@@ -1,0 +1,22 @@
+Package: countbart
+Type: Package
+Title: A collection of log-linear BART models
+Version: 0.1
+Date: 2023-06-08
+Authors@R: c(
+    person("Jared", "Murray", , "jared.murray@mccombs.utexas.edu", role = c("aut", "cre")),
+    person("Nathan", "Wikle", , "nathan.wikle@austin.utexas.edu", role = "aut")
+  )
+Maintainer: Questions and comments to <nathan.wikle@austin.utexas.edu>
+Description: Implements the log-linear BART models used in Wikle and Zigler (2023), "Causal health impacts of power plant emission controls under modeled and uncertain physical process interference." These models were developed in Murray (2021), "Log-Linear Bayesian Additive Regression Trees for Multinomial Logistic and Count Regression Models."
+License: GPL (>= 3)
+Depends: Rcpp (>= 0.10.4), RcppArmadillo, Rcereal, GIGrvg
+LinkingTo: Rcpp, RcppArmadillo, Rcereal, GIGrvg
+NeedsCompilation: yes
+RoxygenNote: 7.1.2
+RcppModules: tree_samples
+Encoding: UTF-8
+Imports: methods, fastDummies
+Packaged: 2023-06-08 20:08:29 UTC; nathan
+Author: Jared Murray [aut, cre],
+  Nathan Wikle [aut]
