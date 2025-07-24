@@ -146,7 +146,7 @@ List multibart(arma::vec y_,
     
     //Rcout << "b " << i << endl;
     
-    Omega[i] = as<arma::mat>(dtemp["Omega"]);
+    Omega[i] = as<arma::mat>(dtemp["Omega"]); // 1 and Z vectors are here
 
   }
 

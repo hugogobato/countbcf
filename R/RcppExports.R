@@ -9,6 +9,14 @@ countbart <- function(y_, offset_, bart_specs, bart_designs, random_des, random_
     .Call('_countbart_countbart', PACKAGE = 'countbart', y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd, return_trees, save_trees, est_mod_fits, est_con_fits, prior_sample, status_interval, lower_bd, upper_bd, probit, text_trace, R_trace)
 }
 
+countbcfgemini <- function(y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd = 0.2, return_trees = TRUE, save_trees = FALSE, est_mod_fits = FALSE, est_con_fits = FALSE, prior_sample = FALSE, status_interval = 100L, lower_bd = as.numeric( c(0.0)), upper_bd = as.numeric( c(0.0)), probit = FALSE, text_trace = TRUE, R_trace = FALSE) {
+    .Call('_countbart_countbcfgemini', PACKAGE = 'countbart', y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd, return_trees, save_trees, est_mod_fits, est_con_fits, prior_sample, status_interval, lower_bd, upper_bd, probit, text_trace, R_trace)
+}
+
+countbcf <- function(y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd = 0.2, return_trees = TRUE, save_trees = FALSE, est_mod_fits = FALSE, est_con_fits = FALSE, prior_sample = FALSE, status_interval = 100L, lower_bd = as.numeric( c(0.0)), upper_bd = as.numeric( c(0.0)), probit = FALSE, text_trace = TRUE, R_trace = FALSE) {
+    .Call('_countbart_countbcf', PACKAGE = 'countbart', y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd, return_trees, save_trees, est_mod_fits, est_con_fits, prior_sample, status_interval, lower_bd, upper_bd, probit, text_trace, R_trace)
+}
+
 rgig <- function(lambda, chi, psi) {
     .Call('_countbart_rgig', PACKAGE = 'countbart', lambda, chi, psi)
 }
