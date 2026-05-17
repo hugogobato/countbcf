@@ -29,6 +29,7 @@ OpenMP, Cereal). The most reliable way to install it on Google Colab
 or any clean R session is via `devtools::install_github`:
 
 ```r
+install.packages("remotes")
 if (!require("devtools")) {
   install.packages("devtools")
 }
@@ -45,8 +46,10 @@ Rtools matching their R version (`Rtools43` or newer is recommended).
 ### Google Colab quick start
 
 ```r
-system("apt-get update -qq && apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev")
-install.packages(c("devtools", "Rcpp", "RcppArmadillo"))
+install.packages("remotes")
+if (!require("devtools")) {
+  install.packages("devtools")
+}
 devtools::install_github("hugogobato/countbcf")
 library(countbcf)
 ```
