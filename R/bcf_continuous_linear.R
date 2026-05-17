@@ -213,14 +213,14 @@ bcf_continuous_linear <- function(y, z, #Omega_con=matrix(rep(1,length(y)), ncol
   X_list = list(x_c, x_m)
   basis_matrix_list = list(matrix(rep(1, n), ncol=1), matrix(z, ncol=1))
   
-  designs = countbart:::make_bart_designs(X_list, basis_matrix_list)
-  specs = list(countbart:::make_bart_spec(design = designs[[1]], 
+  designs = countbcf:::make_bart_designs(X_list, basis_matrix_list)
+  specs = list(countbcf:::make_bart_spec(design = designs[[1]], 
                                           ntree = ntree_control, 
                                           Sigma0 = Sigma0_con, 
                                           scale_df = 3, vanilla=TRUE,
                                           alpha = base_control,
                                           beta = power_control),
-               countbart:::make_bart_spec(design=designs[[2]], 
+               countbcf:::make_bart_spec(design=designs[[2]], 
                                           ntree=ntree_moderate, 
                                           Sigma0 = Sigma0_mod, 
                                           scale_df = -1, 
@@ -271,7 +271,7 @@ bcf_continuous_linear <- function(y, z, #Omega_con=matrix(rep(1,length(y)), ncol
   
   #cat"here\n\n")
 
-  fitbcf = do.call(countbart:::multibart, const_args)
+  fitbcf = do.call(countbcf:::multibart, const_args)
   
   control_fit = list(tree_samples = fitbcf$tree_trace[[1]],
                      str = fitbcf$tree_trace[[1]]$save_string(),

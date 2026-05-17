@@ -2,38 +2,34 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 bcfCore <- function(y_, Omega_con, Omega_mod, Omega_con_est, Omega_mod_est, x_con_, x_mod_, x_con_est_, x_mod_est_, x_con_info_list, x_mod_info_list, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, ntree_mod, ntree_con, lambda, nu, Sigma0_con, Sigma0_mod, con_alpha, con_beta, mod_alpha, mod_beta, treef_name_, est_mod_fits = FALSE, est_con_fits = FALSE, prior_sample = FALSE, use_con_scale = TRUE, use_mod_scale = TRUE, con_scale_df = 1, mod_scale_df = -1, status_interval = 100L, vanilla = FALSE, dart = FALSE, var_sizes_con = as.numeric( c(0.0)), var_sizes_mod = as.numeric( c(0.0)), lower_bd = as.numeric( c(0.0)), upper_bd = as.numeric( c(0.0)), probit = FALSE) {
-    .Call('_countbart_bcfCore', PACKAGE = 'countbart', y_, Omega_con, Omega_mod, Omega_con_est, Omega_mod_est, x_con_, x_mod_, x_con_est_, x_mod_est_, x_con_info_list, x_mod_info_list, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, ntree_mod, ntree_con, lambda, nu, Sigma0_con, Sigma0_mod, con_alpha, con_beta, mod_alpha, mod_beta, treef_name_, est_mod_fits, est_con_fits, prior_sample, use_con_scale, use_mod_scale, con_scale_df, mod_scale_df, status_interval, vanilla, dart, var_sizes_con, var_sizes_mod, lower_bd, upper_bd, probit)
+    .Call('_countbcf_bcfCore', PACKAGE = 'countbcf', y_, Omega_con, Omega_mod, Omega_con_est, Omega_mod_est, x_con_, x_mod_, x_con_est_, x_mod_est_, x_con_info_list, x_mod_info_list, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, ntree_mod, ntree_con, lambda, nu, Sigma0_con, Sigma0_mod, con_alpha, con_beta, mod_alpha, mod_beta, treef_name_, est_mod_fits, est_con_fits, prior_sample, use_con_scale, use_mod_scale, con_scale_df, mod_scale_df, status_interval, vanilla, dart, var_sizes_con, var_sizes_mod, lower_bd, upper_bd, probit)
 }
 
 countbart <- function(y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd = 0.2, return_trees = TRUE, save_trees = FALSE, est_mod_fits = FALSE, est_con_fits = FALSE, prior_sample = FALSE, status_interval = 100L, lower_bd = as.numeric( c(0.0)), upper_bd = as.numeric( c(0.0)), probit = FALSE, text_trace = TRUE, R_trace = FALSE) {
-    .Call('_countbart_countbart', PACKAGE = 'countbart', y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd, return_trees, save_trees, est_mod_fits, est_con_fits, prior_sample, status_interval, lower_bd, upper_bd, probit, text_trace, R_trace)
-}
-
-countbcfgemini <- function(y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd = 0.2, return_trees = TRUE, save_trees = FALSE, est_mod_fits = FALSE, est_con_fits = FALSE, prior_sample = FALSE, status_interval = 100L, lower_bd = as.numeric( c(0.0)), upper_bd = as.numeric( c(0.0)), probit = FALSE, text_trace = TRUE, R_trace = FALSE) {
-    .Call('_countbart_countbcfgemini', PACKAGE = 'countbart', y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd, return_trees, save_trees, est_mod_fits, est_con_fits, prior_sample, status_interval, lower_bd, upper_bd, probit, text_trace, R_trace)
+    .Call('_countbcf_countbart', PACKAGE = 'countbcf', y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd, return_trees, save_trees, est_mod_fits, est_con_fits, prior_sample, status_interval, lower_bd, upper_bd, probit, text_trace, R_trace)
 }
 
 countbcf <- function(y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd = 0.2, return_trees = TRUE, save_trees = FALSE, est_mod_fits = FALSE, est_con_fits = FALSE, prior_sample = FALSE, status_interval = 100L, lower_bd = as.numeric( c(0.0)), upper_bd = as.numeric( c(0.0)), probit = FALSE, text_trace = TRUE, R_trace = FALSE) {
-    .Call('_countbart_countbcf', PACKAGE = 'countbart', y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd, return_trees, save_trees, est_mod_fits, est_con_fits, prior_sample, status_interval, lower_bd, upper_bd, probit, text_trace, R_trace)
+    .Call('_countbcf_countbcf', PACKAGE = 'countbcf', y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd, return_trees, save_trees, est_mod_fits, est_con_fits, prior_sample, status_interval, lower_bd, upper_bd, probit, text_trace, R_trace)
 }
 
 rgig <- function(lambda, chi, psi) {
-    .Call('_countbart_rgig', PACKAGE = 'countbart', lambda, chi, psi)
+    .Call('_countbcf_rgig', PACKAGE = 'countbcf', lambda, chi, psi)
 }
 
 gig_norm <- function(lambda, chi, psi) {
-    .Call('_countbart_gig_norm', PACKAGE = 'countbart', lambda, chi, psi)
+    .Call('_countbcf_gig_norm', PACKAGE = 'countbcf', lambda, chi, psi)
 }
 
 multibart <- function(y_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, lambda, nu, return_trees = TRUE, save_trees = FALSE, est_mod_fits = FALSE, est_con_fits = FALSE, prior_sample = FALSE, status_interval = 100L, lower_bd = as.numeric( c(0.0)), upper_bd = as.numeric( c(0.0)), probit = FALSE, text_trace = TRUE, R_trace = FALSE) {
-    .Call('_countbart_multibart', PACKAGE = 'countbart', y_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, lambda, nu, return_trees, save_trees, est_mod_fits, est_con_fits, prior_sample, status_interval, lower_bd, upper_bd, probit, text_trace, R_trace)
+    .Call('_countbcf_multibart', PACKAGE = 'countbcf', y_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, lambda, nu, return_trees, save_trees, est_mod_fits, est_con_fits, prior_sample, status_interval, lower_bd, upper_bd, probit, text_trace, R_trace)
 }
 
 unflatten_test <- function(flat_tree) {
-    invisible(.Call('_countbart_unflatten_test', PACKAGE = 'countbart', flat_tree))
+    invisible(.Call('_countbcf_unflatten_test', PACKAGE = 'countbcf', flat_tree))
 }
 
 unflatten_test_predict <- function(flat_tree, x_info_list) {
-    invisible(.Call('_countbart_unflatten_test_predict', PACKAGE = 'countbart', flat_tree, x_info_list))
+    invisible(.Call('_countbcf_unflatten_test_predict', PACKAGE = 'countbcf', flat_tree, x_info_list))
 }
 

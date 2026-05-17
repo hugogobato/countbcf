@@ -27,7 +27,7 @@ make_bart_design = function(
   index = -1
   ) {
   
-  cutpoint_list = lapply(1:ncol(X), function(i) countbart:::.cp_quantile(X[,i]))
+  cutpoint_list = lapply(1:ncol(X), function(i) countbcf:::.cp_quantile(X[,i]))
   
   list(X=t(X),
        Omega = t(basis_matrix),

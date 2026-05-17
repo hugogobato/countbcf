@@ -86,7 +86,8 @@ count_bart <- function(
   randeff_design = matrix(1),
   randeff_variance_component_design = matrix(1),
   randeff_scales = 1,
-  randeff_df = 3
+  randeff_df = 3,
+  return_trees = TRUE
 ){
   
   ### check that inputs are valid
@@ -346,13 +347,13 @@ count_bart <- function(
   }
 
   # call to 'make_bart_designs' (in multibart_objects.R)
-  designs <- countbart:::make_bart_designs(X_list, basis_matrix_list)
+  designs <- countbcf:::make_bart_designs(X_list, basis_matrix_list)
 
   # call to 'make_bart_spec' (in multibart_objects.R)
 
   specs <- list()
   for (k in 1:length(designs)){
-    specs[[k]] <- countbart:::make_bart_spec(
+    specs[[k]] <- countbcf:::make_bart_spec(
        design = designs[[k]],
        ntree = ntree_vec[k],
        Sigma0 = Sigma0_con,
@@ -383,19 +384,12 @@ count_bart <- function(
       z_c = z_c, z_d = z_d,
       status_interval = update_interval,
       text_trace = TRUE,
-      count_model = model_type
+      count_model = model_type,
+      return_trees = as.logical(return_trees)
     )
   
   # call 'countbart'
-  fitcounts <- do.call(countbart:::countbart, const_args)
-
-  # list of bart objects
-  fit <- list(
-    tree_samples = fitcounts$tree_trace[[1]],
-    str = fitcounts$tree_trace[[1]]$save_string(),
-    c = leaf_c, d = leaf_d,
-    scale = sdy, shift = muy
-  )
+  fitcounts <- do.call(countbcf:::countbart, const_args)
 
   ### output
   out <- list(
@@ -403,40 +397,45 @@ count_bart <- function(
     order_vec = order_vec
   )
 
-  for (k in 1:num_designs){
-    fit <- list(
-      tree_samples = fitcounts$tree_trace[[k]],
-      str = fitcounts$tree_trace[[k]]$save_string(),
-      c = leaf_c, d = leaf_d,
-      scale = sdy, shift = muy
-    )
-    out[[k + 2]] <- fit
+  ## per-forest in-sample posterior means on the log scale (nsim x n,
+  ## original observation order). Available regardless of return_trees.
+  inv <- order(order_vec)
+  n_sorted <- length(order_vec)
+  .extract_coef <- function(cc) {
+    nsim <- length(cc) / n_sorted
+    arr <- matrix(as.numeric(cc), nrow = n_sorted, ncol = nsim)
+    t(arr[inv, , drop = FALSE])
+  }
+  out$f_post <- .extract_coef(fitcounts$coefs[[1]])
+  if ((model_type == 3) | (model_type == 4)) {
+    out$f0_post <- .extract_coef(fitcounts$coefs[[num_designs + 1]])
+    out$f1_post <- .extract_coef(fitcounts$coefs[[num_designs + 2]])
   }
 
-  if (num_designs > 1){
-    names(out)[-c(1:2)] <- paste("tree_fit", 1:num_designs, sep = "")
-  } else {
-    names(out)[3] <- "tree_fit"
-  }
-  
-  if ((model_type == 3) | model_type == 4) {
-    # zero-inflated tree fits
-    f0_fit <- list(
-      tree_samples = fitcounts$tree_trace[[2]],
-      str = fitcounts$tree_trace[[2]]$save_string(),
-      c = z_c, d = z_d,
-      scale = sdy, shift = muy
-    )
-    f1_fit <- list(
-      tree_samples = fitcounts$tree_trace[[3]],
-      str = fitcounts$tree_trace[[3]]$save_string(),
-      c = z_c, d = z_d,
-      scale = sdy, shift = muy
-    )
+  if (return_trees) {
+    for (k in 1:num_designs){
+      fit <- list(
+        tree_samples = fitcounts$tree_trace[[k]],
+        str = fitcounts$tree_trace[[k]]$save_string(),
+        c = leaf_c, d = leaf_d,
+        scale = sdy, shift = muy
+      )
+      nm <- if (num_designs > 1) paste0("tree_fit", k) else "tree_fit"
+      out[[nm]] <- fit
+    }
 
-    # add zero-inflated tree fits to output
-    out$f0_fit <- f0_fit
-    out$f1_fit <- f1_fit
+    if ((model_type == 3) | model_type == 4) {
+      out$f0_fit <- list(
+        tree_samples = fitcounts$tree_trace[[num_designs + 1]],
+        str = fitcounts$tree_trace[[num_designs + 1]]$save_string(),
+        c = z_c, d = z_d, scale = sdy, shift = muy
+      )
+      out$f1_fit <- list(
+        tree_samples = fitcounts$tree_trace[[num_designs + 2]],
+        str = fitcounts$tree_trace[[num_designs + 2]]$save_string(),
+        c = z_c, d = z_d, scale = sdy, shift = muy
+      )
+    }
   }
 
   if ((model_type == 2) | (model_type == 4)){

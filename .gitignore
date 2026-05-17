@@ -1,0 +1,24 @@
+## Editor / IDE / agent state
+/.claude
+/.vscode
+/.Rhistory
+/.Rproj.user
+
+## Local-only working materials (kept out of the installable package)
+/Papers
+/tests
+ZI_BCF_IMPLEMENTATION.md
+
+.Rhistory
+.Rbuildignore
+
+## Build artifacts produced by R CMD INSTALL / Rcpp::compileAttributes()
+src/*.o
+src/*.so
+src/*.dll
+src/*.dylib
+src/Makevars.local
+src/symbols.rds
+src/*:Zone.Identifier
+*.Rcheck/
+*.tar.gz

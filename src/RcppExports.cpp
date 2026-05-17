@@ -13,7 +13,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // bcfCore
 List bcfCore(arma::vec y_, arma::mat Omega_con, arma::mat Omega_mod, arma::mat Omega_con_est, arma::mat Omega_mod_est, NumericVector x_con_, NumericVector x_mod_, NumericVector x_con_est_, NumericVector x_mod_est_, List x_con_info_list, List x_mod_info_list, arma::mat random_des, arma::mat random_var, arma::mat random_var_ix, double random_var_df, arma::vec randeff_scales, int burn, int nd, int thin, int ntree_mod, int ntree_con, double lambda, double nu, arma::mat Sigma0_con, arma::mat Sigma0_mod, double con_alpha, double con_beta, double mod_alpha, double mod_beta, CharacterVector treef_name_, bool est_mod_fits, bool est_con_fits, bool prior_sample, bool use_con_scale, bool use_mod_scale, double con_scale_df, double mod_scale_df, int status_interval, bool vanilla, bool dart, NumericVector var_sizes_con, NumericVector var_sizes_mod, NumericVector lower_bd, NumericVector upper_bd, bool probit);
-RcppExport SEXP _countbart_bcfCore(SEXP y_SEXP, SEXP Omega_conSEXP, SEXP Omega_modSEXP, SEXP Omega_con_estSEXP, SEXP Omega_mod_estSEXP, SEXP x_con_SEXP, SEXP x_mod_SEXP, SEXP x_con_est_SEXP, SEXP x_mod_est_SEXP, SEXP x_con_info_listSEXP, SEXP x_mod_info_listSEXP, SEXP random_desSEXP, SEXP random_varSEXP, SEXP random_var_ixSEXP, SEXP random_var_dfSEXP, SEXP randeff_scalesSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP ntree_modSEXP, SEXP ntree_conSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP Sigma0_conSEXP, SEXP Sigma0_modSEXP, SEXP con_alphaSEXP, SEXP con_betaSEXP, SEXP mod_alphaSEXP, SEXP mod_betaSEXP, SEXP treef_name_SEXP, SEXP est_mod_fitsSEXP, SEXP est_con_fitsSEXP, SEXP prior_sampleSEXP, SEXP use_con_scaleSEXP, SEXP use_mod_scaleSEXP, SEXP con_scale_dfSEXP, SEXP mod_scale_dfSEXP, SEXP status_intervalSEXP, SEXP vanillaSEXP, SEXP dartSEXP, SEXP var_sizes_conSEXP, SEXP var_sizes_modSEXP, SEXP lower_bdSEXP, SEXP upper_bdSEXP, SEXP probitSEXP) {
+RcppExport SEXP _countbcf_bcfCore(SEXP y_SEXP, SEXP Omega_conSEXP, SEXP Omega_modSEXP, SEXP Omega_con_estSEXP, SEXP Omega_mod_estSEXP, SEXP x_con_SEXP, SEXP x_mod_SEXP, SEXP x_con_est_SEXP, SEXP x_mod_est_SEXP, SEXP x_con_info_listSEXP, SEXP x_mod_info_listSEXP, SEXP random_desSEXP, SEXP random_varSEXP, SEXP random_var_ixSEXP, SEXP random_var_dfSEXP, SEXP randeff_scalesSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP ntree_modSEXP, SEXP ntree_conSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP Sigma0_conSEXP, SEXP Sigma0_modSEXP, SEXP con_alphaSEXP, SEXP con_betaSEXP, SEXP mod_alphaSEXP, SEXP mod_betaSEXP, SEXP treef_name_SEXP, SEXP est_mod_fitsSEXP, SEXP est_con_fitsSEXP, SEXP prior_sampleSEXP, SEXP use_con_scaleSEXP, SEXP use_mod_scaleSEXP, SEXP con_scale_dfSEXP, SEXP mod_scale_dfSEXP, SEXP status_intervalSEXP, SEXP vanillaSEXP, SEXP dartSEXP, SEXP var_sizes_conSEXP, SEXP var_sizes_modSEXP, SEXP lower_bdSEXP, SEXP upper_bdSEXP, SEXP probitSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -68,7 +68,7 @@ END_RCPP
 }
 // countbart
 List countbart(arma::vec y_, arma::vec offset_, List bart_specs, List bart_designs, arma::mat random_des, arma::mat random_var, arma::mat random_var_ix, double random_var_df, arma::vec randeff_scales, int burn, int nd, int thin, int count_model, double lambda, double nu, double kappa_a, double kappa_b, double leaf_c, double leaf_d, double z_c, double z_d, double kappa_prop_sd, bool return_trees, bool save_trees, bool est_mod_fits, bool est_con_fits, bool prior_sample, int status_interval, NumericVector lower_bd, NumericVector upper_bd, bool probit, bool text_trace, bool R_trace);
-RcppExport SEXP _countbart_countbart(SEXP y_SEXP, SEXP offset_SEXP, SEXP bart_specsSEXP, SEXP bart_designsSEXP, SEXP random_desSEXP, SEXP random_varSEXP, SEXP random_var_ixSEXP, SEXP random_var_dfSEXP, SEXP randeff_scalesSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP count_modelSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP kappa_aSEXP, SEXP kappa_bSEXP, SEXP leaf_cSEXP, SEXP leaf_dSEXP, SEXP z_cSEXP, SEXP z_dSEXP, SEXP kappa_prop_sdSEXP, SEXP return_treesSEXP, SEXP save_treesSEXP, SEXP est_mod_fitsSEXP, SEXP est_con_fitsSEXP, SEXP prior_sampleSEXP, SEXP status_intervalSEXP, SEXP lower_bdSEXP, SEXP upper_bdSEXP, SEXP probitSEXP, SEXP text_traceSEXP, SEXP R_traceSEXP) {
+RcppExport SEXP _countbcf_countbart(SEXP y_SEXP, SEXP offset_SEXP, SEXP bart_specsSEXP, SEXP bart_designsSEXP, SEXP random_desSEXP, SEXP random_varSEXP, SEXP random_var_ixSEXP, SEXP random_var_dfSEXP, SEXP randeff_scalesSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP count_modelSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP kappa_aSEXP, SEXP kappa_bSEXP, SEXP leaf_cSEXP, SEXP leaf_dSEXP, SEXP z_cSEXP, SEXP z_dSEXP, SEXP kappa_prop_sdSEXP, SEXP return_treesSEXP, SEXP save_treesSEXP, SEXP est_mod_fitsSEXP, SEXP est_con_fitsSEXP, SEXP prior_sampleSEXP, SEXP status_intervalSEXP, SEXP lower_bdSEXP, SEXP upper_bdSEXP, SEXP probitSEXP, SEXP text_traceSEXP, SEXP R_traceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -109,52 +109,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// countbcfgemini
-List countbcfgemini(arma::vec y_, arma::vec offset_, List bart_specs, List bart_designs, arma::mat random_des, arma::mat random_var, arma::mat random_var_ix, double random_var_df, arma::vec randeff_scales, int burn, int nd, int thin, int count_model, double lambda, double nu, double kappa_a, double kappa_b, double leaf_c, double leaf_d, double z_c, double z_d, double kappa_prop_sd, bool return_trees, bool save_trees, bool est_mod_fits, bool est_con_fits, bool prior_sample, int status_interval, NumericVector lower_bd, NumericVector upper_bd, bool probit, bool text_trace, bool R_trace);
-RcppExport SEXP _countbart_countbcfgemini(SEXP y_SEXP, SEXP offset_SEXP, SEXP bart_specsSEXP, SEXP bart_designsSEXP, SEXP random_desSEXP, SEXP random_varSEXP, SEXP random_var_ixSEXP, SEXP random_var_dfSEXP, SEXP randeff_scalesSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP count_modelSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP kappa_aSEXP, SEXP kappa_bSEXP, SEXP leaf_cSEXP, SEXP leaf_dSEXP, SEXP z_cSEXP, SEXP z_dSEXP, SEXP kappa_prop_sdSEXP, SEXP return_treesSEXP, SEXP save_treesSEXP, SEXP est_mod_fitsSEXP, SEXP est_con_fitsSEXP, SEXP prior_sampleSEXP, SEXP status_intervalSEXP, SEXP lower_bdSEXP, SEXP upper_bdSEXP, SEXP probitSEXP, SEXP text_traceSEXP, SEXP R_traceSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type y_(y_SEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type offset_(offset_SEXP);
-    Rcpp::traits::input_parameter< List >::type bart_specs(bart_specsSEXP);
-    Rcpp::traits::input_parameter< List >::type bart_designs(bart_designsSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type random_des(random_desSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type random_var(random_varSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type random_var_ix(random_var_ixSEXP);
-    Rcpp::traits::input_parameter< double >::type random_var_df(random_var_dfSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type randeff_scales(randeff_scalesSEXP);
-    Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
-    Rcpp::traits::input_parameter< int >::type nd(ndSEXP);
-    Rcpp::traits::input_parameter< int >::type thin(thinSEXP);
-    Rcpp::traits::input_parameter< int >::type count_model(count_modelSEXP);
-    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< double >::type kappa_a(kappa_aSEXP);
-    Rcpp::traits::input_parameter< double >::type kappa_b(kappa_bSEXP);
-    Rcpp::traits::input_parameter< double >::type leaf_c(leaf_cSEXP);
-    Rcpp::traits::input_parameter< double >::type leaf_d(leaf_dSEXP);
-    Rcpp::traits::input_parameter< double >::type z_c(z_cSEXP);
-    Rcpp::traits::input_parameter< double >::type z_d(z_dSEXP);
-    Rcpp::traits::input_parameter< double >::type kappa_prop_sd(kappa_prop_sdSEXP);
-    Rcpp::traits::input_parameter< bool >::type return_trees(return_treesSEXP);
-    Rcpp::traits::input_parameter< bool >::type save_trees(save_treesSEXP);
-    Rcpp::traits::input_parameter< bool >::type est_mod_fits(est_mod_fitsSEXP);
-    Rcpp::traits::input_parameter< bool >::type est_con_fits(est_con_fitsSEXP);
-    Rcpp::traits::input_parameter< bool >::type prior_sample(prior_sampleSEXP);
-    Rcpp::traits::input_parameter< int >::type status_interval(status_intervalSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type lower_bd(lower_bdSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type upper_bd(upper_bdSEXP);
-    Rcpp::traits::input_parameter< bool >::type probit(probitSEXP);
-    Rcpp::traits::input_parameter< bool >::type text_trace(text_traceSEXP);
-    Rcpp::traits::input_parameter< bool >::type R_trace(R_traceSEXP);
-    rcpp_result_gen = Rcpp::wrap(countbcfgemini(y_, offset_, bart_specs, bart_designs, random_des, random_var, random_var_ix, random_var_df, randeff_scales, burn, nd, thin, count_model, lambda, nu, kappa_a, kappa_b, leaf_c, leaf_d, z_c, z_d, kappa_prop_sd, return_trees, save_trees, est_mod_fits, est_con_fits, prior_sample, status_interval, lower_bd, upper_bd, probit, text_trace, R_trace));
-    return rcpp_result_gen;
-END_RCPP
-}
 // countbcf
 List countbcf(arma::vec y_, arma::vec offset_, List bart_specs, List bart_designs, arma::mat random_des, arma::mat random_var, arma::mat random_var_ix, double random_var_df, arma::vec randeff_scales, int burn, int nd, int thin, int count_model, double lambda, double nu, double kappa_a, double kappa_b, double leaf_c, double leaf_d, double z_c, double z_d, double kappa_prop_sd, bool return_trees, bool save_trees, bool est_mod_fits, bool est_con_fits, bool prior_sample, int status_interval, NumericVector lower_bd, NumericVector upper_bd, bool probit, bool text_trace, bool R_trace);
-RcppExport SEXP _countbart_countbcf(SEXP y_SEXP, SEXP offset_SEXP, SEXP bart_specsSEXP, SEXP bart_designsSEXP, SEXP random_desSEXP, SEXP random_varSEXP, SEXP random_var_ixSEXP, SEXP random_var_dfSEXP, SEXP randeff_scalesSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP count_modelSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP kappa_aSEXP, SEXP kappa_bSEXP, SEXP leaf_cSEXP, SEXP leaf_dSEXP, SEXP z_cSEXP, SEXP z_dSEXP, SEXP kappa_prop_sdSEXP, SEXP return_treesSEXP, SEXP save_treesSEXP, SEXP est_mod_fitsSEXP, SEXP est_con_fitsSEXP, SEXP prior_sampleSEXP, SEXP status_intervalSEXP, SEXP lower_bdSEXP, SEXP upper_bdSEXP, SEXP probitSEXP, SEXP text_traceSEXP, SEXP R_traceSEXP) {
+RcppExport SEXP _countbcf_countbcf(SEXP y_SEXP, SEXP offset_SEXP, SEXP bart_specsSEXP, SEXP bart_designsSEXP, SEXP random_desSEXP, SEXP random_varSEXP, SEXP random_var_ixSEXP, SEXP random_var_dfSEXP, SEXP randeff_scalesSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP count_modelSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP kappa_aSEXP, SEXP kappa_bSEXP, SEXP leaf_cSEXP, SEXP leaf_dSEXP, SEXP z_cSEXP, SEXP z_dSEXP, SEXP kappa_prop_sdSEXP, SEXP return_treesSEXP, SEXP save_treesSEXP, SEXP est_mod_fitsSEXP, SEXP est_con_fitsSEXP, SEXP prior_sampleSEXP, SEXP status_intervalSEXP, SEXP lower_bdSEXP, SEXP upper_bdSEXP, SEXP probitSEXP, SEXP text_traceSEXP, SEXP R_traceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -197,7 +154,7 @@ END_RCPP
 }
 // rgig
 double rgig(double lambda, double chi, double psi);
-RcppExport SEXP _countbart_rgig(SEXP lambdaSEXP, SEXP chiSEXP, SEXP psiSEXP) {
+RcppExport SEXP _countbcf_rgig(SEXP lambdaSEXP, SEXP chiSEXP, SEXP psiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -210,7 +167,7 @@ END_RCPP
 }
 // gig_norm
 double gig_norm(double lambda, double chi, double psi);
-RcppExport SEXP _countbart_gig_norm(SEXP lambdaSEXP, SEXP chiSEXP, SEXP psiSEXP) {
+RcppExport SEXP _countbcf_gig_norm(SEXP lambdaSEXP, SEXP chiSEXP, SEXP psiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -223,7 +180,7 @@ END_RCPP
 }
 // multibart
 List multibart(arma::vec y_, List bart_specs, List bart_designs, arma::mat random_des, arma::mat random_var, arma::mat random_var_ix, double random_var_df, arma::vec randeff_scales, int burn, int nd, int thin, double lambda, double nu, bool return_trees, bool save_trees, bool est_mod_fits, bool est_con_fits, bool prior_sample, int status_interval, NumericVector lower_bd, NumericVector upper_bd, bool probit, bool text_trace, bool R_trace);
-RcppExport SEXP _countbart_multibart(SEXP y_SEXP, SEXP bart_specsSEXP, SEXP bart_designsSEXP, SEXP random_desSEXP, SEXP random_varSEXP, SEXP random_var_ixSEXP, SEXP random_var_dfSEXP, SEXP randeff_scalesSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP return_treesSEXP, SEXP save_treesSEXP, SEXP est_mod_fitsSEXP, SEXP est_con_fitsSEXP, SEXP prior_sampleSEXP, SEXP status_intervalSEXP, SEXP lower_bdSEXP, SEXP upper_bdSEXP, SEXP probitSEXP, SEXP text_traceSEXP, SEXP R_traceSEXP) {
+RcppExport SEXP _countbcf_multibart(SEXP y_SEXP, SEXP bart_specsSEXP, SEXP bart_designsSEXP, SEXP random_desSEXP, SEXP random_varSEXP, SEXP random_var_ixSEXP, SEXP random_var_dfSEXP, SEXP randeff_scalesSEXP, SEXP burnSEXP, SEXP ndSEXP, SEXP thinSEXP, SEXP lambdaSEXP, SEXP nuSEXP, SEXP return_treesSEXP, SEXP save_treesSEXP, SEXP est_mod_fitsSEXP, SEXP est_con_fitsSEXP, SEXP prior_sampleSEXP, SEXP status_intervalSEXP, SEXP lower_bdSEXP, SEXP upper_bdSEXP, SEXP probitSEXP, SEXP text_traceSEXP, SEXP R_traceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -257,7 +214,7 @@ END_RCPP
 }
 // unflatten_test
 void unflatten_test(Rcpp::List flat_tree);
-RcppExport SEXP _countbart_unflatten_test(SEXP flat_treeSEXP) {
+RcppExport SEXP _countbcf_unflatten_test(SEXP flat_treeSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type flat_tree(flat_treeSEXP);
@@ -267,7 +224,7 @@ END_RCPP
 }
 // unflatten_test_predict
 void unflatten_test_predict(Rcpp::List flat_tree, List x_info_list);
-RcppExport SEXP _countbart_unflatten_test_predict(SEXP flat_treeSEXP, SEXP x_info_listSEXP) {
+RcppExport SEXP _countbcf_unflatten_test_predict(SEXP flat_treeSEXP, SEXP x_info_listSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type flat_tree(flat_treeSEXP);
@@ -280,20 +237,19 @@ END_RCPP
 RcppExport SEXP _rcpp_module_boot_tree_samples();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_countbart_bcfCore", (DL_FUNC) &_countbart_bcfCore, 45},
-    {"_countbart_countbart", (DL_FUNC) &_countbart_countbart, 33},
-    {"_countbart_countbcfgemini", (DL_FUNC) &_countbart_countbcfgemini, 33},
-    {"_countbart_countbcf", (DL_FUNC) &_countbart_countbcf, 33},
-    {"_countbart_rgig", (DL_FUNC) &_countbart_rgig, 3},
-    {"_countbart_gig_norm", (DL_FUNC) &_countbart_gig_norm, 3},
-    {"_countbart_multibart", (DL_FUNC) &_countbart_multibart, 24},
-    {"_countbart_unflatten_test", (DL_FUNC) &_countbart_unflatten_test, 1},
-    {"_countbart_unflatten_test_predict", (DL_FUNC) &_countbart_unflatten_test_predict, 2},
+    {"_countbcf_bcfCore", (DL_FUNC) &_countbcf_bcfCore, 45},
+    {"_countbcf_countbart", (DL_FUNC) &_countbcf_countbart, 33},
+    {"_countbcf_countbcf", (DL_FUNC) &_countbcf_countbcf, 33},
+    {"_countbcf_rgig", (DL_FUNC) &_countbcf_rgig, 3},
+    {"_countbcf_gig_norm", (DL_FUNC) &_countbcf_gig_norm, 3},
+    {"_countbcf_multibart", (DL_FUNC) &_countbcf_multibart, 24},
+    {"_countbcf_unflatten_test", (DL_FUNC) &_countbcf_unflatten_test, 1},
+    {"_countbcf_unflatten_test_predict", (DL_FUNC) &_countbcf_unflatten_test_predict, 2},
     {"_rcpp_module_boot_tree_samples", (DL_FUNC) &_rcpp_module_boot_tree_samples, 0},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_countbart(DllInfo *dll) {
+RcppExport void R_init_countbcf(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

@@ -1,22 +1,52 @@
-Package: countbart
+Package: countbcf
 Type: Package
-Title: A collection of log-linear BART models
-Version: 0.1
-Date: 2023-06-08
+Title: Bayesian Causal Forests for Count and Zero-Inflated Count Outcomes
+Version: 1.0.0
+Date: 2026-05-16
 Authors@R: c(
-    person("Jared", "Murray", , "jared.murray@mccombs.utexas.edu", role = c("aut", "cre")),
-    person("Nathan", "Wikle", , "nathan.wikle@austin.utexas.edu", role = "aut")
+    person("Hugo", "Gobato Souto",
+           email = "hugo.souto@dell.com",
+           role  = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-7039-0572",
+                       affiliation = "Dell Technologies")),
+    person("Jared", "Murray",
+           email = "jared.murray@mccombs.utexas.edu",
+           role  = "ctb",
+           comment = "Author of log-linear BART (Murray 2021), the count-regression backbone reused here."),
+    person("Nathan", "Wikle",
+           email = "nathan.wikle@austin.utexas.edu",
+           role  = "ctb",
+           comment = "Co-author of the 'countbart' package (Wikle and Zigler, 2023), which countbcf extends."),
+    person("Corwin", "Zigler",
+           role = "ctb",
+           comment = "Co-author of the 'countbart' package (Wikle and Zigler, 2023), which countbcf extends.")
   )
-Maintainer: Questions and comments to <nathan.wikle@austin.utexas.edu>
-Description: Implements the log-linear BART models used in Wikle and Zigler (2023), "Causal health impacts of power plant emission controls under modeled and uncertain physical process interference." These models were developed in Murray (2021), "Log-Linear Bayesian Additive Regression Trees for Multinomial Logistic and Count Regression Models."
+Maintainer: Hugo Gobato Souto <hugo.souto@dell.com>
+Description: Implements 'CountBCF' and 'Zero-Inflated CountBCF', Bayesian Causal
+    Forest sampler for count and zero-inflated count outcomes
+    (Souto, 2026a; Souto, 2026b). The package extends the Bayesian Causal Forest
+    of Hahn, Murray and Carvalho (2020) to count and zero-inflated count
+    responses by applying the (mu, tau) decomposition on top of the log-linear
+    BART backbone of Murray (2021). The implementation builds directly on the
+    'countbart' source code by Nathan B. Wikle and Corwin M. Zigler
+    (https://github.com/nbwikle/estimating-interference), reusing its MCMC
+    machinery, GIG leaf prior, and zero-inflation handling, and recasting them
+    inside the BCF (mu_f, tau_f) parameterization for the count component
+    (Poisson and Negative Binomial) and the structural-zero log-odds components
+    (ZIP and ZINB). The package returns posterior draws of conditional average
+    treatment effects on both the log-rate and response scales.
 License: GPL (>= 3)
-Depends: Rcpp (>= 0.10.4), RcppArmadillo, Rcereal, GIGrvg
+URL: https://github.com/hugogobato/ZI_BCF
+BugReports: https://github.com/hugogobato/ZI_BCF/issues
+Depends: R (>= 3.5.0), Rcpp (>= 0.10.4), RcppArmadillo, Rcereal, GIGrvg
 LinkingTo: Rcpp, RcppArmadillo, Rcereal, GIGrvg
 NeedsCompilation: yes
 RoxygenNote: 7.1.2
 RcppModules: tree_samples
 Encoding: UTF-8
 Imports: methods, fastDummies
-Packaged: 2023-06-08 20:08:29 UTC; nathan
-Author: Jared Murray [aut, cre],
-  Nathan Wikle [aut]
+Packaged: 2026-05-16 00:00:00 UTC; hugogobato
+Author: Hugo Gobato Souto [aut, cre] (<https://orcid.org/0000-0002-7039-0572>, Dell Technologies),
+  Jared Murray [ctb],
+  Nathan Wikle [ctb],
+  Corwin Zigler [ctb]
