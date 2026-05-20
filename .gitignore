@@ -6,6 +6,7 @@
 
 ## Local-only working materials (kept out of the installable package)
 /Papers
+/Papers_old
 /tests
 ZI_BCF_IMPLEMENTATION.md
 
