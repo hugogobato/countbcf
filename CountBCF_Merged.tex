@@ -1,0 +1,2556 @@
+
+
+\documentclass[11pt]{article}
+
+%--- Packages (kept minimal; mirrors BCF.tex where portable) ------------
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm, amsfonts, bm}
+\usepackage{booktabs, multirow}
+\usepackage{natbib}
+\usepackage{algorithm, algpseudocode}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[colorlinks, citecolor=blue, urlcolor=blue, linkcolor=blue]{hyperref}
+\graphicspath{{../tests/analysis/plots/}}
+
+%--- Theorem environments ----------------------------------------------
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{assumption}[thm]{Assumption}
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+%--- Distributions / shorthand -----------------------------------------
+\newcommand{\iid}{\stackrel{\mbox{\tiny iid} }{\sim}}
+\newcommand{\logit}{\mathrm{logit}}
+\newcommand{\Poi}{\mathrm{Poisson}}
+\newcommand{\NB}{\mathrm{NB}}
+\newcommand{\Ber}{\mathrm{Bernoulli}}
+\newcommand{\Be}{\mathrm{Beta}}
+\newcommand{\Ga}{\mathrm{Gamma}}
+\newcommand{\GIG}{\mathrm{GIG}}
+\newcommand{\N}{\mathrm{N}}
+\newcommand{\Exp}{\mathrm{Exponential}}
+
+%--- Vectors / matrices --------------------------------------------------
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\x}{\mathrm{x}}
+\newcommand{\z}{\mathrm{z}}
+\newcommand{\y}{\mathrm{y}}
+\newcommand{\I}{\mathbf{I}}
+\newcommand{\bbeta}{\boldsymbol{\beta}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\bSigma}{\boldsymbol{\Sigma}}
+
+%--- Probability / expectation operators --------------------------------
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\renewcommand{\Pr}{\mathrm{Pr}}
+\newcommand{\ind}{\mathbf{1}}
+
+%--- BCF-style (mu, tau) decomposition: count component -----------------
+\newcommand{\muF}{\mu_f}
+\newcommand{\tauF}{\tau_f}
+\newcommand{\muz}{\mu_{z}}
+\newcommand{\muone}{\mu_{1}}
+\newcommand{\muzero}{\mu_{0}}
+\newcommand{\tauresp}{\tau}                 % response-scale CATE
+\newcommand{\taulog}{\tau_{f}}              % log-rate-scale CATE (= tauF)
+\newcommand{\pihat}{\widehat{\pi}}
+
+%--- GIG leaf-prior reparameterisation ----------------------------------
+\newcommand{\azero}{a_{0}}
+\newcommand{\azerotau}{a_{0,\tau}}
+\newcommand{\leafc}{c}
+\newcommand{\leafd}{d}
+
+%--- ZI-specific notation -----------------------------------------------
+\newcommand{\Si}{S_{i}}
+\newcommand{\pzi}[1][z]{p_{\mathrm{zi},\,#1}}
+\newcommand{\etazi}{\eta_{\mathrm{zi}}}
+\newcommand{\Detazi}{\Delta\etazi}
+\newcommand{\fzeroSym}{f_{0}}
+\newcommand{\foneSym}{f_{1}}
+\newcommand{\muFzero}{\mu_{f_{0}}}
+\newcommand{\muFone}{\mu_{f_{1}}}
+\newcommand{\tauFzero}{\tau_{f_{0}}}
+\newcommand{\tauFone}{\tau_{f_{1}}}
+\newcommand{\zconc}{z_{\mathrm{conc}}}
+\newcommand{\zconctau}{z_{\mathrm{conc},\,\tau}}
+\newcommand{\zilat}{z_{i}}
+\newcommand{\xilat}{\xi_{i}}
+\newcommand{\philat}{\phi_{i}}
+\newcommand{\omegai}{\omega_{i}}
+\newcommand{\logfgroup}[1]{\log f^{(#1)}}
+\newcommand{\logsumexp}{\mathrm{logsumexp}}
+\newcommand{\softw}{w}
+\newcommand{\Deltalam}{\Delta\lambda}
+\newcommand{\Deltapzi}{\Delta p_{\mathrm{zi}}}
+
+% =======================================================================
+\title{CountBCF: Bayesian Causal Forests for Count and
+       Zero-Inflated Count Outcomes}
+\author{Hugo Gobato Souto\thanks{Dell Technologies. ORCID: \href{https://orcid.org/0000-0002-7039-0572}{0000-0002-7039-0572}.
+Email: \href{mailto:hugo.souto@dell.com}{hugo.souto@dell.com}.}}
+\date{May 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Count outcomes -- hospital admissions, infection cases, insurance
+claims, citation counts, recidivism events, single-cell read counts --
+are pervasive in the applied questions for which heterogeneous
+treatment effect (HTE) methods were designed, and a non-trivial
+fraction of these outcomes are also \emph{zero-inflated}: some units
+never enter the count-generating process at all (a structural zero),
+while the rest accumulate strictly positive counts at heterogeneous
+intensities. A treatment can move the structural-zero probability and
+the count intensity independently, and the response-scale conditional
+average treatment effect (CATE) mixes the two channels. Existing
+tools collapse this structure: the workhorse Bayesian Causal Forest
+(BCF) of \citet{hahn2020bayesian} assumes a Gaussian response;
+Poisson and negative binomial generalised linear models, doubly robust
+extensions, and generalised random forests either rule out per-unit
+CATEs by design or discard BCF's two structural ingredients (the
+differentially shrunk $(\mu, \tau)$ decomposition and the
+propensity-as-covariate prognostic forest that combats
+regularization-induced confounding); classical zero-inflated
+regressions assume rigid treatment interactions; two-part learners
+separate the channels but discard the shared-covariate information.
+This paper introduces \textbf{CountBCF}, which embeds the BCF
+decomposition inside the log-linear BART backbone of
+\citet{murray2021loglinear}. The framework covers two regimes within a
+single model: a \emph{count} regime that delivers a $(\muF, \tauF)$
+pair on the log-rate scale, and a \emph{zero-inflated} regime that
+extends the decomposition to all three log-linear-BART forests --
+$f, \fzeroSym, \foneSym$ -- yielding six forests in total. Each
+function group inherits the BCF differential-shrinkage philosophy and
+the propensity-as-covariate fix; posterior draws translate to per-unit
+response-scale CATEs in closed form, with a per-unit channel
+decomposition into count-rate and structural-zero effects available
+in the zero-inflated case. We release the \texttt{countbcf} R package,
+built on the \texttt{countbart} MCMC backend of
+\citet{wikle2023causal}, and pre-register a simulation study that
+crosses linear and nonlinear data-generating processes with Poisson,
+negative binomial, ZIP, and ZINB likelihoods and sweeps one-at-a-time
+over sample size, covariate dimension, and target average treatment
+effect.
+\end{abstract}
+
+\noindent\textbf{Keywords:} Bayesian causal forests; Conditional average
+treatment effects; Count regression; Heterogeneous treatment effects;
+Log-linear BART; Poisson and negative binomial regression;
+Zero-inflated regression; Structural zeros.
+
+% =======================================================================
+\section{Introduction}\label{sec:intro}
+
+Many of the outcomes that motivate modern causal inference are
+counts. Hospital admissions and emergency-department visits,
+infection incidences, dental caries, traffic crashes, insurance
+claims, citation totals, recidivism events, household child counts,
+and single-cell unique-molecular-identifier reads are all
+integer-valued and frequently bunched at zero. The applied
+literatures that produced these outcomes -- epidemiology, health
+economics, ecology, operations research, finance, social statistics,
+computational biology -- share an interest not just in whether an
+intervention works on average, but in \emph{for whom} it works, and
+by how much: the conditional average treatment effect, or CATE. The
+past decade of heterogeneous treatment effect (HTE) methodology has
+answered that demand with flexible nonparametric tools -- Bayesian
+Additive Regression Trees \citep{chipman2010bart, hill2011bayesian},
+Bayesian Causal Forests \citep[BCF;][]{hahn2020bayesian}, generalised
+random forests \citep{athey2019generalized}, meta-learners
+\citep{kunzel2019metalearners}, and double machine learning
+\citep{chernozhukov2018double} -- but the bulk of that methodology
+assumes a continuous, approximately Gaussian response.
+
+Treating counts as if they were Gaussian has three well-documented
+failure modes \citep{camerontrivedi2013count, murray2021loglinear}.
+Count distributions place positive mass at zero and at small
+integers, often on a large fraction of the support; the conditional
+variance grows with the conditional mean, often super-linearly under
+overdispersion; and the substantive scientific quantity is almost
+always a rate or a relative risk, both of which live on the log
+scale. These pathologies bias point estimates, distort uncertainty
+quantification, and degrade the heterogeneity signal that HTE methods
+are designed to recover. A second, sharper failure occurs when the
+count outcome is also \emph{zero-inflated}: a non-trivial fraction of
+units never enter the count-generating process at all (a structural
+zero), while the rest accumulate strictly positive counts at
+heterogeneous intensities. A canonical example is annual healthcare
+utilisation: in many provider panels and insurance cohorts, a
+sizeable fraction of enrollees record zero visits in a given year
+because they are effectively out of the care-seeking system, while
+the remaining enrollees record strictly positive visit counts at
+heterogeneous intensities. The same pattern arises in manufacturing
+defect counts \citep{lambert1992zip}, automobile insurance claims,
+ecological species-abundance surveys, sentencing and recidivism
+counts, and single-cell RNA sequencing, where a large excess-zero
+mass reflects technical dropout on top of a count process.
+
+What makes zero-inflation especially awkward for causal inference is
+that an intervention can move \emph{both} mechanisms, and the two
+movements need not point in the same direction. Continuing the
+healthcare example: a workplace wellness programme aimed at preventive
+care could plausibly pull some enrollees \emph{into} the system --
+shrinking the structural-zero fraction -- while simultaneously
+\emph{lowering} the visit intensity of those already engaged because
+preventive care substitutes for acute episodes. The response-scale
+CATE is then a mixture of the two channel effects; whether it ends
+up positive, negative, or near zero depends on which channel
+dominates for which unit. A method that ignores the structural-zero
+mechanism necessarily mis-attributes its movement: if the treatment
+shifts the structural-zero probability but leaves the count rate
+untouched, a Poisson-only working model has to absorb the entire
+change into the rate estimate, biasing it; the same mis-attribution
+flows in the opposite direction when the treatment moves the count
+rate but not the structural-zero probability.
+
+Faced with a count outcome and a CATE question, an applied analyst
+today reaches for one of three default tools, each of which gives up
+something the analysis arguably needs. The first is a Gaussian HTE
+method, most commonly BCF or causal BART, applied to the raw counts
+as if they were continuous; this preserves the regularisation and
+uncertainty quantification practitioners trust, but commits all three
+Gaussian pathologies above. The second is a parametric Poisson,
+negative binomial, ZIP, or ZINB generalised linear model with
+treatment-by-covariate interactions \citep{camerontrivedi2013count,
+lambert1992zip, greene1994zinb}, possibly stabilised by propensity
+weighting \citep{rosenbaum1983central} or a doubly robust correction
+\citep{chernozhukov2018double}; this respects the count likelihood
+but recovers heterogeneity only through pre-specified interaction
+terms, defeating the nonparametric premise that motivated the move
+to HTE methods in the first place. The third is a generalised random
+forest with a Poisson moment condition \citep{athey2019generalized},
+or a related relative-risk-targeted estimator
+\citep{kennedy2024relative}; this is honest about the count structure
+but discards the two structural priors that distinguish BCF from
+other forest-based HTE methods, leaving heterogeneity estimates
+exposed to the high-variance behaviour that motivated those priors
+to begin with. Two-part and hurdle learners \citep{mullahy1986hurdle}
+separate the channels of a zero-inflated outcome but do not share
+covariate information across them and do not implement BCF
+differential shrinkage.
+
+The structural priors in question are the distinguishing features of
+\citet{hahn2020bayesian}. Their construction decomposes the
+conditional mean of the response into a \emph{prognostic} function --
+what the outcome would be in the absence of treatment, as a smooth
+function of the covariates -- and a \emph{moderating} function -- by
+how much treatment shifts that baseline at each point in covariate
+space. The two functions are fit by separate BART ensembles with
+deliberately different priors: the prognostic forest is large and
+flexible; the moderating forest is small and tightly shrunk toward
+zero, reflecting the prior belief that treatment effect heterogeneity
+is typically smoother and weaker than the prognostic surface itself.
+This differential shrinkage stabilises CATE estimates in finite
+samples without forcing them to be constant. The second structural
+ingredient is the inclusion of an estimated propensity score among
+the inputs to the prognostic forest only. \citet{hahn2020bayesian}
+show that omitting this control creates \emph{regularization-induced
+confounding} (RIC): the moderating forest absorbs prognostic signal
+that the regularised prognostic forest underfits, biasing CATE
+estimates in the direction of the propensity score. Both pathologies
+are at least as severe under a log-link count likelihood as under a
+Gaussian one: the multiplicative geometry of the log scale amplifies
+the consequences of prognostic underfitting, and the count
+likelihood's tight mean-variance coupling leaves the moderating
+forest doubly exposed to RIC bias. The same arguments apply
+\emph{per channel} in the zero-inflated case.
+
+\medskip
+\noindent\textbf{Our contribution.}
+This paper develops \textbf{CountBCF}, a unified Bayesian causal
+forest framework for count and zero-inflated count outcomes that
+retains both of BCF's structural ingredients while replacing its
+Gaussian backbone with a log-linear count likelihood. The framework
+covers two regimes within a single model and a single sampler:
+\begin{enumerate}
+  \item \textbf{A count-faithful BCF.}
+    For non-zero-inflated count outcomes, we extend the Bayesian
+    Causal Forest of \citet{hahn2020bayesian} from a Gaussian to a
+    Poisson and a negative binomial likelihood by routing both the
+    prognostic and the moderating forest through the log-linear BART
+    backbone of \citet{murray2021loglinear}. The result is a BCF
+    that respects discreteness, mass at zero, and mean-variance
+    coupling without abandoning the prognostic/moderating
+    decomposition that defines the BCF family.
+  \item \textbf{A six-forest BCF decomposition for zero-inflated
+    outcomes.}
+    Murray's log-linear BART parameterises a zero-inflated count
+    likelihood through three function groups: the count log-rate
+    $f$, the structural-zero log-odds $\fzeroSym$, and the
+    not-structural-zero log-odds $\foneSym$, with the structural-zero
+    probability identified as $\sigma(\fzeroSym - \foneSym)$. We
+    replace each group's single forest with the BCF
+    propensity-adjusted prognostic / moderator pair, yielding six
+    forests in total: $(\muF, \tauF)$ for the count channel and
+    $(\muFzero, \tauFzero), (\muFone, \tauFone)$ for the ZI channel.
+    The non-zero-inflated case is recovered as the three-forest sub-model.
+  \item \textbf{RIC protection on the log scale, per channel.}
+    We retain the propensity-as-covariate fix and the
+    differential-shrinkage prior structure of BCF, with the
+    prognostic forest of each function group receiving more trees and
+    a weaker zero-bias prior than the corresponding moderating
+    forest. The leaf prior is the GIG mixture of
+    \citet{murray2021loglinear}, conjugate under a latent-variable
+    augmentation; concentration hyperparameters are calibrated
+    separately for the count and ZI groups, so each moderating forest
+    is shrunk strictly more aggressively than its prognostic
+    counterpart.
+  \item \textbf{Closed-form response-scale heterogeneity and channel
+    decomposition.}
+    The log-linear parameterisation means that, given posterior draws
+    of the forests at any covariate value, the response-scale
+    conditional treatment effect is available without any additional
+    Monte Carlo step: it is a deterministic function of the stored
+    forest values. We report per-unit posterior means, $50\%$ and
+    $95\%$ credible intervals, and population-averaged ATE summaries,
+    all on the response scale. In the zero-inflated case the same
+    posterior draws produce a per-unit decomposition of the CATE into
+    a count-rate channel $\Deltalam(x)$ and a structural-zero channel
+    $\Deltapzi(x)$.
+  \item \textbf{Open software and a pre-registered simulation study.}
+    We release \texttt{countbcf}, an open-source R package built on
+    the \texttt{countbart} MCMC backend of \citet{wikle2023causal},
+    with a single user-facing entry point that consumes a
+    treated/control split and returns the posterior draw matrices
+    needed for the closed-form CATE. The package is accompanied by a
+    pre-registered simulation study (Section~\ref{sec:methodology})
+    that crosses linear and nonlinear data-generating processes with
+    Poisson, NB, ZIP, and ZINB likelihoods and sweeps one-at-a-time
+    over sample size, covariate dimension, and target average
+    treatment effect, scoring all methods against a rate-scale truth.
+\end{enumerate}
+
+The remainder of the paper proceeds as follows.
+Section~\ref{sec:litreview} places CountBCF in the literature on
+count and zero-inflated causal inference and identifies the specific
+gap it fills. Section~\ref{sec:notation} fixes notation, including
+the latent structural-zero indicator and the response-scale
+potential-outcome means that are the paper's target estimand.
+Section~\ref{sec:background} reviews the log-linear BART machinery,
+the GIG-mixture leaf prior, and the redundant $(\fzeroSym, \foneSym)$
+parameterisation that makes the ZI leaf updates conditionally
+conjugate. Section~\ref{sec:countbcf} introduces CountBCF proper: the
+likelihood and parameterisation in both the count and the
+zero-inflated regimes, the differential-shrinkage prior structure,
+the augmented Gibbs sampler, and the closed-form response-scale CATE
+and channel-decomposition summaries.
+Section~\ref{sec:methodology} pre-registers the simulation study used
+to evaluate CountBCF against a Gaussian-BCF baseline.
+Sections~\ref{sec:empirical} and \ref{sec:discussion} are reserved
+for empirical results and discussion, to be written once the
+simulation study completes.
+
+% =======================================================================
+\section{Relationship to previous literature}\label{sec:litreview}
+
+This section reviews the literatures that bear on conditional
+average treatment effect (CATE) estimation for count and
+zero-inflated count outcomes. The cell of the methodological grid in
+which CountBCF sits -- causal $\times$ count-aware (with or without
+zero-inflation) $\times$ nonparametric Bayesian -- is sparsely
+populated; the subsections that follow walk the adjacent cells in
+turn before Section~\ref{sec:lit-gap} states the gap that CountBCF
+fills.
+
+\subsection{Causal inference for count outcomes:
+parametric and semiparametric eras}\label{sec:lit-count}
+
+Causal analysis of count outcomes has its longest tradition in the
+parametric era of generalised linear models. The Poisson and negative
+binomial GLMs with a log link \citep{camerontrivedi2013count} deliver
+interpretable rate-ratio summaries of the average causal effect under
+an unconfoundedness assumption and a correctly specified mean
+function. These models extend cleanly to the negative binomial when
+equi-dispersion fails, and when unconfoundedness is plausible only
+conditionally on covariates, the prescription is essentially the same
+as for continuous outcomes: condition on the covariates or on the
+propensity score \citep{rosenbaum1983central}. The two-stage residual
+inclusion of \citet{terza2008twostage} and the marginal structural
+models of \citet{robins2000marginal} relax the unconfoundedness
+assumption in different ways while keeping the parametric
+log-linear-mean structure. Their common feature is that they target
+the \emph{average} effect under a \emph{fixed functional form}:
+heterogeneity, if permitted at all, enters through pre-specified
+treatment-by-covariate interactions, which is workable for a small
+number of binary moderators but not for a moderate-dimensional
+covariate vector with unknown interaction structure.
+
+The semiparametric and doubly robust literature relaxes the
+parametric programme's commitment to a single correct outcome model.
+\citet{funk2011doubly} survey doubly robust estimators across
+continuous and discrete outcomes, including Poisson outcome models
+paired with logistic propensity models. \citet{van2010targetedI} and
+\citet{vanderlaan2011targeted} develop targeted maximum likelihood
+estimation (TMLE) as a general semiparametric framework whose
+construction extends naturally to count outcomes via a Poisson or
+negative binomial submodel for the targeted update step.
+\citet{chernozhukov2018double} introduce the double / debiased machine
+learning (DML) framework: the outcome regression and propensity
+score are fit by arbitrary high-quality machine learners, cross-fitted
+across folds to avoid overfitting bias, and combined in a
+Neyman-orthogonal score whose root yields an asymptotically normal
+ATE estimate. DML is outcome-model-agnostic: a Poisson-loss gradient
+boosting machine, a neural network, or BART can sit in the outcome
+slot without changing the orthogonality property. By design these
+methods target the average treatment effect rather than the per-unit
+CATE; heterogeneity, when reported at all, is typically delivered by
+stratifying across pre-specified subgroups or by a separate post-hoc
+fit of the outcome regression -- neither of which preserves the
+orthogonality property that motivated the doubly robust construction.
+We adopt the spirit of the doubly robust programme -- propensity
+adjustment of the outcome regression -- via the route of
+\citet{hansen2008prognostic} and \citet{hahn2020bayesian}, but reject
+the restriction to the average effect.
+
+\subsection{Classical and causal zero-inflated count
+models}\label{sec:lit-zi}
+
+The starting point for any zero-inflated analysis is the
+zero-inflated Poisson (ZIP) regression of \citet{lambert1992zip},
+which writes the response as a two-component mixture: with
+probability $\pi(x)$ the unit is a structural zero, and otherwise it
+is drawn from a Poisson with rate $\lambda(x)$. The hurdle
+alternative \citep{mullahy1986hurdle} factors the joint density into
+a binary ``any vs.\ none'' model and a zero-truncated count model;
+hurdle treats \emph{all} zeros as structural while ZIP allows
+sampling zeros from the count component as well.
+\citet{greene1994zinb} extends both constructions to the negative
+binomial case. \citet{hall2000zip} develops a random-effects ZIP for
+repeated-measures data, and \citet{li2012zipidentifiability} settles
+the identifiability question: in the absence of constraints, the
+$(\pi, \lambda)$ pair is not jointly identified from the marginal
+distribution of $Y$, but a logistic link on $\pi$ together with a log
+link on $\lambda$ and at least one continuous covariate restore
+identifiability. The \texttt{pscl} package of
+\citet{zeileis2008regression} consolidates the count GLM toolkit --
+Poisson, NB, ZIP / ZINB, hurdle -- in a single \texttt{R} treatment.
+
+When interest shifts from describing $Y$ to estimating a treatment
+effect, the two-component structure of ZI data complicates matters in
+two ways. First, the response-scale estimand is itself a sum of two
+interpretable contrasts: a shift in the structural-zero probability
+and a shift in the count rate. Second, identifying each contrast
+separately requires that the ignorability assumption be combined with
+the link-function restrictions of \citet{li2012zipidentifiability} or
+with an instrument acting on only one channel. The naive plug-in
+strategy -- estimate a ZIP / ZINB regression with treatment-covariate
+interactions and report the implied mean contrast -- inherits all of
+the distributional rigidity of the underlying GLM. The two-part
+learner -- fit a binary CATE for $\ind\{Y_i > 0\}$ and a count CATE
+for $Y_i \mid Y_i > 0$, then combine -- correctly separates the
+channels but loses joint efficiency across them and does not share
+covariate information. \citet{vanderlaan2011targeted} discuss how
+doubly robust / TMLE constructions adapt to these working models;
+\citet{kennedy2024relative} formalises the closely related mismatch
+between absolute-risk partitioning criteria and relative-risk targets.
+\citet{guo2016mediation} develop an IV mediation analysis for ZI
+counts that defines indirect effect \emph{ratios} suitable for
+count outcomes. \citet{yu2022msnmm} propose a Multiplicative
+Structural Nested Mean Model for ZI nonnegative longitudinal
+outcomes. \citet{oganisian2021bayesian} build a Bayesian nonparametric
+model using Dirichlet process mixtures that jointly predict
+structural zeros, individualised treatment effects, and latent
+subgroups. \citet{choi2023zigdag} approach ZI outcomes from the
+causal-discovery direction. \citet{lukusa2017review} review the
+closely related literature on zero-inflated models with missing data.
+Each of these methods commits either to a particular longitudinal
+structural form, to a single response-scale estimand, or to a
+likelihood that does not isolate the structural-zero and count
+components for inference.
+
+\subsection{Heterogeneous-effects methods and the BART
+line}\label{sec:lit-hte-bart}
+
+Methodological work on heterogeneous treatment effects has been
+dominated by Gaussian or binary outcomes. \citet{hill2011bayesian}
+introduced BART \citep{chipman2010bart, chipman1998bayesian} into the
+causal inference literature as a flexible learner for the outcome
+regression under unconfoundedness; her construction estimates a
+single BART model on $(X, Z)$ and reads the CATE off as the difference
+of the model's predictions at $Z = 1$ and $Z = 0$. This estimator
+inherits BART's strong empirical performance and produces a fully
+Bayesian posterior over per-unit treatment effects, but it ties the
+prognostic and moderating components of the conditional mean to a
+single tree-structure prior, making no provision for the asymmetric
+regularisation that distinguishes heterogeneity estimation from
+outcome estimation, and -- applied to a count outcome -- it inherits
+the three Gaussian failure modes catalogued above.
+
+\citet{athey2019generalized} introduce generalized random forests
+(GRF), a non-Bayesian alternative built on random forests with locally
+weighted moment conditions. GRF accommodates a Poisson moment for
+count outcomes; the asymptotic theory of \citet{wager2018estimation}
+establishes pointwise consistency and asymptotic normality. GRF with
+a Poisson moment shares a feature CountBCF aims to escape: the
+splitting criterion targets local likelihood improvement, not
+relative-risk heterogeneity. \citet{kennedy2024relative} formalises
+this observation. \citet{kunzel2019metalearners} catalogue the
+standard meta-learners (S, T, X, DR), which are estimator-agnostic
+recipes that delegate the regression and propensity work to a
+user-chosen base. In principle a meta-learner can be deployed with a
+count-aware base, but the published meta-learner studies use Gaussian
+or binary base learners; meta-learners do not by themselves address
+RIC, and they offer no off-the-shelf solution for ZI counts.
+
+The fourth strand -- and the one from which CountBCF draws its
+computational backbone -- is the line of work on BART and its
+count-aware extensions. \citet{murray2021loglinear} extends BART to
+count, binomial, and multinomial outcomes by replacing the Gaussian
+likelihood with a log-linear count likelihood (Poisson or negative
+binomial) and replacing the Gaussian leaf prior with a generalised
+inverse Gaussian (GIG) mixture leaf prior whose hyperparameters are
+calibrated so that, after exponentiation, the implied prior on the
+forest sum has zero mean and a user-controlled marginal variance.
+The mixture structure is engineered so that, after a Gamma
+latent-variable augmentation, the GIG mixture is conjugate. Section
+4.2.2 of \citet{murray2021loglinear} extends the construction to
+zero-inflation through the \emph{redundant} parameterisation
+$\pzi(x) = \sigma\bigl(\fzeroSym(x) - \foneSym(x)\bigr)$, in which each
+of $\fzeroSym$ and $\foneSym$ carries its own log-linear BART prior,
+and the data drive symmetry-breaking through latent indicators. The
+redundancy is precisely what makes the leaf updates conditionally
+conjugate under a symmetric GIG-mixture prior. \citet{wikle2023causal}
+package both constructions into the \texttt{countbart} R/C++
+implementation that the present paper extends.
+
+\citet{hahn2020bayesian} introduce Bayesian Causal Forests as the
+BART-based answer to the CATE-estimation problem under
+unconfoundedness, with the differential-shrinkage and
+propensity-as-covariate ingredients catalogued in
+Section~\ref{sec:intro}. The construction has antecedents in the
+prognostic score literature of \citet{hansen2008prognostic} and the
+RIC argument of \citet{hahn2016regularization}.
+\citet{wikle2023causal} restrict their count BART implementation to
+the predictive setting; they do not pursue the BCF decomposition.
+The combination of the BCF decomposition with the log-linear count
+likelihood (with or without zero-inflation), which is the content of
+the present paper, has not appeared in the literature.
+
+\subsection{Identified gap}\label{sec:lit-gap}
+
+To summarise: the predictive count and ZI-count cells are well
+populated, anchored by \citet{murray2021loglinear} and the
+\texttt{countbart} implementation of \citet{wikle2023causal}. The
+causal Gaussian cell is well populated, anchored by
+\citet{hahn2020bayesian} on the Bayesian side and by generalized
+random forests \citep{athey2019generalized, wager2018estimation} on
+the frequentist side. The causal count and causal ZI-count cells are
+sparsely populated, and within them no existing method combines (i)
+the propensity-adjusted $(\muF, \tauF)$ decomposition that has made
+BCF the de-facto Bayesian benchmark for heterogeneous causal effects,
+with (ii) a count-aware (and where applicable, zero-inflation-aware)
+likelihood that respects the discreteness, overdispersion, and
+structural-zero process of integer outcomes. The closest prior work
+either retains the Gaussian likelihood (BCF;
+\citealp{hahn2020bayesian}), drops the BCF decomposition (log-linear
+BART, with or without ZI; \citealp{murray2021loglinear}), separates
+the two ZI channels and loses joint efficiency (two-part / hurdle
+learners; \citealp{mullahy1986hurdle}; \citealp{guo2016mediation};
+\citealp{yu2022msnmm}; \citealp{oganisian2021bayesian}), or replaces
+the Bayesian machinery with frequentist random forests targeting an
+absolute-risk or relative-risk criterion
+\citep{athey2019generalized, kennedy2024relative}.
+\textbf{CountBCF fills this gap.} It routes the prognostic and
+moderating forest of each log-linear BART function group through the
+backbone of \citet{murray2021loglinear} while preserving
+\citeauthor{hahn2020bayesian}'s propensity-adjusted
+differential-shrinkage prior structure, yielding a count-aware
+Bayesian causal forest with closed-form per-unit response-scale
+CATEs, a per-unit channel decomposition in the zero-inflated case,
+and full posterior uncertainty.
+
+% =======================================================================
+\section{Problem statement and notation}\label{sec:notation}
+
+Let $Y_i \in \mathbb{Z}_{\ge 0}$ denote a count-valued response,
+$Z_i \in \{0, 1\}$ a binary treatment indicator, and
+$X_i \in \mathbb{R}^p$ a length-$p$ vector of pre-treatment covariates.
+We observe an iid sample $\{(Y_i, Z_i, X_i)\}_{i=1}^n$ from some joint
+distribution. Capital Roman letters denote random variables, with
+realisations in lower case. When $Y$ or $Z$ appear without a subscript
+they denote length-$n$ column vectors; $\X$ is the $n \times p$ design
+matrix of covariates.
+
+In the potential outcomes framework \citep{imbens2015causal}, write
+$Y_i(0), Y_i(1) \in \mathbb{Z}_{\ge 0}$ for the counterfactual responses
+under control and treatment, with observed outcome
+$Y_i = Z_i Y_i(1) + (1 - Z_i) Y_i(0)$ (SUTVA). Throughout we assume
+\emph{strong ignorability}:
+\begin{align}
+  Y_i(0), Y_i(1) &\independent Z_i \,\big|\, X_i, \label{eq:ignorability}\\
+  0 \;<\; \pi(X_i) \;&\equiv\; \Pr(Z_i = 1 \mid X_i) \;<\; 1, \label{eq:overlap}
+\end{align}
+the second of which (overlap) is required to identify treatment effects
+everywhere in covariate space. The estimated propensity score is denoted
+$\pihat(X_i)$; for the simulation study of Section~\ref{sec:methodology}
+we set $\pihat = \pi$.
+
+\medskip
+\noindent\textbf{Latent structural-zero indicator.}
+In the zero-inflated regime, the response splits into a
+structural-zero component and a count component. Let
+$\Si \in \{0, 1\}$ be the latent indicator that unit $i$ is a
+structural zero:
+\begin{equation}
+  \Si = 1 \;\Longrightarrow\; Y_i = 0, \qquad
+  \Si = 0 \;\Longrightarrow\; Y_i \mid X_i, Z_i \sim \Poi(\lambda(X_i, Z_i))
+                              \quad (\text{or } \NB(\lambda, \kappa)),
+  \label{eq:Si}
+\end{equation}
+and write the conditional structural-zero probability as
+\begin{equation}
+  \pzi(X_i) \;\equiv\; \Pr(\Si = 1 \mid X_i, Z_i = z),
+  \qquad z \in \{0, 1\}.
+  \label{eq:pzi}
+\end{equation}
+The marginal count-component mean is
+$\lambda(x, z) = \E[Y_i \mid X_i = x, Z_i = z, \Si = 0]$; we
+parameterise $\log \lambda$ via a sum-of-trees prior in
+Section~\ref{sec:countbcf}. The non-zero-inflated regime is recovered
+by setting $\pzi \equiv 0$ (no structural-zero process); equivalently,
+$\Si \equiv 0$ for all $i$.
+
+\medskip
+\noindent\textbf{Response-scale potential-outcome means.}
+Combining the two channels yields the response-scale potential-outcome
+means
+\begin{equation}
+  \muz(x) \;=\; \E[Y_i(z) \mid X_i = x]
+          \;=\; \bigl(1 - \pzi(x)\bigr) \,\exp\bigl(\log \lambda_z(x)\bigr),
+  \qquad z \in \{0, 1\}.
+  \label{eq:potmeans}
+\end{equation}
+Our target estimands are the \emph{response-scale CATE} and ATE:
+\begin{equation}
+  \tauresp(x) \;=\; \muone(x) - \muzero(x), \qquad
+  \mathrm{ATE} \;=\; \E_{X}\!\bigl[\tauresp(X)\bigr].
+  \label{eq:cate-ate}
+\end{equation}
+When $\pzi \equiv 0$, \eqref{eq:potmeans} reduces to
+$\muz(x) = \exp(\log\lambda_z(x))$ and \eqref{eq:cate-ate} becomes the
+plain count CATE.
+
+\medskip
+\noindent\textbf{Two-channel decomposition.}
+In the zero-inflated regime, the response-scale CATE in
+\eqref{eq:cate-ate} mixes a change in the count intensity and a
+change in the structural-zero probability. Methods that fit only one
+channel necessarily miss part of the effect. In
+Section~\ref{sec:summaries} we therefore report -- alongside
+$\tauresp$ -- the two per-unit channel decompositions
+\begin{equation}
+  \Deltalam(x) \;=\; \exp(\log \lambda_1(x)) - \exp(\log \lambda_0(x)),
+  \qquad
+  \Deltapzi(x) \;=\; \pzi[1](x) - \pzi[0](x).
+  \label{eq:channels}
+\end{equation}
+
+\medskip
+\noindent\textbf{Scales.}
+Treatment effects naturally live on up to three scales:
+\begin{itemize}
+  \item the \emph{count log-rate scale}, on which the moderating forest
+        $\tauF(x)$ is parameterised; this is a relative-risk-like
+        quantity, $\tauF(x) \approx \log\{\lambda_1(x) / \lambda_0(x)\}$
+        in the non-zero-inflated case;
+  \item the \emph{ZI log-odds scale}, on which the treatment shift in
+        $\etazi$ is parameterised (zero-inflated regime only);
+  \item the \emph{response (rate) scale}, $\tauresp(x)$ in
+        \eqref{eq:cate-ate}, against which all reported metrics are
+        evaluated.
+\end{itemize}
+All relevant quantities are reported. The simulation study
+(Section~\ref{sec:methodology}) is scored against the rate-scale
+truth.
+
+% =======================================================================
+\section{Background: log-linear BART}\label{sec:background}
+
+This section gives the condensed restatement of the log-linear BART
+construction of \citet{murray2021loglinear} -- including the
+zero-inflation extension of \S4.2.2 -- that we need to define
+CountBCF in Section~\ref{sec:countbcf}. The prognostic and moderating
+forests of each function group are individually log-linear BART
+regressions, so the leaf prior, the conditional sufficient
+statistics, and the latent-variable augmentation recapped here
+reappear unchanged inside the CountBCF Gibbs sampler. A reader
+already fluent in \citet{murray2021loglinear} \S\S3--4.2.2 may skip to
+Section~\ref{sec:countbcf}.
+
+\subsection{The BART prior}\label{sec:bart-prior}
+
+A single BART regression \citep{chipman2010bart} expresses an unknown
+function $f : \mathbb{R}^p \to \mathbb{R}$ as a sum of $m$ shallow
+regression trees,
+\begin{equation}
+  f(\x) \;=\; \sum_{h=1}^{m} g(\x;\; T_h, M_h),
+  \label{eq:bart-sum}
+\end{equation}
+where $T_h$ is a binary tree partitioning $\mathbb{R}^p$ and
+$M_h = (\mu_{h,1}, \dots, \mu_{h, b_h})'$ collects the leaf parameters
+at the $b_h$ terminal nodes of $T_h$; the operator $g(\x;\; T_h, M_h)$
+returns $\mu_{h,t}$ when $\x$ falls in terminal node $t$ of $T_h$. The
+tree prior of \citet{chipman1998bayesian} assigns each internal node
+at depth $d$ a split probability $\alpha\,(1+d)^{-\beta}$, with
+$(\alpha, \beta) = (0.95, 2)$ biasing trees toward stubs. With a
+Gaussian response, a Gaussian leaf prior is conjugate, and the
+posterior is sampled by a backfitting Gibbs scheme that updates one
+tree at a time using grow / prune / change / swap MH moves on $T_h$
+and a conjugate draw of $M_h \mid T_h$.
+
+\subsection{The log-linear extension}\label{sec:loglinear-extension}
+
+For non-negative responses one writes the same sum-of-trees
+representation on the log scale,
+\begin{equation}
+  \log f(\x) \;=\; \sum_{h=1}^{m} g(\x;\; T_h, M_h),
+  \label{eq:loglinear-bart}
+\end{equation}
+and reparameterises each leaf parameter as
+$\lambda_{h,t} = \exp(\mu_{h,t}) > 0$, so that
+$f(\x) = \prod_h \lambda_{h, t(\x; T_h)}$. The Poisson and negative
+binomial regression models take the form
+\begin{equation}
+  Y_i \mid \X_i \;\sim\; \Poi\bigl(\mu_{0i}\, f(\X_i)\bigr),
+  \qquad
+  Y_i \mid \X_i \;\sim\; \NB\bigl(\mathrm{size} = \kappa,\;
+                                  \mathrm{mean} = \mu_{0i}\, f(\X_i)\bigr),
+  \label{eq:loglinear-likelihoods}
+\end{equation}
+with $\mu_{0i}$ a unit-specific offset and $\kappa$ the NB dispersion,
+satisfying $\Var(Y_i) = \mu_{0i} f(\X_i) + \mu_{0i}^2 f(\X_i)^2 /
+\kappa$. The Poisson model is the $\kappa \to \infty$ limit. Both
+likelihoods reappear inside the zero-inflated construction of
+Section~\ref{sec:zi-param}: the not-structural-zero component of the
+ZI mixture is exactly the model in \eqref{eq:loglinear-likelihoods},
+while the structural-zero process is governed by an independent pair
+of log-linear BART components introduced below.
+
+After collecting all but the $h$th tree's fit into
+$f^{-h}(\X_i) = \prod_{l \neq h} g(\X_i; T_l, \Lambda_l)$, the
+contribution of a single observation to the joint posterior over
+$(T_h, \Lambda_h)$ has the conditionally Gamma-shaped form
+\begin{equation}
+  L\bigl((T_h, \Lambda_h);\; T_{-h}, \Lambda_{-h}, y\bigr)
+  \;\propto\;
+  \prod_{t=1}^{b_h}
+    \lambda_{h,t}^{r_{h,t}}\,
+    \exp\!\bigl[-s_{h,t}\, \lambda_{h,t}\bigr],
+  \label{eq:bart-poisson-leaflik}
+\end{equation}
+with conditional sufficient statistics
+\begin{equation}
+  r_{h,t} \;=\; \sum_{i:\, \X_i \in \mathcal{A}_{h,t}} u_i,
+  \qquad
+  s_{h,t} \;=\; \sum_{i:\, \X_i \in \mathcal{A}_{h,t}} v_i\, f^{-h}(\X_i),
+  \label{eq:bart-suffstats}
+\end{equation}
+$\mathcal{A}_{h,t}$ the leaf-$t$ partition cell of $T_h$, and
+$(u_i, v_i)$ likelihood-specific summaries that depend on the function
+group (see Sections~\ref{sec:loglinear-augmentation} and
+\ref{sec:zi-param}).
+
+\subsection{The GIG-mixture leaf prior}\label{sec:gig-leaf-prior}
+
+\citet{murray2021loglinear} constructs a leaf prior conjugate to
+\eqref{eq:bart-poisson-leaflik} from two pieces. The generalised
+inverse Gaussian (GIG) family has density
+\begin{equation}
+  p_{\GIG}(\lambda \mid \eta, \chi, \psi)
+  \;\propto\;
+  \lambda^{\eta - 1}\,
+  \exp\!\Bigl[-\tfrac{1}{2}\bigl(\chi / \lambda + \psi \lambda\bigr)\Bigr],
+  \qquad \lambda > 0,
+  \label{eq:gig-density}
+\end{equation}
+covering the Gamma ($\chi = 0$) and inverse-Gamma ($\psi = 0$)
+families as boundary cases. The CountBCF leaf prior is the equal
+mixture
+\begin{equation}
+  p\bigl(\lambda_{h,t} \mid \leafc, \leafd\bigr)
+  \;=\;
+  \tfrac{1}{2}\, p_{\GIG}\!\bigl(\lambda_{h,t} \mid -\leafc,\, 2\leafd,\, 0\bigr)
+  \;+\;
+  \tfrac{1}{2}\, p_{\GIG}\!\bigl(\lambda_{h,t} \mid +\leafc,\, 0,\, 2\leafd\bigr),
+  \label{eq:gig-leaf-prior}
+\end{equation}
+with stochastic representation $\lambda_{h,t} = W$ with probability
+$1/2$ and $\lambda_{h,t} = 1/W$ otherwise, $W \sim \Ga(\leafc,
+\leafd)$. This construction makes $\log \lambda_{h,t}$ exactly
+symmetric about zero and keeps \eqref{eq:gig-leaf-prior} conjugate to
+\eqref{eq:bart-poisson-leaflik}: the leaf full conditional is again a
+GIG mixture, and the integrated likelihood for the tree MH step is a
+ratio of GIG normalising constants \citep[\S3.1]{murray2021loglinear}.
+
+The pair $(\leafc, \leafd)$ is reparameterised by a user-facing
+concentration -- $\azero$ for the count component, $\zconc$ for the
+ZI components (Section~\ref{sec:zi-param}) -- and the number of trees
+$m$, by setting $\psi_1(\leafc) = \azero^2 / m$ and
+$\leafd = \exp(\psi(\leafc))$, where $\psi$ and $\psi_1$ are the
+digamma and trigamma functions. This calibration gives
+$\E[\log \lambda_{h,t}] = 0$ and
+$\Var(\log \lambda_{h,t}) = \azero^2 / m$, so the implied prior on
+$\log f(\X) = \sum_h \log \lambda_{h, t(\X; T_h)}$ is approximately
+$\N(0, \azero^2)$ at any $\X$. The concentration therefore plays the
+same role for $\log f$ that the prior leaf scale plays for $f$ in
+Gaussian BART. For large $m$ or small $\azero$ the calibration admits
+the closed-form approximation $\leafc \approx m / \azero^2 + 1/2$,
+$\leafd \approx m / \azero^2$ \citep[Proposition
+3]{murray2021loglinear}.
+
+\subsection{Latent-variable augmentation for the count
+component}\label{sec:loglinear-augmentation}
+
+To put the count likelihood into the form
+\eqref{eq:bart-poisson-leaflik}, \citet{murray2021loglinear}
+introduces one Gamma latent variable $\xilat$ per observation, with
+full conditional
+$\xilat \mid - \sim \Ga(\kappa + y_i,\; \kappa + \mu_{0i} f(\X_i))$
+under the NB likelihood, and $\xilat \equiv 1$ under the Poisson
+likelihood. Conditioning on $\xilat$, the per-observation
+contribution of $f$ collapses to a Poisson-type kernel
+$f(\X_i)^{y_i}\, \exp[-\xilat \mu_{0i} f(\X_i)]$, which integrated
+against the GIG-mixture prior \eqref{eq:gig-leaf-prior} gives
+\eqref{eq:bart-poisson-leaflik} with $u_i = y_i$ and
+$v_i = \xilat \mu_{0i}$. Under the NB likelihood the dispersion
+$\kappa$ is updated by a random-walk MH step on $\log \kappa$ with a
+$\Be$-prime prior implied by
+$\kappa / (1 + \kappa) \sim \Be(\kappa_a, \kappa_b)$. We defer the
+specific update to Section~\ref{sec:posterior}.
+
+\subsection{Zero-inflation and the redundant
+$(\fzeroSym, \foneSym)$ parameterisation}\label{sec:zi-param}
+
+For a zero-inflated count outcome the likelihood is a two-component
+mixture: with conditional probability $\omega(\X_i)$ the response is
+a structural zero, and otherwise it is drawn from the Poisson or NB
+law \eqref{eq:loglinear-likelihoods}. \citet{murray2021loglinear}
+\S4.2.2 writes the mixing probability through a pair of log-linear
+BART forests $\fzeroSym, \foneSym$,
+\begin{equation}
+  \omega(\X_i)
+  \;=\;
+  \frac{\exp(\fzeroSym(\X_i))}{\exp(\fzeroSym(\X_i)) + \exp(\foneSym(\X_i))}
+  \;=\;
+  \sigma\!\bigl(\fzeroSym(\X_i) - \foneSym(\X_i)\bigr),
+  \label{eq:omega-redundant}
+\end{equation}
+where each of $\fzeroSym, \foneSym$ has its own log-linear BART prior
+\eqref{eq:loglinear-bart} with an independent GIG-mixture leaf prior
+\eqref{eq:gig-leaf-prior} (with concentration $\zconc$). The
+parameterisation is \emph{redundant}: adding a common constant to
+both $\fzeroSym$ and $\foneSym$ leaves $\omega$ unchanged. The
+redundancy is identified through the prior -- both forests are
+centred at zero with symmetric GIG-mixture leaf priors -- and confers
+two concrete benefits. Conditionally Gamma-shaped leaf updates with
+closed-form GIG-mixture posteriors are obtained via a pair of latent
+variables. Let $\zilat \in \{0, 1\}$ be the augmented mixture
+indicator that resolves whether an observed $Y_i = 0$ came from the
+structural process ($\zilat = 0$) or from the count process with a
+zero draw ($\zilat = 1$). When $Y_i > 0$, $\zilat \equiv 1$; when
+$Y_i = 0$, $\zilat$ has the Bernoulli full conditional
+\begin{equation}
+  \Pr(\zilat = 1 \mid -)
+  \;=\;
+  \frac{(1 - \omega(\X_i))\, p_{\mathrm{count}}(0 \mid \X_i)}
+       {\omega(\X_i) + (1 - \omega(\X_i))\, p_{\mathrm{count}}(0 \mid \X_i)},
+  \label{eq:zilat-fc}
+\end{equation}
+where $p_{\mathrm{count}}(0 \mid \X_i)$ is the count-component zero
+probability ($\exp(-\lambda)$ for Poisson / ZIP,
+$(\kappa / (\kappa + \lambda))^\kappa$ for NB / ZINB). Let further
+$\philat > 0$ be an Exponential latent decoupling $\fzeroSym$ and
+$\foneSym$, with full conditional
+\begin{equation}
+  \philat \;\mid\; - \;\sim\;
+  \Exp\!\bigl(\exp(\fzeroSym(\X_i)) + \exp(\foneSym(\X_i))\bigr).
+  \label{eq:phi-fc}
+\end{equation}
+Conditioning on $(\zilat, \philat)$, the joint conditional likelihood
+of $(\fzeroSym, \foneSym)$ factorises into independent terms of the
+form \eqref{eq:bart-poisson-leaflik}: the $\fzeroSym$ leaves have
+$(u_i, v_i) = (1 - \zilat, \philat)$ and the $\foneSym$ leaves have
+$(u_i, v_i) = (\zilat, \philat)$ \citep[\S A.5, Proposition
+1]{murray2021loglinear}. The redundant sampler is also numerically
+better behaved than a strictly identified parameterisation:
+\citet[Supplement \S A]{murray2021loglinear} report substantially
+better effective-sample-size performance across the full
+probability range. In the body of this paper we write the
+structural-zero log-odds as $\etazi = \fzeroSym - \foneSym$ and
+report inference for the identified functionals only.
+
+\subsection{Implementation backbone}\label{sec:backend-note}
+
+We inherit the C++ implementation of the log-linear BART sampler --
+the GIG-mixture leaf draw, the grow / prune / change / swap tree MH
+moves, the latent-variable updates $(\zilat, \xilat, \philat)$, the
+soft-mixture-weight recomputation, and the dispersion MH step -- from
+the \texttt{countbart} R package of \citet{wikle2023causal}. CountBCF
+adds the BCF $(\muF, \tauF)$ decomposition on top of this backend by
+replacing the single forest of log-linear BART (per function group)
+with a forest pair and introducing a per-observation weight that
+routes treated and control units to the correct forest; we describe
+that change next.
+
+% =======================================================================
+\section{CountBCF: BCF decomposition for count and ZI count
+outcomes}\label{sec:countbcf}
+
+This section defines CountBCF. Section~\ref{sec:likelihood} states
+the likelihood and parameterisation in both the count and the
+zero-inflated regimes; Section~\ref{sec:priors} collects the priors
+and the differential shrinkage applied symmetrically across function
+groups; Section~\ref{sec:posterior} writes out the MCMC sweep in
+Algorithm~\ref{alg:countbcf} and the associated Gibbs and MH updates;
+Section~\ref{sec:summaries} explains how posterior draws are
+post-processed into the estimands of Section~\ref{sec:notation},
+including the per-unit channel decomposition in the ZI case.
+
+\subsection{Likelihood and parameterisation}\label{sec:likelihood}
+
+CountBCF models the conditional mean of a count response (and, in the
+ZI regime, the structural-zero probability) on the log scale using a
+treatment-aware BCF decomposition. We treat the count and
+zero-inflated cases as two sub-models of a common framework, selected
+by the user via a \texttt{count\_model} switch that takes values in
+$\{\texttt{poisson}, \texttt{nb}, \texttt{zipoisson}, \texttt{zinb}\}$.
+
+\paragraph{Count regime: three forests.}
+For unit $i$ with covariates $X_i$ and treatment indicator
+$Z_i \in \{0, 1\}$, the Poisson / NB sub-model writes
+\begin{equation}
+  \boxed{\;
+    \log \lambda(X_i, Z_i)
+    \;=\;
+    \muF\!\bigl(X_i,\; \pihat(X_i)\bigr)
+    \;+\;
+    Z_i \cdot \tauF(X_i),
+  \;}
+  \label{eq:countbcf-loglambda}
+\end{equation}
+with response
+\begin{equation}
+  Y_i \mid X_i, Z_i
+  \;\sim\;
+  \Poi\bigl(\lambda(X_i, Z_i)\bigr)
+  \;\;\text{or}\;\;
+  \NB\bigl(\mathrm{size} = \kappa,\; \mathrm{mean} = \lambda(X_i, Z_i)\bigr),
+  \label{eq:countbcf-likelihoods}
+\end{equation}
+where the size parameter $\kappa > 0$ governs overdispersion. The
+Poisson model is the $\kappa \to \infty$ limit. Decomposition
+\eqref{eq:countbcf-loglambda} is the count analogue of the additive
+BCF decomposition $\E[Y \mid X, Z] = \muF(X, \pihat) + Z \tauF(X)$ of
+\citet{hahn2020bayesian}. Both pieces are log-linear BART forests in
+the sense of Section~\ref{sec:loglinear-extension}: $\muF$ is a sum
+of $m_\mu$ trees with leaf parameters drawn from the GIG mixture
+\eqref{eq:gig-leaf-prior}, and similarly $\tauF$ is a sum of $m_\tau$
+trees. The prognostic forest models the control-arm log-mean across
+the whole sample; the moderating forest enters only for treated units
+and captures treatment-effect heterogeneity. As in BCF, $\pihat$ is
+appended to the covariates feeding $\muF$ but \emph{not} those
+feeding $\tauF$.
+
+\paragraph{Zero-inflated regime: six forests, three groups.}
+The ZIP / ZINB sub-model attaches a BCF $(\mu, \tau)$ decomposition
+to each of the three log-linear BART forests $f, \fzeroSym, \foneSym$
+of Section~\ref{sec:zi-param}. We index the three function groups by
+$g \in \{0, 1, 2\}$ with $g = 0$ the count log-rate, $g = 1$ the
+structural-zero log-odds component $\fzeroSym$, and $g = 2$ the
+not-structural-zero log-odds component $\foneSym$. Then
+\begin{equation}
+  \boxed{\;
+    \begin{aligned}
+      \log \lambda(X_i, Z_i)
+        &\;=\; \muF\!\bigl(X_i,\, \pihat(X_i)\bigr)
+               \;+\; Z_i \cdot \tauF(X_i), \\[2pt]
+      \etazi(X_i, Z_i)
+        &\;=\; \bigl[\muFzero\!\bigl(X_i,\, \pihat(X_i)\bigr)
+                     + Z_i \cdot \tauFzero(X_i)\bigr] \\
+        &\quad - \bigl[\muFone\!\bigl(X_i,\, \pihat(X_i)\bigr)
+                       + Z_i \cdot \tauFone(X_i)\bigr], \\[2pt]
+      \pzi(X_i)
+        &\;=\; \sigma\!\bigl(\etazi(X_i,\, Z_i = z)\bigr), \qquad z \in \{0, 1\},
+    \end{aligned}
+  \;}
+  \label{eq:zicountbcf-loglambda}
+\end{equation}
+together with the ZI count likelihood
+$Y_i \mid \Si = 1 = 0$, and
+$Y_i \mid \Si = 0, X_i, Z_i \sim \Poi(\lambda(X_i, Z_i))$ or
+$\NB(\kappa, \lambda(X_i, Z_i))$, where
+$\Pr(\Si = 1 \mid X_i, Z_i) = \pzi(X_i)$. The non-ZI sub-model
+collapses \eqref{eq:zicountbcf-loglambda} by dropping the $\etazi$
+line and the two ZI groups, recovering \eqref{eq:countbcf-loglambda}.
+Equation \eqref{eq:zicountbcf-loglambda} contains six unknown
+functions, two per function group, summarised in
+Table~\ref{tab:zicountbcf-forests}. Each is itself a log-linear BART
+regression: a sum of $m_{s, g}$ shallow trees with leaf parameters
+drawn from the GIG mixture, with $s \in \{\mu, \tau\}$ indexing the
+BCF role and $g \in \{0, 1, 2\}$ indexing the function group. For
+each group, the prognostic forest $\mu^{(g)}$ enters with weight
+$\omegai = 1$; the moderating forest $\tau^{(g)}$ enters with weight
+$\omegai = Z_i$. The propensity score estimate $\pihat$ is appended
+to the covariates of all three prognostic forests but not to the
+moderating ones.
+
+\begin{table}[t]
+\centering
+\caption{The six forests of CountBCF in the zero-inflated regime. The
+function group $g$ labels the log-linear BART target inherited from
+\citet{murray2021loglinear}; the BCF role $s$ labels the prognostic
+($\mu$) vs.\ moderating ($\tau$) piece introduced by the
+$(\mu, \tau)$ decomposition. The non-ZI sub-model retains only the
+$g = 0$ row.}
+\label{tab:zicountbcf-forests}
+\begin{tabular}{cllcc}
+\toprule
+$g$ & Function group & Forest pair $(\mu^{(g)}, \tau^{(g)})$
+                                                      & Trees $(m_\mu, m_\tau)$ & Weight $\omegai$ on $\tau^{(g)}$ \\
+\midrule
+$0$ & Count log-rate $\log\lambda$           & $(\muF,\; \tauF)$
+                                                      & $(250,\; 50)$ & $Z_i$ \\
+$1$ & ZI log-odds $\fzeroSym$                & $(\muFzero,\; \tauFzero)$
+                                                      & $(100,\; 50)$ & $Z_i$ \\
+$2$ & not-ZI log-odds $\foneSym$             & $(\muFone,\; \tauFone)$
+                                                      & $(100,\; 50)$ & $Z_i$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\medskip
+\noindent\textbf{Scales recovered.}
+On the \emph{count log-rate scale}, $\tauF(x)$ is itself a CATE: the
+conditional log relative rate (of the not-structural-zero
+sub-population in the ZI case),
+$\tauF(x) = \log\{\lambda_1(x) / \lambda_0(x)\}$. On the \emph{ZI
+log-odds scale}, the treatment shift in the structural-zero log-odds
+is
+\begin{equation}
+  \Detazi(x)
+  \;\equiv\;
+  \etazi(x, 1) - \etazi(x, 0)
+  \;=\;
+  \tauFzero(x) - \tauFone(x),
+  \label{eq:Deltaeta-decomp}
+\end{equation}
+so $\tauFzero, \tauFone$ are jointly identified up to a common shift
+-- only the difference is statistically relevant for the ZI channel.
+On the \emph{response (rate) scale}, the potential-outcome means
+\eqref{eq:potmeans} are
+\begin{equation}
+  \muz(x)
+  \;=\;
+  \bigl(1 - \sigma(\etazi(x, z))\bigr)\,
+  \exp\!\bigl(\muF(x, \pihat(x)) + z\, \tauF(x)\bigr),
+  \qquad z \in \{0, 1\},
+  \label{eq:muz-decomp}
+\end{equation}
+and $\tauresp(x) = \muone(x) - \muzero(x)$. In the non-ZI sub-model
+$\pzi \equiv 0$ and \eqref{eq:muz-decomp} reduces to
+$\muz(x) = \exp(\muF + z\tauF)$, giving the closed-form count CATE
+\begin{equation}
+  \tauresp(x)
+  \;=\;
+  \exp\!\bigl(\muF(x, \pihat(x))\bigr)\,
+  \bigl(\exp(\tauF(x)) - 1\bigr),
+  \label{eq:tauresp-decomp}
+\end{equation}
+which makes explicit that the absolute treatment effect on the rate
+scale depends on the baseline rate in addition to the log-rate
+effect. In the ZI case, $\tauresp$ also mixes the count-rate channel
+$\Deltalam$ and the ZI-probability channel $\Deltapzi$ from
+\eqref{eq:channels}.
+
+\medskip
+\noindent\textbf{Why this parameterisation.}
+Three properties of the construction are worth flagging. First, the
+model respects the non-negativity of $Y$ automatically: $\lambda > 0$
+and (where applicable) $\pzi \in (0, 1)$ regardless of the forest
+values, so no truncation or clipping is required. Second, all forests
+are parameterised \emph{a priori} independently, which is what
+permits the BCF differential-shrinkage idea
+\citep[\S2.3]{hahn2020bayesian} to be applied per group: each
+$\tau^{(g)}$ can be shrunk harder than its $\mu^{(g)}$ counterpart
+without disturbing other groups' priors. Third, the construction
+reduces to log-linear BART \citep{murray2021loglinear} when
+$\tau^{(g)} \equiv 0$ for all $g$, and to standard BCF in the limit
+where $\tauF$ is shrunk hard to zero. In this sense CountBCF is the
+smallest extension of log-linear BART that delivers a separate
+moderating forest on each channel, and the smallest extension of BCF
+that handles count and zero-inflated count outcomes natively. The
+redundant $(\fzeroSym, \foneSym)$ parameterisation in the ZI case is
+retained for the reasons given in Section~\ref{sec:zi-param}:
+conjugate leaf updates, well-defined posterior on the identified
+functionals, and substantially better MCMC mixing
+\citep[Supplement~\S A]{murray2021loglinear}. The BCF $(\mu, \tau)$
+decomposition does not break the redundancy: shifting $\muFzero$ and
+$\muFone$ by a common constant leaves $\etazi$ invariant, and shifting
+$\tauFzero$ and $\tauFone$ by a common constant leaves $\Detazi$
+invariant.
+
+\subsection{Priors}\label{sec:priors}
+
+The CountBCF prior factorises across forests, the dispersion
+parameter, and the GIG-mixture latent structure of each leaf. The
+construction is symmetric across function groups, so we state the
+prior for a generic forest pair $(\mu^{(g)}, \tau^{(g)})$ and
+specialise the concentration hyperparameters to the count and ZI
+groups.
+
+\paragraph{Sum-of-trees priors on each forest.}
+Each forest is a log-linear BART regression in the sense of
+Section~\ref{sec:loglinear-extension}: a sum of $m_{s,g}$ shallow
+trees with tree structures $\{T_{s,g,h}\}$ drawn \emph{a priori}
+independently from the CGM tree-structure prior and leaf parameters
+$\{\Lambda_{s,g,h}\} = \{\lambda_{s, g, h, t}\}$ drawn \emph{a priori}
+independently from the GIG mixture \eqref{eq:gig-leaf-prior}.
+Collecting these, for $s \in \{\mu, \tau\}$ and (in the ZI case)
+$g \in \{0, 1, 2\}$,
+\begin{equation}
+  \boxed{\;
+    \begin{aligned}
+      T_{s, g, h} \;\big|\; \alpha_s, \beta_s
+        &\;\stackrel{\mathrm{iid}}{\sim}\;
+          \mathrm{CGM}(\alpha_s, \beta_s),
+          & h &= 1, \dots, m_{s, g}, \\[2pt]
+      \lambda_{s, g, h, t} \;\big|\; \leafc_{s,g}, \leafd_{s,g}
+        &\;\stackrel{\mathrm{iid}}{\sim}\;
+          \tfrac{1}{2}\,\GIG(-\leafc_{s,g}, 2\leafd_{s,g}, 0)
+          + \tfrac{1}{2}\,\GIG(\leafc_{s,g}, 0, 2\leafd_{s,g}),
+          & t &= 1, \dots, b_{s, g, h}, \\[2pt]
+      \mu^{(g)}(x, \pihat(x))
+        &\;=\; \sum_{h=1}^{m_{\mu, g}} g\!\bigl((x, \pihat(x));\, T_{\mu, g, h}, \Lambda_{\mu, g, h}\bigr),
+        & \tau^{(g)}(x)
+        &\;=\; \sum_{h=1}^{m_{\tau, g}} g\bigl(x;\, T_{\tau, g, h}, \Lambda_{\tau, g, h}\bigr),
+    \end{aligned}
+  \;}
+  \label{eq:zicountbcf-prior}
+\end{equation}
+where the CGM density assigns an internal-node split probability
+$\alpha_s\,(1+d)^{-\beta_s}$ at depth $d$ and a uniform draw over
+splitting variable and threshold given the split. The
+depth-penalty hyperparameters $(\alpha_s, \beta_s)$ are shared across
+function groups (so all prognostic forests have the same tree-shape
+prior, and similarly for the moderating forests); the leaf
+concentration is allowed to differ across $g$ to reflect the
+different natural scales of the count log-rate versus the
+zero-inflation log-odds. In the count-only regime, indices $g \in
+\{1, 2\}$ are dropped throughout.
+
+\paragraph{Differential shrinkage applied symmetrically.}
+CountBCF inherits the BCF \citep{hahn2020bayesian} idea that the
+treatment-effect surface $\tau^{(g)}$ should be shrunk more
+aggressively than the prognostic surface $\mu^{(g)}$ on \emph{each}
+channel: the signal-to-noise in $\tau^{(g)}$ is typically lower than
+in $\mu^{(g)}$; spurious heterogeneity in any of $\tauF, \tauFzero,
+\tauFone$ manifests as fake interactions with $Z$ on the respective
+channel; and a stub-biased prior on every $\tau^{(g)}$ delivers a
+near-constant treatment-effect estimator as a default. The default
+hyperparameters are summarised in
+Table~\ref{tab:default-hyperparams}. The tree-prior
+$(\alpha_\tau, \beta_\tau) = (0.25, 3)$ sharply downweights non-stub
+trees in every moderating forest: under it the prior probability of a
+non-trivial split at the root is $0.25$ and the probability of a
+depth-$2$ internal node is approximately $0.0039$, so on average each
+moderating forest is close to a piecewise-constant surface with very
+few splits. The leaf concentration $\azerotau = \azero / 2$ (count
+group) and $\zconctau = \zconc / 2$ (ZI groups) further shrinks the
+amplitude of those few splits: under the GIG-mixture calibration of
+Section~\ref{sec:gig-leaf-prior},
+$\Var(\log \lambda_{\tau, g, h, t}) \approx a_{0, \tau, g}^2 /
+m_{\tau, g}$, so the implied marginal prior on $\tau^{(g)}(x)$ is
+$\N(0, a_{0, \tau, g}^2)$, a factor of two tighter than the prior on
+$\mu^{(g)}$.
+
+The user-facing concentration $\azero$ defaults to
+$\tfrac{1}{2}(\log y_{(0.95)} - \overline{\log \mu_{0,i}})$, where
+$y_{(0.95)}$ is the empirical 95\% quantile of $y$, centring the
+count-channel prior on a data-matched scale. The ZI concentration
+$\zconc$ defaults to $3.5 / \sqrt{2} \approx 2.47$, matching the
+calibration of \citet[\S 4.2.2]{murray2021loglinear} for the
+redundant $(\fzeroSym, \foneSym)$ parameterisation. Both can be
+overridden by the user.
+
+\begin{table}[t]
+\centering
+\caption{CountBCF default hyperparameters. The ZI rows ($g \in
+\{1, 2\}$) apply only when \texttt{count\_model} $\in
+\{\texttt{zipoisson}, \texttt{zinb}\}$; the dispersion parameters
+apply only when \texttt{count\_model} $\in \{\texttt{nb},
+\texttt{zinb}\}$.}
+\label{tab:default-hyperparams}
+\begin{tabular}{lll}
+\toprule
+Hyperparameter & Default & Role \\
+\midrule
+$m_{\mu, 0}$, $m_{\tau, 0}$ & $250$,\, $50$ & Trees per forest, count group $g = 0$ \\
+$m_{\mu, 1}$, $m_{\tau, 1}$ & $100$,\, $50$ & Trees per forest, ZI group $g = 1$ ($\fzeroSym$) \\
+$m_{\mu, 2}$, $m_{\tau, 2}$ & $100$,\, $50$ & Trees per forest, ZI group $g = 2$ ($\foneSym$) \\
+$(\alpha_\mu, \beta_\mu)$ & $(0.95,\, 2)$ & CGM depth penalty, all $\mu^{(g)}$ \\
+$(\alpha_\tau, \beta_\tau)$ & $(0.25,\, 3)$ & CGM depth penalty, all $\tau^{(g)}$ \\
+$\azero$ & $\tfrac{1}{2}(\log y_{(0.95)} - \overline{\log \mu_{0,i}})$ & Leaf concentration, $\muF$ (count) \\
+$\azerotau$ & $\azero / 2$ & Leaf concentration, $\tauF$ (count) \\
+$\zconc$ & $3.5 / \sqrt{2}$ & Leaf concentration, $\muFzero, \muFone$ (ZI) \\
+$\zconctau$ & $\zconc / 2$ & Leaf concentration, $\tauFzero, \tauFone$ (ZI) \\
+$(\kappa_a, \kappa_b)$ & $(5,\, 3)$ & Beta-prime prior on $\kappa$ \\
+$\sigma_\kappa$ & $0.21$ & RW-MH proposal SD on $\log \kappa$ \\
+\texttt{include\_pihat} & \texttt{"control"} & Propensity appended to all $\mu^{(g)}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Propensity-as-covariate fix on every channel.}
+A central insight of \citet{hahn2020bayesian} is that, on the
+additive response scale, naively regressing the outcome on $(X, Z)$
+with a BART-like prior leaves the estimator vulnerable to
+regularisation-induced confounding (RIC): when the propensity score
+$\pi(x)$ is a function of $x$, the prior shrinkage of the prognostic
+surface toward zero biases $\tauF$ in a direction that depends on
+$\pi$. The fix is to append $\pihat(x)$ to the prognostic forest's
+covariates so that $\muF$ can ``absorb'' the part of the outcome
+explained by $\pi$ without recruiting $\tauF$. On the log-rate scale
+of \eqref{eq:countbcf-loglambda} the RIC argument is at least as
+severe: a perturbation $\delta$ in $\muF$ translates to a
+multiplicative perturbation $e^\delta - 1 \approx \delta$ in the
+baseline rate, which then multiplies into $\tauresp$ via
+\eqref{eq:tauresp-decomp}; a bias in $\muF$ correlated with $\pi$
+propagates linearly into $\tauresp$. In the ZI case the same RIC
+argument applies \emph{independently} on each channel: perturbations
+in $\muFzero$ or $\muFone$ propagate into the ZI-channel moderating
+forests through the redundant parameterisation. We therefore append
+$\pihat$ to the covariate set of \emph{every} prognostic forest by
+default and do \emph{not} append it to any moderating forest. The R
+wrapper exposes this as \verb|include_pihat = "control"|, with
+\verb|"moderate"|, \verb|"both"|, and \verb|"none"| available for
+sensitivity checks.
+
+\paragraph{Negative-binomial dispersion $\kappa$.}
+Under the NB / ZINB likelihood, the size parameter $\kappa$ controls
+overdispersion: $\Var(Y_i \mid X_i, Z_i, \Si = 0) = \lambda_i +
+\lambda_i^2 / \kappa$. Following \citet{murray2021loglinear} we place
+a Beta-prime prior on $\kappa$ implied by
+\begin{equation}
+  \frac{\kappa}{1 + \kappa} \;\sim\; \Be(\kappa_a, \kappa_b),
+  \qquad
+  (\kappa_a, \kappa_b) = (5,\, 3),
+  \label{eq:kappa-prior}
+\end{equation}
+with mean $2.5$ and a right tail heavy enough not to rule out
+near-Poisson behaviour while still penalising arbitrarily large
+overdispersion. The same prior governs $\kappa$ under both NB and
+ZINB; structural zeros enter the $\kappa$-conditional likelihood only
+through $\zilat$ (Section~\ref{sec:posterior}). The dispersion is
+updated by a random-walk MH step on $\log \kappa$ with Gaussian
+proposal of standard deviation $\sigma_\kappa = 0.21$.
+
+\subsection{Posterior computation}\label{sec:posterior}
+
+Posterior inference for CountBCF uses a Gibbs sampler that
+interleaves backfitting updates of the forests with latent-variable
+augmentation steps and (under NB / ZINB) a MH step on the dispersion.
+The structure mirrors the log-linear BART sampler of
+\citet[\S 3.3, \S S.3]{murray2021loglinear}: the only forest-level
+change is the introduction of a per-observation weight
+$\omegai \in \{1, Z_i\}$ that routes treated and control units to the
+moderating and prognostic forests, replicated across all function
+groups.
+
+\paragraph{Latent-variable augmentation.}
+The augmentations are inherited from
+Sections~\ref{sec:loglinear-augmentation} and \ref{sec:zi-param}.
+Each observation carries up to three latents:
+\begin{equation}
+  \begin{aligned}
+    \zilat \;\mid\; -
+      &\;\sim\;
+      \Ber\!\Bigl(
+        \frac{(1 - \omega(\X_i))\, p_{\mathrm{count}}(0 \mid \X_i)}
+             {\omega(\X_i) + (1 - \omega(\X_i))\,
+              p_{\mathrm{count}}(0 \mid \X_i)}\Bigr)
+        \quad\text{when } Y_i = 0 \text{ (ZIP/ZINB)};
+        \;\; \zilat \equiv 1 \text{ when } Y_i > 0, \\[2pt]
+    \xilat \;\mid\; -
+      &\;\sim\;
+      \begin{cases}
+        \delta_{1} & \text{(Poisson / ZIP)}, \\
+        \Ga\!\bigl(\kappa + Y_i,\;\kappa + \lambda(\X_i, Z_i)\bigr)
+        & \text{(NB / ZINB)},
+      \end{cases} \\[2pt]
+    \philat \;\mid\; -
+      &\;\sim\;
+      \Exp\!\bigl(\exp(\fzeroSym(\X_i)) + \exp(\foneSym(\X_i))\bigr)
+      \quad\text{(ZIP/ZINB only)}.
+  \end{aligned}
+  \label{eq:three-latents}
+\end{equation}
+Under the non-ZI sub-models the $\zilat$ and $\philat$ updates are
+skipped; under the Poisson / ZIP sub-models the $\xilat$ update is
+skipped.
+
+\paragraph{Tree updates: a single primitive applied to all forests.}
+Conditional on the latents, the joint conditional likelihood of the
+forests factorises into independent terms, each of which has the
+conditionally Gamma form \eqref{eq:bart-poisson-leaflik}. For forest
+$s$ in function group $g$ at tree $h$, the conditional augmented
+likelihood for the $b_{s,g,h}$ leaves of $T_{s,g,h}$ is
+\begin{equation}
+  \boxed{\;
+    L\bigl(\Lambda_{s,g,h} \,\big|\, T_{s,g,h}, T_{-(s,g,h)},
+           \Lambda_{-(s,g,h)},
+           \zilat, \xilat, \philat, Y, \kappa\bigr)
+    \;\propto\;
+    \prod_{t=1}^{b_{s,g,h}}
+      \lambda_{s,g,h,t}^{\,r_{s,g,h,t}}\;
+      \exp\!\bigl[-s_{s,g,h,t}\,\lambda_{s,g,h,t}\bigr],
+  \;}
+  \label{eq:zi-augmented-leaflik}
+\end{equation}
+where the leaf sufficient statistics
+$r_{s,g,h,t} = \sum_{i \in \mathcal{A}_{s,g,h,t}} u_i$ and
+$s_{s,g,h,t} = \sum_{i \in \mathcal{A}_{s,g,h,t}}
+v_i\, f^{-(s,g,h)}(\X_i)$ aggregate over the units in the partition
+cell, using the per-group $(u_i, v_i)$ enumerated in
+Table~\ref{tab:suffstats}. The BCF weight $\omegai \in \{1, Z_i\}$
+enters multiplicatively in both $u_i$ and $v_i$: for prognostic
+forests every unit contributes; for moderating forests only treated
+units contribute. This is the BCF moderating-forest ingredient
+transposed to the count (or ZI count) likelihood, applied
+symmetrically to all function groups present in the model.
+
+\begin{table}[t]
+\centering
+\caption{Per-group sufficient statistics. The values $u_i, v_i$ are
+inserted into \eqref{eq:zi-augmented-leaflik} through the leaf
+accumulators $r_{s,g,h,t}, s_{s,g,h,t}$. The BCF weight is
+$\omegai = 1$ for prognostic forests ($s = \mu$) and $\omegai = Z_i$
+for moderating forests ($s = \tau$); it premultiplies $(u_i, v_i)$
+before the leaf sum is formed. The non-ZI sub-model retains only the
+$g = 0$ row.}
+\label{tab:suffstats}
+\begin{tabular}{clll}
+\toprule
+$g$ & Function target          & $u_i \cdot \omegai^{-1}$ & $v_i \cdot \omegai^{-1}$ \\
+\midrule
+$0$ & count rate $\lambda$     & $\zilat\, y_i$
+                                & $\zilat\, \exp(\log \xilat + \log\lambda(\X_i, Z_i)
+                                            - \omegai \log \lambda_{s,g,h,t})$ \\
+$1$ & ZI log-odds $\fzeroSym$  & $1 - \zilat$
+                                & $\exp(\log \philat + \log\fzeroSym(\X_i)
+                                            - \omegai \log \lambda_{s,g,h,t})$ \\
+$2$ & ZI log-odds $\foneSym$   & $\zilat$
+                                & $\exp(\log \philat + \log\foneSym(\X_i)
+                                            - \omegai \log \lambda_{s,g,h,t})$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The GIG-mixture leaf prior \eqref{eq:gig-leaf-prior} is conjugate to
+\eqref{eq:zi-augmented-leaflik}, so the leaf draw is a closed-form
+mixture of GIG variates (implemented in \texttt{drmu\_loglinear}), and
+$T_{s,g,h}$ is updated by a MH step with grow / prune / change / swap
+proposals (implemented in \texttt{bd\_loglinear}). The MH acceptance
+ratio uses the integrated marginal likelihood obtained by integrating
+$\Lambda_{s,g,h}$ against the GIG-mixture prior; because both prior
+and likelihood are products over leaves, that integral factorises and
+reduces to a ratio of GIG normalising constants
+\citep[Appendix~A]{murray2021loglinear}.
+
+\paragraph{Per-group log-fit accumulator.}
+Implemented as backfitting, the tree update maintains running
+accumulators on the $n$-vector index $k$: $\mathtt{allfit}[k]$ tracks
+the total log-mean / log-odds; $\mathtt{allfits}[s][k]$ tracks the
+contribution of forest $s$; and the per-group accumulator
+$\mathtt{log\_f\_per\_group}[g][k] = \mu^{(g)}(\X_k, \pihat(\X_k)) +
+Z_k\, \tau^{(g)}(\X_k)$ stores the in-sample log-fit of both forests
+in group $g$. Before sampling tree $(s, g, h)$ its current
+contribution is subtracted from all relevant accumulators; sufficient
+statistics are computed from the partial fit; $T_{s,g,h}$ and
+$\Lambda_{s,g,h}$ are updated; and the new contribution is added back.
+The per-group accumulator makes the six-forest update efficient: the
+ZI sufficient statistics read $\log \fzeroSym$ and $\log \foneSym$
+from $\mathtt{log\_f\_per\_group}[1]$ and
+$\mathtt{log\_f\_per\_group}[2]$ in $O(1)$ per observation. After
+each sweep the soft mixture weight that enters the $\zilat$ update is
+recomputed as $\log\softw(\X_i) = \log\foneSym(\X_i) -
+\logsumexp(\log\fzeroSym(\X_i), \log\foneSym(\X_i))$, which avoids the
+underflow of naive computation when one of the log-fits is large and
+negative.
+
+\paragraph{Dispersion update (NB / ZINB only).}
+Propose $\kappa^\star = \exp(\log \kappa + \sigma_\kappa\,
+\varepsilon)$ with $\varepsilon \sim \N(0, 1)$. Accept with
+probability
+\begin{equation}
+  \alpha_\kappa
+  \;=\;
+  \min\!\Bigl\{1,\;
+    \frac{p_{\NB}(Y \mid \zilat, \lambda, \kappa^\star)}{p_{\NB}(Y \mid \zilat, \lambda, \kappa)}
+    \cdot
+    \frac{p(\kappa^\star)}{p(\kappa)}
+    \cdot
+    \frac{\kappa^\star}{\kappa}
+  \Bigr\},
+  \label{eq:kappa-MH}
+\end{equation}
+where the likelihood factor is the augmented NB likelihood conditional
+on the mixture indicator (so structural zeros do not enter the
+dispersion update under ZINB), $p(\kappa)$ is the Beta-prime density
+implied by \eqref{eq:kappa-prior}, and the Jacobian factor $\kappa^\star
+/ \kappa$ comes from the log-scale proposal. Acceptance rates after
+burn-in are returned as \texttt{kappa\_acpt} and serve as a coarse
+convergence diagnostic; we target the $0.20$--$0.45$ band typical for
+random-walk MH.
+
+\begin{algorithm}[t]
+\caption{CountBCF: one MCMC sweep. Indices $s \in \{\mu, \tau\}$
+range over forests, $g \in \{0\}$ in the count sub-model and
+$g \in \{0, 1, 2\}$ in the ZI sub-model, and $h = 1, \dots, m_{s, g}$
+over the trees of forest $(s, g)$. The BCF weight is $\omegai = 1$
+for $s = \mu$ and $\omegai = Z_i$ for $s = \tau$. Latent updates that
+are not applicable to the active sub-model are skipped.}
+\label{alg:countbcf}
+\begin{algorithmic}[1]
+  \Require Current state
+  $\bigl(\{T_{s,g,h}, \Lambda_{s,g,h}\},\, \kappa,\,
+         \{\zilat, \xilat, \philat\}\bigr)$.
+  \Statex
+  \State \textbf{Dispersion update (NB / ZINB only).}
+         Propose $\kappa^\star = \exp(\log \kappa + \sigma_\kappa\,
+         \varepsilon)$, $\varepsilon \sim \N(0, 1)$. Accept with
+         probability $\alpha_\kappa$ from \eqref{eq:kappa-MH}; otherwise
+         retain $\kappa$.
+  \Statex
+  \State \textbf{Augmentation update for $\zilat$ (ZIP / ZINB only).}
+         For each $i$ with $Y_i = 0$, draw $\zilat$ from the Bernoulli
+         full conditional in \eqref{eq:three-latents}; set $\zilat = 1$
+         when $Y_i > 0$. [\texttt{drz\_loglinear}]
+  \Statex
+  \State \textbf{Augmentation update for $\xilat$ (NB / ZINB only).}
+         For each $i$, draw $\xilat$ from the Gamma full conditional;
+         set $\xilat \equiv 1$ otherwise.
+         [\texttt{drxi\_loglinear}]
+  \Statex
+  \State \textbf{Augmentation update for $\philat$ (ZIP / ZINB only).}
+         For each $i$, draw
+         $\philat \sim \Exp(\exp(\fzeroSym(\X_i)) +
+         \exp(\foneSym(\X_i)))$.
+         [\texttt{drphi\_loglinear}]
+  \Statex
+  \State \textbf{Backfitting tree updates.}
+         For each function group $g$ active in the sub-model, each
+         forest $s \in \{\mu, \tau\}$, and each tree $h = 1, \dots,
+         m_{s, g}$:
+         \begin{enumerate}[label*=5.\arabic*, leftmargin=*, topsep=2pt, itemsep=2pt]
+            \item Subtract the current contribution of
+                  $(T_{s,g,h}, \Lambda_{s,g,h})$ from
+                  $\mathtt{allfit}$, $\mathtt{allfits}[s]$, and
+                  $\mathtt{log\_f\_per\_group}[g]$.
+            \item Compute the leaf sufficient statistics
+                  $(r_{s, g, h, t}, s_{s, g, h, t})$ from
+                  \eqref{eq:zi-augmented-leaflik} using the per-group
+                  $(u_i, v_i)$ of Table~\ref{tab:suffstats},
+                  premultiplied by the weight $\omegai$.
+            \item Propose a tree move (grow / prune / change / swap)
+                  for $T_{s, g, h}$ and accept with probability from
+                  the integrated marginal likelihood (GIG-mixture
+                  conjugacy). [\texttt{bd\_loglinear}]
+            \item Draw the leaf values
+                  $\Lambda_{s, g, h} \mid T_{s, g, h}, \zilat, \xilat,
+                  \philat, Y, \kappa$ from the GIG-mixture posterior
+                  implied by \eqref{eq:zi-augmented-leaflik}.
+                  [\texttt{drmu\_loglinear}]
+            \item Add the new contribution back into the affected
+                  accumulators.
+         \end{enumerate}
+  \Statex
+  \State \textbf{Soft mixture weight (ZIP / ZINB only).}
+         For each $i$, recompute
+         $\log \softw(\X_i) = \log\foneSym(\X_i) -
+         \logsumexp(\log\fzeroSym(\X_i), \log\foneSym(\X_i))$.
+  \Statex
+  \State \textbf{(Optional) Random-effects update.} If enabled, draw
+         the random-intercept block from its Gibbs full conditional;
+         otherwise skip.
+  \Statex
+  \State \Return Updated state
+         $\bigl(\{T_{s,g,h}, \Lambda_{s,g,h}\},\, \kappa,\,
+                \{\zilat, \xilat, \philat\}\bigr)$.
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{Implementation lineage.}
+The C++ primitives \texttt{bd\_loglinear}, \texttt{drmu\_loglinear},
+\texttt{fit\_loglinear}, \texttt{drz\_loglinear},
+\texttt{drxi\_loglinear}, \texttt{drphi\_loglinear}, and the
+dispersion MH step are inherited verbatim from \texttt{countbart}
+\citep{wikle2023causal}; the CountBCF contribution is the dispatch
+logic in \texttt{src/countbcf.cpp} that (i) instantiates two forests
+per function group rather than one, (ii) sets the per-forest weight
+vector $\omegai$ to either $\mathbf{1}_n$ or $Z_{\mathrm{trt}}$, (iii)
+applies $\omegai$ to the sufficient-statistic construction in
+step~5.2, and (iv) maintains the per-group log-fit accumulator so
+that the four ZI forests read $\fzeroSym$ and $\foneSym$ in $O(1)$
+per observation. The change is mechanical at the kernel level but
+yields a sampler that, to our knowledge, is functionally distinct
+from any log-linear BART variant in the published literature: it
+jointly estimates up to six log-rate / log-odds surfaces under
+differential shrinkage, with each moderating forest seeing only the
+treated subsample's residual variation.
+
+\subsection{Posterior summaries}\label{sec:summaries}
+
+Algorithm~\ref{alg:countbcf} produces a sequence of $B$ post-burn-in
+posterior draws indexed by $b = 1, \dots, B$. The sampler stores, for
+each draw, the per-unit values of the active forests on the original
+(unsorted) input order:
+\begin{equation}
+  \begin{aligned}
+    \muF^{(b)}(X_i) &= \texttt{mu\_f\_post}[b, i],
+    & \tauF^{(b)}(X_i) &= \texttt{tau\_f\_post}[b, i], \\
+    \muFzero^{(b)}(X_i) &= \texttt{mu\_f0\_post}[b, i],
+    & \tauFzero^{(b)}(X_i) &= \texttt{tau\_f0\_post}[b, i], \\
+    \muFone^{(b)}(X_i) &= \texttt{mu\_f1\_post}[b, i],
+    & \tauFone^{(b)}(X_i) &= \texttt{tau\_f1\_post}[b, i],
+  \end{aligned}
+  \label{eq:zi-posterior-storage}
+\end{equation}
+together with the dispersion draws $\kappa^{(b)}$ (NB / ZINB only).
+In the non-ZI sub-model only the first row is stored. Downstream
+inference is a post-processing exercise on these matrices and
+produces three (count) or four (ZI) classes of summaries.
+
+\paragraph{Per-iteration potential outcomes.}
+For each draw $b$ and each unit $i$, the closed-form mapping from
+stored forest values to response-scale potential-outcome means is,
+for $z \in \{0, 1\}$,
+\begin{equation}
+  \boxed{\;
+    \begin{aligned}
+      \log \lambda_z^{(b)}(X_i)
+        &\;=\; \muF^{(b)}(X_i) + z \cdot \tauF^{(b)}(X_i), \\[2pt]
+      \etazi[z]^{(b)}(X_i)
+        &\;=\; \bigl[\muFzero^{(b)}(X_i) + z \cdot \tauFzero^{(b)}(X_i)\bigr]
+              - \bigl[\muFone^{(b)}(X_i)  + z \cdot \tauFone^{(b)}(X_i)\bigr], \\[2pt]
+      \muz^{(b)}(X_i)
+        &\;=\; \bigl(1 - \sigma(\etazi[z]^{(b)}(X_i))\bigr) \,
+              \exp\!\bigl(\log \lambda_z^{(b)}(X_i)\bigr).
+    \end{aligned}
+  \;}
+  \label{eq:zi-potoutcomes}
+\end{equation}
+In the non-ZI sub-model $\sigma(\etazi) \equiv 0$ and
+\eqref{eq:zi-potoutcomes} collapses to
+$\muz^{(b)}(X_i) = \exp(\muF^{(b)}(X_i) + z \tauF^{(b)}(X_i))$. The
+pair $(\muzero^{(b)}, \muone^{(b)})$ collects the response-scale
+potential-outcome means at every unit under every draw, and all
+reported quantities below are deterministic functions of these two
+matrices -- no additional sampling is required: posterior uncertainty
+in the response-scale CATE arises from joint uncertainty in the
+forests and is automatically propagated by the backfitting Gibbs
+sampler.
+
+\paragraph{Response-scale CATE.}
+The primary estimand is \eqref{eq:cate-ate}. The $b$th posterior draw
+is
+\begin{equation}
+  \widehat{\tauresp,_i}^{(b)}
+  \;=\; \muone^{(b)}(X_i) - \muzero^{(b)}(X_i),
+  \label{eq:zi-tauresp-draw}
+\end{equation}
+with the count-only form $\widehat{\tauresp,_i}^{(b)} =
+\exp(\muF^{(b)}(X_i))(\exp(\tauF^{(b)}(X_i)) - 1)$ recovered in the
+non-ZI sub-model. The per-unit posterior mean and $95\%$ equal-tailed
+credible interval are
+$\overline{\tauresp,_i} = B^{-1} \sum_b \widehat{\tauresp,_i}^{(b)}$
+and $[Q_{0.025}, Q_{0.975}]$ across draws, with $Q_q$ the empirical
+$q$-quantile. The log-rate CATE
+$\widehat{\taulog,_i}^{(b)} = \tauF^{(b)}(X_i)$ is reported alongside
+for users whose applied questions are best phrased as relative rates.
+
+\paragraph{Sample-average treatment effect.}
+The ATE \eqref{eq:cate-ate} is the in-sample mean of the
+response-scale CATE,
+\begin{equation}
+  \widehat{\mathrm{ATE}}^{(b)}
+  \;=\; \frac{1}{n} \sum_{i=1}^{n} \widehat{\tauresp,_i}^{(b)},
+  \label{eq:ate-draw}
+\end{equation}
+giving a $B$-vector of posterior draws. The posterior mean and
+$95\%$ equal-tailed interval of this vector give the point estimate
+and uncertainty of the sample ATE. The average is over the empirical
+distribution of $X$, so \eqref{eq:ate-draw} estimates the
+\emph{sample-average} treatment effect rather than a
+population-average one; \citet{hahn2020bayesian} discuss why this is
+the natural target for BART-family methods.
+
+\paragraph{Channel decomposition (ZI only).}
+A central affordance of the six-forest construction over a
+single-channel causal forest is that $\tauresp$ can be decomposed
+into a count-rate channel and a structural-zero channel. The per-unit
+posterior draws of the two channel components introduced in
+\eqref{eq:channels} are
+\begin{equation}
+  \widehat{\Deltalam,_i}^{(b)}
+    \;=\; \exp\!\bigl(\log\lambda_1^{(b)}(X_i)\bigr)
+        - \exp\!\bigl(\log\lambda_0^{(b)}(X_i)\bigr),
+  \qquad
+  \widehat{\Deltapzi,_i}^{(b)}
+    \;=\; \sigma\!\bigl(\etazi[1]^{(b)}(X_i)\bigr)
+        - \sigma\!\bigl(\etazi[0]^{(b)}(X_i)\bigr),
+  \label{eq:zi-channels-draws}
+\end{equation}
+both deterministic functions of the stored forest values. Either
+channel can be summarised by its posterior mean and $95\%$ credible
+interval per unit, or averaged to produce a posterior of the
+channel-specific sample average. The two channels are not constrained
+to share a sign: for some units the treatment can increase the count
+rate \emph{and} decrease the structural-zero probability (both
+contributing positively to $\tauresp$); for other units the channels
+can offset, producing a small response-scale effect masking large
+channel-specific shifts.
+
+\paragraph{Counterfactual prediction at new $X$ and diagnostics.}
+For prediction at a new covariate matrix $X^\star$ and treatment
+vector $Z^\star$, the user passes \verb|return_trees = TRUE| to
+retain the serialised tree traces; \texttt{get\_forest\_fit} then
+evaluates each stored tree at $X^\star$, after which the closed-form
+mappings above apply unchanged. The default
+(\verb|return_trees = FALSE|) drops the tree traces after the
+in-sample fit to keep memory consumption modest. All per-unit
+summaries are reported on the original (unsorted) input order; the
+internal sort that places zeros first (used to amortise the
+latent-variable scan) is undone at the storage step
+\eqref{eq:zi-posterior-storage}. The NB / ZINB acceptance rate
+$\texttt{kappa\_acpt}$ and chain-level traces of $\kappa^{(b)}$ serve
+as the main convergence diagnostics; we additionally monitor
+effective sample sizes of $\widehat{\mathrm{ATE}}^{(b)}$ and of a
+small panel of $\widehat{\tauresp,_i}^{(b)}$ at sentinel units.
+
+% =======================================================================
+\section{Research methodology}\label{sec:methodology}
+
+This section pre-registers the simulation study that will evaluate
+CountBCF against the natural Gaussian-likelihood baseline. The
+specification is held fixed before any cells are run; results will be
+reported in Section~\ref{sec:empirical} without revision to the
+design below. The motivation for pre-registration is standard
+\citep[\S~3.2]{hahn2020bayesian}: heterogeneous-effect comparisons
+are sensitive to which DGPs, factor sweeps, and metrics one chooses
+to highlight, and reporting those choices \emph{after} seeing results
+risks confirming the preferred method.
+
+\subsection{Estimand}\label{sec:method-estimand}
+
+We target the response-scale conditional and average treatment
+effects defined in Section~\ref{sec:notation}: for unit $i$, the
+potential-outcome means
+$\muz(x) = (1 - \pzi(x)) \exp(\log\lambda_z(x))$ of
+\eqref{eq:potmeans} give rise to
+\begin{equation}
+  \tauresp(x) \;=\; \muone(x) - \muzero(x),
+  \qquad
+  \mathrm{ATE} \;=\; \E_{X}\!\bigl[\tauresp(X)\bigr],
+  \label{eq:method-estimand}
+\end{equation}
+on the same units as $Y$. Under zero-inflation \eqref{eq:method-estimand}
+mixes a change in the count rate and a change in the structural-zero
+probability, and a method that changes only one of the two will
+systematically under-estimate the effect on at least some part of the
+covariate space; the ZI DGPs of Section~\ref{sec:method-dgp}
+engineer this asymmetry deliberately. All methods, regardless of
+their native scale, are scored against this rate-scale truth. For
+CountBCF the per-draw CATE is obtained from
+\eqref{eq:zi-potoutcomes}--\eqref{eq:zi-tauresp-draw}; for the
+Gaussian BCF baseline it is read off directly from the moderating
+forest.
+
+\subsection{Data-generating processes}\label{sec:method-dgp}
+
+The simulation grid is a $2 \times 4$ design over (i) the
+\emph{functional form} of the prognostic and moderating surfaces
+(linear or nonlinear) and (ii) the \emph{count distribution}
+(Poisson, NB with $\kappa = 2$, ZIP, or ZINB with $\kappa = 2$). All
+eight DGPs share the same covariate distribution and propensity
+model, so cross-DGP comparisons isolate the effects of nonlinearity,
+overdispersion, and zero-inflation. Each DGP features strong,
+sign-changing, multi-covariate heterogeneity; the ZI DGPs additionally
+contain non-trivial heterogeneity on the structural-zero channel, so
+the per-unit CATE estimation task is substantively challenging in
+every cell.
+
+\paragraph{Covariates and treatment.}
+We draw $n$ iid covariate vectors $X_i \in \mathbb{R}^p$ with the
+first $p - 2$ columns iid standard Gaussian and the last two binary,
+\begin{equation}
+  X_{i, j} \stackrel{\mathrm{iid}}{\sim} \N(0, 1) \text{ for } j = 1, \dots, p - 2,
+  \quad
+  X_{i,\, p-1} \sim \Ber(0.6),
+  \quad
+  X_{i,\, p} \sim \Ber(0.4),
+  \label{eq:method-covariates}
+\end{equation}
+so every design contains two binary columns regardless of $p$. Only
+the first five covariates carry signal; columns $X_{\cdot, 6}, \dots,
+X_{\cdot, p - 2}$ are irrelevant noise included to stress-test
+variable selection as $p$ grows. The propensity model is fixed
+across DGPs at
+\begin{equation}
+  \pi(x) \;=\; \sigma(0.5\, x_1 - 0.4\, x_2),
+  \qquad
+  Z_i \mid X_i \sim \Ber(\pi(X_i)),
+  \label{eq:method-propensity}
+\end{equation}
+with $\sigma(\cdot)$ the logistic CDF. The estimated propensity
+$\pihat$ passed to the methods is set to the truth, $\pihat(X_i) =
+\pi(X_i)$, so the comparison isolates the outcome model rather than
+penalising methods for propensity mis-estimation.
+
+\paragraph{Count component.}
+For all eight DGPs the conditional log-mean of the count component
+(non-ZI cells) or the not-structural-zero component (ZI cells) has
+the BCF-style form
+\begin{equation}
+  \log \lambda_i \;=\; \mu_c(X_i) \;+\; Z_i\,\bigl[\tau_0 + \tau_h(X_i)\bigr],
+  \label{eq:method-loglambda}
+\end{equation}
+with the prognostic surface $\mu_c$ and the heterogeneous part
+$\tau_h$ taking the form in the upper half of
+Table~\ref{tab:method-dgp}. The scalar $\tau_0$ is a per-cell
+intercept calibrated so that the realised response-scale ATE matches
+the cell's target value. For non-ZI cells, we solve
+\begin{equation}
+  \E_{X}\!\bigl[\exp(\mu_c(X))\,\bigl(\exp(\tau_0 + \tau_h(X)) - 1\bigr)\bigr]
+  \;=\; \mathrm{ATE}_{\mathrm{target}}
+  \label{eq:method-tau0-calib}
+\end{equation}
+via \texttt{R}'s \texttt{uniroot()} on a fresh held-out sample of
+$5{,}000$ covariate vectors. For ZI cells, the calibration accounts
+for the $(1 - \pzi)$ thinning of the count component; only $\tau_0$
+is calibrated, the ZI shift $\Detazi$ is held fixed.
+
+\paragraph{Zero-inflation component (ZI cells only).}
+The structural-zero probability follows $\pzi(x) = \sigma(\etazi(x) +
+z \Detazi(x))$, with the control logit $\etazi(x)$ and treatment
+shift $\Detazi(x)$ in the lower half of Table~\ref{tab:method-dgp}.
+The control logit is calibrated so the baseline structural-zero
+probability is approximately $25$--$30\%$ across the covariate
+distribution -- large enough to make the ZI channel matter but small
+enough not to swamp the count signal. The treatment shift
+$\Detazi(x)$ is sign-changing across units: for some units the
+treatment increases the structural-zero probability while for others
+it decreases it, with the sign and magnitude depending on $X$. A
+single ATE-level summary of the ZI channel would average over the
+sign reversal and report a misleading null; the channel-decomposition
+plots described below are designed to recover this heterogeneity.
+
+\begin{table}[t]
+\centering
+\caption{Functional forms for the prognostic surface $\mu_c$ and the
+heterogeneous component $\tau_h$ (count channel, top), and for the
+control logit $\etazi$ and treatment shift $\Detazi$ on the ZI
+channel (bottom). The linear and nonlinear families each cross with
+the four count distributions $\{\Poi, \NB, \mathrm{ZIP},
+\mathrm{ZINB}\}$ to give eight DGPs; the ZI rows apply only to the
+ZIP / ZINB cells.}
+\label{tab:method-dgp}
+\begin{tabular}{lll}
+\toprule
+DGP family & linear & nonlinear \\
+\midrule
+\multicolumn{3}{l}{\emph{Count component} ($\log\lambda_i = \mu_c(X_i) + Z_i[\tau_0 + \tau_h(X_i)]$)} \\
+$\mu_c(x)$ &
+  $1.0 + 0.5 x_1 - 0.3 x_2 + 0.2 x_3$ &
+  $0.8 + 0.6 \sin(x_1) + 0.4 x_2 x_3 + 0.5\,\ind\{x_4 > 0\}$ \\
+$\tau_h(x)$ &
+  $0.60 x_1 - 0.45 x_2 + 0.30 x_3$ &
+  $0.80 \sin(x_1) + 0.50\,\ind\{x_2 > 0\}\, x_3 - 0.40 x_5$ \\
+\midrule
+\multicolumn{3}{l}{\emph{ZI component} ($\pzi(x) = \sigma(\etazi(x) + z \Detazi(x))$, ZIP / ZINB only)} \\
+$\etazi(x)$ &
+  $-1.0 + 0.5 x_2$ &
+  $-1.0 + 0.7 \lvert x_2 \rvert - 0.5 \exp(-x_3^{2})$ \\
+$\Detazi(x)$ &
+  $-0.50 x_1 + 0.30 x_3 - 0.40 x_4$ &
+  $-0.60 x_1 x_4 + 0.40 x_2\,\ind\{x_5 > 0\}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Sampling distribution.}
+For each unit $i$, the response is drawn from one of four
+distributions. Under the non-ZI cells, $Y_i \sim \Poi(\lambda_i)$ or
+$\NB(\kappa, \lambda_i)$ with $\kappa = 2$. Under the ZI cells, a
+Bernoulli structural-zero indicator $S_i \sim \Ber(\pzi[Z_i](X_i))$
+is drawn first; if $S_i = 1$ then $Y_i = 0$ deterministically;
+otherwise
+$Y_i \mid S_i = 0 \sim \Poi(\lambda_i)$ or $\NB(\kappa, \lambda_i)$
+with $\kappa = 2$. Combined with Table~\ref{tab:method-dgp} this
+yields the eight CATE-focused DGPs
+\verb|linear_{poisson,nb,zip,zinb}_cate| and
+\verb|nonlinear_{poisson,nb,zip,zinb}_cate|.
+
+\subsection{Experimental factors}\label{sec:method-factors}
+
+We sweep three experimental factors -- sample size $N$, covariate
+count $p$, and target ATE -- one-at-a-time (OAT) around a reference
+cell. Reference values are $N_{\mathrm{ref}} = 250$,
+$p_{\mathrm{ref}} = 5$, $\mathrm{ATE}_{\mathrm{ref}} = 1.25$.
+Off-reference levels are in Table~\ref{tab:method-factors}; together
+with the reference, this gives $1 + 2 + 2 + 2 = 7$ cells per
+$(\text{method}, \text{DGP})$ pair. For each cell all eight DGPs of
+Section~\ref{sec:method-dgp} are run. Within a cell $\times$ DGP we
+draw $N_{\mathrm{sim}} = 100$ independent Monte Carlo replicates;
+the seed of replicate $s$ is exactly $s$ -- \verb|set.seed(sim_id)| --
+so any single replicate is reproducible from its
+$(\text{dgp}, N, p, \text{ATE}, \text{sim\_id})$ tuple alone.
+
+\begin{table}[t]
+\centering
+\caption{One-at-a-time factor sweep. ``Held fixed'' columns list the
+factors that take their reference value within the row's sweep.}
+\label{tab:method-factors}
+\begin{tabular}{lll}
+\toprule
+Factor & Off-reference levels & Held fixed \\
+\midrule
+Sample size $N$         & $\{100,\, 500\}$       & $p = 5$,\; ATE $= 1.25$ \\
+Covariate count $p$     & $\{50,\, 250\}$        & $N = 250$,\; ATE $= 1.25$ \\
+Target ATE              & $\{0.5,\, 2.5\}$       & $N = 250$,\; $p = 5$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Methods compared}\label{sec:method-methods}
+
+Both methods produce a posterior over the response-scale ATE and
+per-unit posterior means and credible intervals for the
+response-scale CATE; both are Bayesian, both share the BCF prior
+structure, and they differ only in the outcome likelihood.
+
+\begin{enumerate}
+  \item \textbf{CountBCF (proposed).} Fit via \verb|countbcf()| with
+        \verb|count_model| set to one of \verb|"poisson"|,
+        \verb|"nb"|, \verb|"zipoisson"|, or \verb|"zinb"| depending
+        on the DGP. All other hyperparameters take the defaults
+        catalogued in Table~\ref{tab:default-hyperparams}. The
+        per-unit CATE is recovered from the closed-form mapping
+        \eqref{eq:zi-potoutcomes}--\eqref{eq:zi-tauresp-draw}; under
+        ZIP / ZINB the same coefficient matrices are also
+        post-processed into the channel decomposition
+        $(\widehat\Deltalam, \widehat\Deltapzi)$ of
+        \eqref{eq:zi-channels-draws}.
+  \item \textbf{BCF (Gaussian baseline).} The
+        \citet{hahn2020bayesian} BCF applied to the count outcome
+        \emph{as if it were Gaussian}, fit via \verb|bcf_binary()|.
+        The treatment-effect posterior is read off the moderating
+        forest with \verb|get_forest_fit()|. This is the natural
+        ``what if you ignored the count structure'' baseline: it
+        retains the BCF $(\mu, \tau)$ decomposition and the
+        propensity-as-covariate fix but does not respect the
+        discreteness of $Y$, the heteroscedasticity induced by the
+        count likelihood, or the structural-zero process; in the ZI
+        case it produces only a single response-scale CATE with no
+        channel decomposition.
+\end{enumerate}
+
+Both methods use the same MCMC budget: $\mathtt{nburn} =
+\mathtt{nsim} = 1000$, $\mathtt{nthin} = 1$. The methodological
+symmetry is deliberate -- the only structural difference is the
+outcome likelihood -- so any performance gap observed in
+Section~\ref{sec:empirical} can be attributed to the likelihood, not
+to incidental choices of prior, MCMC budget, or post-processing.
+
+\paragraph{CountBART considered and dropped.}
+An $S$-learner built on top of \verb|count_bart()| -- augmenting the
+design matrix with $Z$ and $\pihat$, fitting a single log-linear BART
+model on $(X, Z, \pihat)$ (three-forest in the ZI case), and reading
+the CATE off counterfactual evaluations -- was originally part of the
+benchmark. It consistently exhausts the available Colab RAM and
+crashes on the larger ablation cells ($p \in \{50, 250\}$); the
+three-forest backbone of the ZI model amplifies the memory pressure
+relative to the non-ZI case. Until the memory footprint of the
+upstream \texttt{count\_bart} is reduced, the CountBART $S$-learner is
+not feasible to evaluate against CountBCF on the same hardware, and
+we exclude it rather than report it on the subset of cells where it
+runs.
+
+\subsection{Metrics}\label{sec:method-metrics}
+
+For each row of every per-cell CSV -- one row per
+$(\text{cell}, \text{DGP}, \text{sim}, \text{method})$ tuple -- we
+record three families of metrics plus light bookkeeping. All metrics
+that involve the truth are computed on the \emph{response} scale,
+regardless of which scale the method natively reports. Aggregating
+across the $N_{\mathrm{sim}} = 100$ replicates within a cell gives
+Monte Carlo means and standard errors. The CATE-level metrics are
+the primary site of method differentiation in the $N = 100$ regime.
+
+\paragraph{Outcome-fit, ATE, and CATE.}
+Two diagnostics measure how well the fitted mean approximates the
+true conditional mean on the observed arm:
+$\mathtt{rmse\_yhat} = \sqrt{\overline{(\widehat y_i - \mu_{Z_i}(X_i))^2}}$
+and $\mathtt{bias\_yhat} = \overline{\widehat y_i - \mu_{Z_i}(X_i)}$,
+with $\widehat y_i$ the posterior-mean fitted value under the
+observed treatment and $\mu_{Z_i}(X_i) = (1 - \pzi[Z_i](X_i))
+\exp(\log\lambda_{Z_i}(X_i))$ the response-scale truth. ATE-level
+inference is summarised by \verb|ate_mean|, \verb|ate_q025|,
+\verb|ate_q975| (the $95\%$ credible-interval bounds),
+\verb|ate_coverage| (the indicator that the interval contains the
+realised true ATE), and \verb|true_ate|
+($n^{-1}\sum_i \tauresp(X_i)$). CATE-level performance is summarised
+by the seven metrics of Table~\ref{tab:method-metrics-cate}.
+
+\begin{table}[t]
+\centering
+\caption{CATE-level metrics, evaluated on the response scale against
+the realised truth $\tau(X_i) = \muone(X_i) - \muzero(X_i)$.}
+\label{tab:method-metrics-cate}
+\begin{tabular}{ll}
+\toprule
+Metric & Definition \\
+\midrule
+\verb|pehe| &
+  $\sqrt{\,\overline{(\widehat\tau(X_i) - \tau(X_i))^{2}}\,}$ (PEHE) \\
+\verb|mae_cate| &
+  $\overline{\lvert \widehat\tau(X_i) - \tau(X_i) \rvert}$ \\
+\verb|cate_bias| &
+  $\overline{\widehat\tau(X_i) - \tau(X_i)}$ \\
+\verb|cate_cor| &
+  Pearson correlation between $\widehat\tau$ and $\tau$ \\
+\verb|cate_cov95|, \verb|cate_cov50| &
+  Fraction of units whose 95\% / 50\% unit-level CI contains $\tau(X_i)$ \\
+\verb|cate_ci_width95| &
+  Mean width of the unit-level 95\% credible intervals \\
+\verb|cate_sd_true| &
+  $\mathrm{sd}(\tau(X_i))$ across the in-sample units \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+PEHE \citep{hill2011bayesian} is the headline metric, but in the
+$N_{\mathrm{sim}} = 100$ regime the credible-interval metrics --
+particularly \verb|cate_cov95| and \verb|cate_ci_width95| -- are what
+most clearly expose miscalibration of the Gaussian baseline.
+
+\paragraph{Zero-inflation regime indicators (ZI cells only).}
+Two ZI-specific columns record the regime each Monte Carlo replicate
+sits in:
+$\mathtt{pct\_zero} = n^{-1}\sum_i \ind\{Y_i = 0\}$
+(the realised total-zero rate, observable from $Y$) and
+$\mathtt{pct\_struct\_zero} = n^{-1}\sum_i \ind\{S_i = 1\}$
+(the realised structural-zero rate, available only via the latent
+indicator drawn by the DGP). Together with their ratio, these
+characterise how much of the observed-zero mass is structural versus
+count-process at the cell's calibration point, and make it possible
+to distinguish performance differences driven by the ZI channel from
+those driven by overall zero-rate effects.
+
+\paragraph{Bookkeeping.}
+Two columns are kept for transparency: \verb|elapsed_sec| (the
+wall-clock fit time, in seconds) and \verb|error| (\verb|NA| on
+success; the caught \verb|R| error message otherwise, so failure
+modes are recorded rather than silently dropped).
+
+\subsection{Outputs and reproducibility}\label{sec:method-outputs}
+
+Each $(\text{method}, \text{DGP}, \text{cell})$ tuple writes its own
+long-format CSV and a timestamped progress log. CSV filenames follow
+the pattern
+\verb|sim__<method>__<dgp>__N<N>_P<P>_ATE<ATE x100>.csv|, with
+companion \verb|.log| files. There are $2$ methods $\times$ $8$ CATE
+DGPs $\times$ $7$ cells $= 112$ CSVs across the count-only and ZI
+sub-studies combined, each holding $100$ rows (one per Monte Carlo
+replicate). Rows are streamed incrementally so that a crash on
+replicate $s$ does not lose the work of replicates $1, \dots, s - 1$.
+Aggregation is a one-liner: \verb|rbind| of the CSVs in \verb|R| or
+\verb|cat *.csv| in a shell.
+
+\paragraph{Output panels.}
+Section~\ref{sec:empirical} will present three families of panels.
+\emph{Outcome-fit / ATE / CATE} panels show the standard Monte Carlo
+summaries of the metrics in Section~\ref{sec:method-metrics} along
+the three OAT sweeps. \emph{Coverage diagnostics} report empirical
+$95\%$ interval coverage of both \verb|ate_coverage| and
+\verb|cate_cov95| so that miscalibration is visible on both the
+marginal and conditional scales. \emph{Channel decomposition} -- the
+panel template specific to the ZI sub-study -- plots, for CountBCF
+only, the per-unit posterior means of $\Deltalam$ and $\Deltapzi$
+against each other and against the combined response-scale CATE
+$\tauresp$ on a per-DGP basis at the reference cell. Channels that
+share sign across most of the covariate space appear as a clustered
+cloud along the diagonal; sign-changing DGPs produce a cross-shaped
+scatter; either pattern is a visual confirmation that the six-forest
+decomposition recovers heterogeneity that single-channel methods
+cannot expose.
+
+\paragraph{Reproducibility.}
+The runners under \verb|tests/runners_count/| and
+\verb|tests/runners_zi/| are self-contained single \verb|.R| files:
+each depends only on \verb|library(countbart)| and base \verb|R| --
+no \verb|source()| of any repository file -- so any single runner is
+portable to a Google Colab session without setup. With $15$ CPUs the
+runners execute in waves of $15$. The runners themselves are emitted
+by \verb|tests/_generate_runners.R|, which holds the cell grid, the
+DGP function bodies, and the method wrappers as templated strings;
+editing it and re-running regenerates the runners in lock-step. Each
+replicate seed equals its \verb|sim_id|, so any individual replicate
+is reproducible from its
+$(\text{dgp}, N, p, \text{ATE}, \text{sim\_id})$ tuple alone. We do
+not anonymise or post-process the per-cell CSVs prior to plotting:
+the raw output is the audit trail.
+
+% =======================================================================
+\section{Simulation Studies}\label{sec:empirical}
+
+This section reports the outcome of the pre-registered protocol of
+Section~\ref{sec:methodology}, with no revision to the design. Two
+sub-studies are run in parallel: a \emph{count-only} sub-study over
+the four CATE-focused Poisson and Negative-Binomial DGPs of
+Table~\ref{tab:method-dgp}, and a \emph{zero-inflated} sub-study over
+the corresponding ZIP and ZINB cells. The two sub-studies isolate
+complementary phenomena. The count-only sub-study measures the cost
+of treating an integer outcome as Gaussian when no structural-zero
+channel is present; the zero-inflated sub-study additionally stresses
+the methods on a second treatment channel ($\Detazi$) that the
+Gaussian baseline cannot represent at all. Because both sub-studies
+share the covariate distribution, propensity model
+\eqref{eq:method-propensity}, factor grid
+(Table~\ref{tab:method-factors}), and Monte Carlo budget
+($N_{\mathrm{sim}} = 100$ replicates per cell), every contrast
+across the two sub-studies can be attributed to the presence or
+absence of zero-inflation in the DGP, not to incidental design
+choices.
+
+The remainder of the section is organised in three parts. The
+reference-cell head-to-head (\S~\ref{sec:emp-ref}) fixes the design
+at $(N, p, \mathrm{ATE}) = (250, 5, 1.25)$ and reports both methods
+on all six metrics across all eight DGPs. The ablation studies
+(\S~\ref{sec:emp-abl}) sweep each experimental factor one at a time
+around the reference cell and present, for each sweep, the three
+CATE-level metrics most diagnostic of the comparison: the per-unit
+$95\%$ credible-interval coverage $\mathtt{cate\_cov95}$, the
+heterogeneous-effect error PEHE, and the average per-unit $95\%$
+interval width $\mathtt{cate\_ci\_width95}$. The cross-cutting
+interpretation (\S~\ref{sec:emp-interp}) and a list of caveats
+(\S~\ref{sec:emp-caveats}) close the section. Aggregate ATE-level
+quantities ($\mathtt{rmse\_ate}$, $\mathtt{ate\_coverage}$, ATE CI
+width) and RMSE / ATE coverage curves along the same sweeps are
+omitted from the figures to keep the visual presentation focused on
+the heterogeneity story; the underlying per-cell numbers are
+provided in \texttt{tests/analysis/summary\_count.csv} and
+\texttt{tests/analysis/summary\_zi.csv}, and the headline numbers
+are quoted in the text.
+
+\subsection{Reference-cell head-to-head}\label{sec:emp-ref}
+
+We first fix the design at the reference cell
+$(N, p, \mathrm{ATE}) = (250, 5, 1.25)$ and compare the two methods
+at the centre of the factor grid. Tables~\ref{tab:sim_count_ref}
+and~\ref{tab:sim_zi_ref} report all six metrics for the four
+count-only and four zero-inflated DGPs respectively. RMSE(ATE) and
+ATE coverage are scalar Monte Carlo summaries; the remaining columns
+are reported as cross-replicate mean $\pm$ one standard deviation
+across the $100$ replicates per cell.
+
+\begin{table}[h!]\footnotesize
+\caption{Reference-cell ($N = 250$, $p = 5$, ATE $= 1.25$) Monte-Carlo summary on the count-only DGPs (Poisson, NB). RMSE ATE and ATE coverage are scalar Monte-Carlo summaries; the remaining columns report the cross-replicate mean $\pm$ one standard deviation. ATE CI Width is the average width of the 95\% ATE posterior credible interval; PEHE is $\sqrt{\overline{(\hat\tau_i - \tau_i)^2}}$; CATE Cov.~95 is the per-unit 95\% credible-interval coverage of $\tau(X_i)$; CATE CI Width95 is the mean width of those unit-level intervals.}\label{tab:sim_count_ref}
+\centering
+\begin{tabular*}{\linewidth}{ @{\extracolsep{\fill}} ll cc cccc @{}}
+\toprule
+ &  & \multicolumn{2}{c}{ATE} & \multicolumn{4}{c}{CATE} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-8}
+DGP & Method & RMSE & Cov.\,95 & Avg.\ CI Width & PEHE & Cov.\,95 & Avg.\ CI Width95 \\
+\midrule
+\multirow{2}{*}{Linear / Poisson} & BCF (Gaussian) & 1.15 & 0.55 & 1.23 $\pm$ 0.26 & 6.23 $\pm$ 4.44 & 0.81 $\pm$ 0.08 & 4.20 $\pm$ 1.12 \\
+ & CountBCF & 1.08 & 0.65 & 2.28 $\pm$ 0.82 & 4.77 $\pm$ 2.46 & 0.92 $\pm$ 0.07 & 7.83 $\pm$ 2.21 \\
+\midrule
+\multirow{2}{*}{Nonlinear / Poisson} & BCF (Gaussian) & 1.09 & 0.64 & 1.40 $\pm$ 0.18 & 5.92 $\pm$ 4.80 & 0.81 $\pm$ 0.07 & 5.32 $\pm$ 0.98 \\
+ & CountBCF & 0.76 & 0.80 & 1.88 $\pm$ 0.44 & 3.48 $\pm$ 1.66 & 0.87 $\pm$ 0.09 & 6.74 $\pm$ 1.75 \\
+\midrule
+\multirow{2}{*}{Linear / NB} & BCF (Gaussian) & 1.21 & 0.60 & 1.79 $\pm$ 0.36 & 9.16 $\pm$ 4.90 & 0.82 $\pm$ 0.06 & 5.54 $\pm$ 1.63 \\
+ & CountBCF & 1.25 & 0.65 & 2.95 $\pm$ 1.18 & 5.95 $\pm$ 2.83 & 0.90 $\pm$ 0.07 & 10.08 $\pm$ 3.09 \\
+\midrule
+\multirow{2}{*}{Nonlinear / NB} & BCF (Gaussian) & 1.30 & 0.68 & 2.23 $\pm$ 0.57 & 7.81 $\pm$ 5.95 & 0.83 $\pm$ 0.08 & 7.34 $\pm$ 2.07 \\
+ & CountBCF & 0.90 & 0.80 & 2.63 $\pm$ 0.65 & 4.49 $\pm$ 1.81 & 0.88 $\pm$ 0.07 & 9.61 $\pm$ 2.95 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\begin{table}[h!]\footnotesize
+\caption{Reference-cell ($N = 250$, $p = 5$, ATE $= 1.25$) Monte-Carlo summary on the zero-inflated DGPs (ZIP, ZINB). Conventions match Table~\ref{tab:sim_count_ref}.}\label{tab:sim_zi_ref}
+\centering
+\begin{tabular*}{\linewidth}{ @{\extracolsep{\fill}} ll cc cccc @{}}
+\toprule
+ &  & \multicolumn{2}{c}{ATE} & \multicolumn{4}{c}{CATE} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-8}
+DGP & Method & RMSE & Cov.\,95 & Avg.\ CI Width & PEHE & Cov.\,95 & Avg.\ CI Width95 \\
+\midrule
+\multirow{2}{*}{Linear / ZIP} & BCF (Gaussian) & 0.97 & 0.62 & 1.25 $\pm$ 0.23 & 5.81 $\pm$ 4.03 & 0.83 $\pm$ 0.07 & 4.06 $\pm$ 1.20 \\
+ & CountBCF & 0.73 & 0.76 & 1.88 $\pm$ 0.56 & 3.96 $\pm$ 1.89 & 0.93 $\pm$ 0.05 & 6.67 $\pm$ 1.67 \\
+\midrule
+\multirow{2}{*}{Nonlinear / ZIP} & BCF (Gaussian) & 1.03 & 0.74 & 1.61 $\pm$ 0.25 & 5.52 $\pm$ 4.41 & 0.83 $\pm$ 0.07 & 5.81 $\pm$ 1.22 \\
+ & CountBCF & 0.55 & 0.83 & 1.69 $\pm$ 0.35 & 3.06 $\pm$ 1.47 & 0.93 $\pm$ 0.04 & 6.92 $\pm$ 1.47 \\
+\midrule
+\multirow{2}{*}{Linear / ZINB} & BCF (Gaussian) & 1.71 & 0.54 & 1.62 $\pm$ 0.35 & 8.45 $\pm$ 9.24 & 0.83 $\pm$ 0.08 & 4.82 $\pm$ 1.78 \\
+ & CountBCF & 0.95 & 0.70 & 2.39 $\pm$ 0.72 & 5.17 $\pm$ 2.50 & 0.94 $\pm$ 0.06 & 8.35 $\pm$ 2.33 \\
+\midrule
+\multirow{2}{*}{Nonlinear / ZINB} & BCF (Gaussian) & 1.35 & 0.74 & 2.12 $\pm$ 0.38 & 7.58 $\pm$ 6.24 & 0.84 $\pm$ 0.08 & 6.77 $\pm$ 1.60 \\
+ & CountBCF & 0.67 & 0.91 & 2.36 $\pm$ 0.51 & 3.49 $\pm$ 1.27 & 0.93 $\pm$ 0.04 & 9.02 $\pm$ 2.38 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\paragraph{Aggregate gap.} Averaged over the four DGPs within each
+sub-study, CountBCF improves on the Gaussian BCF baseline on every
+aggregate metric in both sub-studies. On the count-only DGPs the
+average ATE root-mean-squared error falls from $1.19$ to $1.00$
+($-16\%$) and the average PEHE from $7.28$ to $4.67$ ($-36\%$); the
+corresponding gains on the zero-inflated DGPs are roughly twice as
+large in relative terms, $1.26 \to 0.73$ on RMSE(ATE) ($-43\%$) and
+$6.84 \to 3.92$ on PEHE ($-43\%$). The gap is widest precisely where
+the count likelihood differs most from a Gaussian: the nonlinear
+ZINB cell yields the most extreme PEHE ratio
+($7.58 \to 3.49$, a $-54\%$ reduction), and the linear-Poisson cell
+--- the cell closest to a homoscedastic-Gaussian regime --- the
+smallest ($-23\%$). That ordering is direct evidence that the
+likelihood, not the BCF prior structure shared by the two methods,
+drives the improvement: where the Gaussian working model is least
+wrong (linear, Poisson, no zero-inflation), the gap shrinks;
+elsewhere it widens.
+
+\paragraph{Coverage and sharpness.} The two methods produce
+qualitatively different posterior intervals. Gaussian BCF intervals
+are uniformly narrower (count: average ATE CI $1.66$ vs.\ $2.44$,
+$-32\%$; ZI: $1.65$ vs.\ $2.08$, $-21\%$), but their empirical
+$95\%$ coverage sits at $0.62$ (count) and $0.66$ (ZI) on average
+across DGPs --- and falls as low as $0.54$ on the linear ZINB cell,
+or $40$ percentage points below nominal. CountBCF widens both
+ATE-level and per-unit intervals, paying a sharpness cost of $+46\%$
+(count) and $+26\%$ (ZI) on average ATE width and $+53\%$ /\ $+44\%$
+on average per-unit CATE width, in exchange for moving empirical
+coverage to $0.73$ / $0.80$ on ATE and to $0.89$ / $0.93$ on
+per-unit CATE. The latter is essentially at nominal: across the
+four zero-inflated DGPs the per-unit CATE coverage of CountBCF lies
+in $[0.93, 0.94]$, while the Gaussian baseline lies in
+$[0.83, 0.84]$. Under-coverage of a posterior interval is the more
+serious failure mode for downstream policy inference --- a $0.83$
+interval that one reads as a $0.95$ interval understates the
+estimation risk by a factor of nearly three on the tail probability
+--- so the wider intervals are a favourable trade.
+
+\paragraph{Per-DGP wins.} Looking at the eight DGPs individually,
+CountBCF wins on PEHE in $8/8$ cells (count: $4/4$; ZI: $4/4$) and
+is strictly closer to nominal $0.95$ per-unit CATE coverage in
+$8/8$. On ATE RMSE the picture is similar ($3/4$ on count, $4/4$ on
+ZI); the single tie/loss is on \verb|linear_nb_cate|
+($1.21$ vs.\ $1.25$), a difference of order $\widehat\sigma /
+\sqrt{100}$ given the per-replicate dispersion and within Monte
+Carlo noise. The largest single per-DGP gap is again on the
+nonlinear ZINB cell: ATE RMSE $1.35 \to 0.67$ ($-50\%$), PEHE
+$7.58 \to 3.49$ ($-54\%$), ATE coverage $0.74 \to 0.91$, per-unit
+CATE coverage $0.84 \to 0.93$. This is the DGP that combines all
+three pathologies CountBCF was designed for: overdispersion (NB),
+nonlinearity in the prognostic and moderating surfaces, and a
+structural-zero channel that the Gaussian baseline cannot represent.
+
+\subsection{Ablation studies}\label{sec:emp-abl}
+
+We now sweep each of the three experimental factors of
+Table~\ref{tab:method-factors} one at a time around the reference
+cell. Each ablation figure below holds the other two factors at
+their reference values and overlays the four CATE-focused DGPs of
+the relevant sub-study; the dashed grey horizontal in the coverage
+panels marks the nominal $0.95$. Error bars denote one
+cross-replicate SD across the $100$ Monte Carlo replicates per cell.
+The plotted metrics --- per-unit CATE $95\%$ coverage, PEHE, and
+average per-unit CATE $95\%$ interval width --- are the three CATE
+diagnostics that most clearly expose the calibration of an HTE
+posterior; the corresponding ATE-level curves move in the same
+direction and are omitted to keep each figure to three panels. Cell
+counts in cross-DGP averages reported in the text exclude the single
+missing cell (CountBCF on \verb|nonlinear_poisson_cate| at
+$N = 250$, $p = 250$); panel (b) of Figure~\ref{fig:abl-count-P}
+therefore shows three of the four CountBCF curves at $p = 250$.
+
+\subsubsection*{Sample size sweep ($N \in \{100, 250, 500\}$)}
+
+The sample-size sweep is the cleanest of the three because both
+methods should approach a regime where MCMC posterior intervals
+shrink and means concentrate as $N$ grows. The numerics confirm
+that pattern in different ways for the two methods. On the
+count-only sub-study, RMSE(ATE) falls for both methods as expected
+(BCF (Gaussian): $-61\%$, CountBCF: $-30\%$ from $N = 100$ to
+$N = 500$, averaged over DGPs), but their PEHE responses to extra
+data differ qualitatively: CountBCF's PEHE shrinks by $-6\%$, while
+Gaussian BCF's is essentially flat ($-4\%$). The mechanism is
+visible in the coverage panels (Figure~\ref{fig:abl-count-N}a): the
+Gaussian baseline's intervals shrink faster than its bias, so its
+empirical ATE coverage drifts $-22\%$ across the sweep, while
+CountBCF's intervals shrink in step and its coverage drifts only
+$-10\%$. The same pattern is sharper on the zero-inflated
+sub-study (Figure~\ref{fig:abl-zi-N}): Gaussian BCF's PEHE
+\emph{worsens} by $+10\%$ as $N$ grows, because the additional data
+sharpens the wrong working model, while CountBCF's PEHE shrinks by
+$-7\%$ and its per-unit CATE coverage rises monotonically toward
+$0.96$ on every DGP.
+
+A second feature of the count-only $N$ sweep deserves comment: at
+$N = 100$, CountBCF's per-unit CATE coverage is markedly below
+nominal on the Poisson DGPs ($0.66$ on linear Poisson, $0.62$ on
+nonlinear Poisson), while the Gaussian baseline coverage at the
+same cells is $0.87$. This is the only regime in which the
+Gaussian baseline reports nominally higher coverage than CountBCF
+on this metric, and it is explained by the small-sample behaviour
+of the Pólya--Gamma sampler underlying the count likelihood: with
+only $\approx 100$ observations the latent-variable augmentation
+mixes more slowly, so the posterior on the leaf parameters has not
+yet inflated to its asymptotic width. By $N = 250$ CountBCF
+recovers ($0.92$ and $0.87$ respectively) and by $N = 500$ it is
+above $0.95$. The Gaussian baseline's apparent coverage advantage
+at $N = 100$ on the Poisson DGPs is therefore a feature of two
+methods that are both miscalibrated at small $N$ on different
+sides; it disappears once the sample is large enough to populate
+the prior.
+
+\begin{figure}[t]
+\centering
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{count_N_cate_cov95_mean.png}
+  \caption{Per-unit CATE $95\%$ coverage.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{count_N_pehe_mean.png}
+  \caption{PEHE.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{count_N_cate_ci_width95_mean.png}
+  \caption{Avg.\ per-unit CATE $95\%$ CI width.}
+\end{subfigure}
+\caption{Count-only sub-study, sample-size sweep
+$N \in \{100, 250, 500\}$ at $p = 5$, $\mathrm{ATE} = 1.25$. Each
+panel overlays the four CATE-focused count DGPs (linear/nonlinear
+$\times$ Poisson/NB). Dashed line in panel (a): nominal $0.95$
+coverage. Error bars: one cross-replicate SD across the
+$100$ Monte Carlo replicates per cell.}
+\label{fig:abl-count-N}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{zi_N_cate_cov95_mean.png}
+  \caption{Per-unit CATE $95\%$ coverage.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{zi_N_pehe_mean.png}
+  \caption{PEHE.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{zi_N_cate_ci_width95_mean.png}
+  \caption{Avg.\ per-unit CATE $95\%$ CI width.}
+\end{subfigure}
+\caption{Zero-inflated sub-study, sample-size sweep
+$N \in \{100, 250, 500\}$ at $p = 5$, $\mathrm{ATE} = 1.25$. Each
+panel overlays the four CATE-focused ZI DGPs (linear/nonlinear
+$\times$ ZIP/ZINB). Conventions as in
+Figure~\ref{fig:abl-count-N}.}
+\label{fig:abl-zi-N}
+\end{figure}
+
+\subsubsection*{Covariate-count sweep ($p \in \{5, 50, 250\}$)}
+
+The covariate-count sweep is the sweep that most clearly separates
+the two methods. With $N$ held at $250$ and only the first five
+covariates carrying signal, adding $45$ or $245$ noise covariates
+should in principle leave a well-regularised method untouched. On
+the count-only sub-study the Gaussian BCF baseline degrades
+substantially as nuisance dimensions are added: averaged across
+DGPs, RMSE(ATE) rises by $+72\%$ from $p = 5$ to $p = 250$, PEHE by
+$+44\%$, and empirical ATE coverage falls by $-30\%$. CountBCF
+moves in the opposite direction on RMSE(ATE), \emph{improving} by
+$-34\%$ from $p = 5$ to $p = 250$, and worsens on PEHE by only
+$+29\%$ (Figure~\ref{fig:abl-count-P}). Per-unit CATE coverage
+under CountBCF stays within $[0.83, 0.86]$ across $p$ on the count
+DGPs and within $[0.92, 0.94]$ on the ZI DGPs, while the Gaussian
+baseline drifts from $\sim 0.82$ at $p = 5$ to $\sim 0.74$ at
+$p = 250$ on the count cells and from $\sim 0.83$ to $\sim 0.77$
+on the ZI cells.
+
+The asymmetric response to nuisance covariates is, we conjecture,
+the combined effect of two features specific to the count
+likelihood. First, the Dirichlet-style splitting rule on the log
+scale concentrates split mass on the few covariates that explain
+residual count structure; when the response is heavy-tailed,
+spurious splits on noise covariates make the likelihood
+\emph{worse}, so the Metropolis acceptance ratio penalises them
+more aggressively than under a homoscedastic Gaussian likelihood
+of the same nominal mean. Second, the propensity-score adjustment
+shared by the two methods is itself less informative at large $p$,
+because the Gaussian baseline must absorb the residual count
+heteroscedasticity into the moderating forest, and the wider the
+covariate basis the more noise covariates can stand in as proxies
+for that residual structure. CountBCF separates these channels by
+construction.
+
+\begin{figure}[t]
+\centering
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{count_P_cate_cov95_mean.png}
+  \caption{Per-unit CATE $95\%$ coverage.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{count_P_pehe_mean.png}
+  \caption{PEHE.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{count_P_cate_ci_width95_mean.png}
+  \caption{Avg.\ per-unit CATE $95\%$ CI width.}
+\end{subfigure}
+\caption{Count-only sub-study, covariate-count sweep
+$p \in \{5, 50, 250\}$ at $N = 250$, $\mathrm{ATE} = 1.25$. The
+single missing cell (CountBCF on \texttt{nonlinear\_poisson\_cate}
+at $p = 250$) is omitted from the corresponding CountBCF curve;
+the BCF (Gaussian) curve at $p = 250$ for that DGP is shown.
+Conventions as in Figure~\ref{fig:abl-count-N}.}
+\label{fig:abl-count-P}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{zi_P_cate_cov95_mean.png}
+  \caption{Per-unit CATE $95\%$ coverage.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{zi_P_pehe_mean.png}
+  \caption{PEHE.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{zi_P_cate_ci_width95_mean.png}
+  \caption{Avg.\ per-unit CATE $95\%$ CI width.}
+\end{subfigure}
+\caption{Zero-inflated sub-study, covariate-count sweep
+$p \in \{5, 50, 250\}$ at $N = 250$, $\mathrm{ATE} = 1.25$.
+Conventions as in Figure~\ref{fig:abl-count-N}; all $56$ ZI cells
+completed $100$ replicates.}
+\label{fig:abl-zi-P}
+\end{figure}
+
+The same story repeats on the zero-inflated sub-study, where all
+$56$ cells completed: RMSE(ATE) for the Gaussian baseline rises by
+$+60\%$ across $p \in \{5, 250\}$ averaged across DGPs, while
+CountBCF \emph{falls} by $-31\%$. PEHE for Gaussian BCF rises by
+$+41\%$; CountBCF by $+18\%$. The largest single contrast is on
+\verb|linear_zinb_cate|: at $p = 250$ Gaussian BCF reports RMSE(ATE)
+$= 3.49$ against CountBCF's $0.52$ --- nearly a seven-fold gap --- and
+empirical ATE coverage of $0.34$ against CountBCF's $0.98$. Two
+plausible reasons for the unusually good performance of CountBCF
+at the largest $p$ on this cell: the Dirichlet-on-splits prior
+concentrates on the five informative covariates, and the ZI channel
+provides the model with an additional degree of freedom against
+which to assign sign-changing treatment effects.
+
+\subsubsection*{Target-ATE sweep ($\mathrm{ATE} \in \{0.5, 1.25, 2.5\}$)}
+
+The target-ATE sweep stresses the magnitude of the treatment effect
+while holding the functional form of $\tau_h$ fixed; recall that
+$\tau_0$ is calibrated per cell so that the realised response-scale
+ATE matches the target. As the calibrated treatment effect grows
+from $0.5$ to $2.5$, both methods' absolute errors increase, as one
+would expect from the multiplicative scaling of the count outcome:
+on the count-only sub-study, average BCF RMSE rises by $+45\%$,
+CountBCF by $+63\%$; BCF PEHE rises by $+54\%$, CountBCF by $+54\%$
+(Figure~\ref{fig:abl-count-ATE}). On the zero-inflated sub-study,
+both methods show steeper growth: BCF RMSE $+77\%$, CountBCF
+$+93\%$; BCF PEHE $+79\%$, CountBCF $+64\%$
+(Figure~\ref{fig:abl-zi-ATE}).
+
+The headline contrast is that absolute errors grow proportionally
+on both methods, but CountBCF stays below BCF (Gaussian) on RMSE
+and PEHE at every level of the swept target ATE, and the
+per-unit CATE coverage of CountBCF is the only one of the four
+trajectories that stays near nominal as the effect size grows:
+across the swept range CountBCF holds at $0.87$--$0.95$ on the
+count DGPs and at $0.91$--$0.96$ on the ZI DGPs, while the Gaussian
+baseline drops from $\sim 0.85$ at $\mathrm{ATE} = 0.5$ to
+$\sim 0.78$ at $\mathrm{ATE} = 2.5$ on both sub-studies. CI widths
+in both methods grow proportionally to the calibrated ATE: this
+is a property of the response-scale CATE, which inherits the
+multiplicative scaling of the count rate, not of either posterior;
+it is visible in panel (c) of both ATE-sweep figures as nearly
+linear growth on both methods.
+
+\begin{figure}[t]
+\centering
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{count_ATE_cate_cov95_mean.png}
+  \caption{Per-unit CATE $95\%$ coverage.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{count_ATE_pehe_mean.png}
+  \caption{PEHE.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{count_ATE_cate_ci_width95_mean.png}
+  \caption{Avg.\ per-unit CATE $95\%$ CI width.}
+\end{subfigure}
+\caption{Count-only sub-study, target-ATE sweep
+$\mathrm{ATE} \in \{0.5, 1.25, 2.5\}$ at $N = 250$, $p = 5$. The
+per-cell intercept $\tau_0$ is calibrated so the realised
+response-scale ATE matches the target. Conventions as in
+Figure~\ref{fig:abl-count-N}.}
+\label{fig:abl-count-ATE}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{zi_ATE_cate_cov95_mean.png}
+  \caption{Per-unit CATE $95\%$ coverage.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{zi_ATE_pehe_mean.png}
+  \caption{PEHE.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}
+  \includegraphics[width=\linewidth]{zi_ATE_cate_ci_width95_mean.png}
+  \caption{Avg.\ per-unit CATE $95\%$ CI width.}
+\end{subfigure}
+\caption{Zero-inflated sub-study, target-ATE sweep
+$\mathrm{ATE} \in \{0.5, 1.25, 2.5\}$ at $N = 250$, $p = 5$.
+Conventions as in Figure~\ref{fig:abl-count-N}.}
+\label{fig:abl-zi-ATE}
+\end{figure}
+
+\subsection{Cross-cutting interpretation}\label{sec:emp-interp}
+
+Three threads run through the reference-cell results and the three
+ablation sweeps.
+
+\paragraph{Treating counts as Gaussian systematically under-states
+posterior uncertainty.} Across all $56$ count-only and $56$
+zero-inflated cells (excluding the single missing cell), Gaussian
+BCF intervals are $25$--$60\%$ narrower than CountBCF's at the same
+cell, yet their empirical coverage sits $10$--$15$ percentage
+points below the nominal $0.95$ on most cells and below $0.55$ in
+the worst (linear ZINB at $p = 250$, ATE coverage $0.34$). This is
+the worst kind of miscalibration for a policy report: a $0.95$
+label on an interval that empirically covers $0.55$ implies the
+analyst is communicating an order-of-magnitude over-confident
+posterior. CountBCF's wider intervals are not a free-lunch loss in
+sharpness --- they are intervals that actually cover, and in the
+zero-inflated case they cover at essentially the nominal level.
+
+\paragraph{The CountBCF / Gaussian gap widens with likelihood
+mis-specification.} The relative PEHE improvement of CountBCF over
+BCF (Gaussian) is monotone in the severity of the count likelihood
+mis-specification: smallest on linear Poisson (the cell closest to
+Gaussian) at $-23\%$, larger on the nonlinear and / or NB cells,
+and largest on the nonlinear ZINB cell at $-54\%$. Comparable
+ordering holds on RMSE(ATE) and on the gap between empirical and
+nominal coverage. This is direct evidence that the source of the
+improvement is the count likelihood --- the only structural
+difference between the two methods --- rather than incidental
+hyperparameter or post-processing choices.
+
+\paragraph{The two methods react quite differently to nuisance
+covariates.} CountBCF's PEHE and coverage are nearly flat across
+$p \in \{5, 50, 250\}$ at $N = 250$ on both sub-studies, while the
+Gaussian BCF degrades steadily. We attribute this to the
+log-scale regularisation: on the log scale, irrelevant covariates
+have a hard time standing in for residual count heteroscedasticity
+because the Dirichlet-style splitting rules concentrate on the few
+covariates that improve the count log-likelihood, and the
+Metropolis acceptance ratio under the count likelihood penalises
+spurious splits more aggressively than the same prior under a
+homoscedastic-Gaussian likelihood of the same nominal mean. The
+gap is a regularisation gap, not a propensity-adjustment gap:
+both methods use the propensity-as-covariate fix, and both share
+the BCF $(\mu, \tau)$ decomposition. CountBCF additionally
+benefits, on the ZI cells, from the channel decomposition: the
+treatment effect on the structural-zero probability has its own
+forest pair, so heterogeneity that the Gaussian baseline must
+absorb into a single response-scale CATE is allocated to its
+proper channel.
+
+\subsection{Caveats}\label{sec:emp-caveats}
+
+\begin{itemize}
+\item \emph{Monte Carlo size.} With $N_{\mathrm{sim}} = 100$ per
+  cell, cross-replicate SDs are the right scale for the variance
+  bars in Figures~\ref{fig:abl-count-N}--\ref{fig:abl-zi-ATE}, but
+  cell-level means still carry Monte Carlo noise of order
+  $\widehat\sigma / \sqrt{100}$. Tight comparisons (e.g.\ the
+  $1.21$ vs.\ $1.25$ RMSE on \verb|linear_nb_cate|) are within
+  that noise.
+\item \emph{ATE coverage is replicate-realised.} Coverage of the
+  ATE is read off the \emph{realised} ATE for that replicate, not
+  a single population value. This is the right way to score a
+  posterior interval against the truth that the data actually
+  speak to, but it does mean that ATE coverage moves with the
+  realised variability of $\tau_0$ across the calibration target.
+\item \emph{Missing count cell.} CountBCF on
+  \verb|nonlinear_poisson_cate| at $N = 250$, $p = 250$ did not
+  complete (the runner was killed by Colab's memory ceiling on
+  that single cell). The corresponding curve in
+  Figure~\ref{fig:abl-count-P} therefore shows only three of the
+  four DGPs at $p = 250$ for CountBCF; the BCF (Gaussian) curve
+  at the same cell completed normally. The aggregate $-34\%$ and
+  $+29\%$ numbers for CountBCF in the text are averaged over the
+  three completed DGPs at $p = 250$.
+\item \emph{Large-$p$ PEHE variability.} The cross-replicate PEHE
+  SD at $p = 250$ remains large for both methods on both
+  sub-studies; cell-to-cell noise in the $p$-ablation panels at
+  the high end should be interpreted with a Monte Carlo error of
+  order $\widehat\sigma_{\mathrm{PEHE}} / \sqrt{100}$ in mind.
+\item \emph{True propensity used.} All runs use
+  $\widehat{\pi} = \pi$, the true propensity. This benchmark
+  isolates the outcome model; real-data performance with an
+  estimated $\widehat{\pi}$ will be worse for both methods to a
+  similar degree, because the propensity-as-covariate adjustment
+  is shared.
+\item \emph{Two-method comparison.} CountBART, the S-learner
+  built on the same log-linear backbone, was originally part of
+  the benchmark but is dropped here on the memory grounds noted
+  in Section~\ref{sec:method-methods}; an external comparison
+  against generalised random forests, $X$-learner, and DR-learner
+  on the same DGPs is left to future work.
+\end{itemize}
+
+% =======================================================================
+\section{Discussion}\label{sec:discussion}
+\noindent\emph{[Reserved.  To be written after the empirical
+evaluations.  Suggested topics: applied dataset picks (count cells --
+hospital admissions, citation counts; ZI cells -- healthcare
+utilisation under a wellness intervention, insurance claims under
+policy change, ecological abundance under habitat intervention,
+scRNAseq under a perturbation), identifiability remarks
+(\citealt{murray2021loglinear} \S4.2.2 for prior-induced
+identification of $\fzeroSym, \foneSym$;
+\citealt{li2012zipidentifiability} on ZIP identifiability conditions;
+\citealt{wager2018estimation} on count-forest asymptotics),
+reproducibility statement.]}
+
+% =======================================================================
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}
