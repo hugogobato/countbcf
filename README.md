@@ -12,7 +12,7 @@ This repository contains two things:
    simulation pipeline, runners, analysis scripts, and outputs behind
    the working paper:
 
-   > Souto, H. G. (2026). *CountBCF: Bayesian Causal Forests for Count
+   > Souto, H. G., Wang, E. & Shuryak, I. (2026). *CountBCF: Bayesian Causal Forests for Count
    > and Zero-Inflated Count Outcomes.*
 
    Part II below documents the layout, the experimental design, and
