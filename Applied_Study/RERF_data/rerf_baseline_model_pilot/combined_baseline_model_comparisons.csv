@@ -1,0 +1,33 @@
+endpoint,contrast,model_set,model,AIC,poisson_overdispersion
+solid,0_0p10_vs_0p10_0p20,adjusted,Negative binomial,6802.2222059657715,NA
+solid,0_0p10_vs_0p10_0p20,adjusted,Zero-inflated negative binomial,6806.222885701067,NA
+solid,0_0p10_vs_0p10_0p20,adjusted,Poisson,6827.020243255847,1.1114818986352053
+solid,0_0p10_vs_0p10_0p20,adjusted,Zero-inflated Poisson,6831.021041355969,NA
+solid,0_0p10_vs_0p10_0p20,minimal,Negative binomial,8708.878899612617,NA
+solid,0_0p10_vs_0p10_0p20,minimal,Zero-inflated negative binomial,8710.910593978606,NA
+solid,0_0p10_vs_0p10_0p20,minimal,Zero-inflated Poisson,10088.911904626597,NA
+solid,0_0p10_vs_0p10_0p20,minimal,Poisson,10843.43728304531,3.8928708002050816
+stomach,0_0p10_vs_0p10_0p20,adjusted,Negative binomial,3634.444192622837,NA
+stomach,0_0p10_vs_0p10_0p20,adjusted,Zero-inflated negative binomial,3638.4442746915593,NA
+stomach,0_0p10_vs_0p10_0p20,adjusted,Poisson,3643.979782210347,0.8911063523270619
+stomach,0_0p10_vs_0p10_0p20,adjusted,Zero-inflated Poisson,3646.262419157606,NA
+stomach,0_0p10_vs_0p10_0p20,minimal,Negative binomial,4483.433522107454,NA
+stomach,0_0p10_vs_0p10_0p20,minimal,Zero-inflated negative binomial,4484.8299726908845,NA
+stomach,0_0p10_vs_0p10_0p20,minimal,Zero-inflated Poisson,4630.863607998695,NA
+stomach,0_0p10_vs_0p10_0p20,minimal,Poisson,4960.546979305869,1.9797428376936312
+solid,0_0p20_vs_0p20_0p50,adjusted,Negative binomial,7879.259214688035,NA
+solid,0_0p20_vs_0p20_0p50,adjusted,Zero-inflated negative binomial,7883.259482948472,NA
+solid,0_0p20_vs_0p20_0p50,adjusted,Poisson,7903.333761279754,1.1113276821923967
+solid,0_0p20_vs_0p20_0p50,adjusted,Zero-inflated Poisson,7907.334992709741,NA
+solid,0_0p20_vs_0p20_0p50,minimal,Negative binomial,10002.96084372357,NA
+solid,0_0p20_vs_0p20_0p50,minimal,Zero-inflated negative binomial,10004.186495406691,NA
+solid,0_0p20_vs_0p20_0p50,minimal,Zero-inflated Poisson,11410.796137632067,NA
+solid,0_0p20_vs_0p20_0p50,minimal,Poisson,12183.977575594357,3.628370586667873
+stomach,0_0p20_vs_0p20_0p50,adjusted,Negative binomial,4115.128309189142,NA
+stomach,0_0p20_vs_0p20_0p50,adjusted,Zero-inflated negative binomial,4119.128581638348,NA
+stomach,0_0p20_vs_0p20_0p50,adjusted,Poisson,4123.48850387313,0.902077731974238
+stomach,0_0p20_vs_0p20_0p50,adjusted,Zero-inflated Poisson,4125.952052148271,NA
+stomach,0_0p20_vs_0p20_0p50,minimal,Zero-inflated negative binomial,5024.478178128669,NA
+stomach,0_0p20_vs_0p20_0p50,minimal,Negative binomial,5025.882900396236,NA
+stomach,0_0p20_vs_0p20_0p50,minimal,Zero-inflated Poisson,5168.86955053679,NA
+stomach,0_0p20_vs_0p20_0p50,minimal,Poisson,5498.335285343033,1.9643644525151502

@@ -1,0 +1,11 @@
+============================================================
+RERF BASELINE MODEL PILOT SUMMARY
+============================================================
+
+Pilot specs tested:
+
+Group summaries:
+
+Model comparisons:
+
+Dose group effects:

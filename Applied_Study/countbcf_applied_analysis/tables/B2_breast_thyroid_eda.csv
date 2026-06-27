@@ -1,0 +1,7 @@
+dose_level,cells,cases,pyr,endpoint
+control,1355,199,389068.58136,breast
+moderate,1265,38,62429.0134,breast
+high,706,34,25696.28576,breast
+control,2704,81,656600.73338,thyroid
+moderate,2492,23,103512.98583,thyroid
+high,1441,20,35473.47871,thyroid

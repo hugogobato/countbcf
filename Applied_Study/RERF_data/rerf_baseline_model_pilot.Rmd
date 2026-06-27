@@ -1,0 +1,605 @@
+---
+title: "Untitled"
+output: html_document
+date: "2026-06-16"
+---
+
+```{r}
+
+
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tibble)
+library(MASS)
+library(pscl)
+library(broom)
+library(purrr)
+library(stringr)
+
+
+base_dir <- "/Users/ericwang/Documents/Columbia CRR/Code/RERF_data"
+
+out_dir <- file.path(base_dir, "rerf_baseline_model_pilot")
+if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
+
+# Load solid cancer incidence data
+solid_data <- read_csv(file.path(base_dir, "lssinc07.csv"), show_col_types = FALSE)
+names(solid_data) <- trimws(names(solid_data))
+
+# Clean negative dose codes
+dose_vars <- c(
+  "cola02w10",
+  "stoa02w10",
+  "thya02w10",
+  "brea02w10",
+  "liva02w10",
+  "pana02w10",
+  "blaa02w10"
+)
+
+dose_vars <- dose_vars[dose_vars %in% names(solid_data)]
+
+solid_data <- solid_data %>%
+  mutate(
+    across(
+      all_of(dose_vars),
+      ~ ifelse(.x < 0, NA_real_, .x)
+    )
+  )
+
+safe_var_mean <- function(x) {
+  m <- mean(x, na.rm = TRUE)
+  if (is.na(m) || m == 0) return(NA_real_)
+  var(x, na.rm = TRUE) / m
+}
+
+get_pyr_var <- function(data) {
+  if ("pyr" %in% names(data)) return("pyr")
+  if ("py" %in% names(data)) return("py")
+  if ("person_years" %in% names(data)) return("person_years")
+  stop("No person-year variable found.")
+}
+
+make_pilot_data <- function(data, endpoint, dose_var,
+                            low_min, low_max,
+                            high_min, high_max) {
+  
+  pyr_var <- get_pyr_var(data)
+  
+  pilot <- data %>%
+    filter(
+      !is.na(.data[[endpoint]]),
+      !is.na(.data[[dose_var]]),
+      .data[[dose_var]] >= 0,
+      !is.na(.data[[pyr_var]]),
+      .data[[pyr_var]] > 0
+    ) %>%
+    mutate(
+      outcome = .data[[endpoint]],
+      dose = .data[[dose_var]],
+      pyr_used = .data[[pyr_var]],
+      dose_group = case_when(
+        dose >= low_min & dose < low_max ~ 0L,
+        dose >= high_min & dose < high_max ~ 1L,
+        TRUE ~ NA_integer_
+      ),
+      dose_group_label = case_when(
+        dose_group == 0L ~ paste0(low_min, "-", low_max, " Gy"),
+        dose_group == 1L ~ paste0(high_min, "-", high_max, " Gy"),
+        TRUE ~ NA_character_
+      )
+    ) %>%
+    filter(!is.na(dose_group)) %>%
+    mutate(
+      dose_group = factor(dose_group, levels = c(0, 1)),
+      dose_group_label = factor(
+        dose_group_label,
+        levels = c(
+          paste0(low_min, "-", low_max, " Gy"),
+          paste0(high_min, "-", high_max, " Gy")
+        )
+      )
+    )
+  
+  return(pilot)
+}
+
+summarize_pilot <- function(pilot, endpoint, dose_var, contrast_name) {
+  
+  pilot %>%
+    group_by(dose_group, dose_group_label) %>%
+    summarise(
+      endpoint = endpoint,
+      dose_var = dose_var,
+      contrast = contrast_name,
+      n_strata = n(),
+      total_cases = sum(outcome, na.rm = TRUE),
+      total_pyr = sum(pyr_used, na.rm = TRUE),
+      incidence_rate_per_100k_py = total_cases / total_pyr * 100000,
+      mean_count = mean(outcome, na.rm = TRUE),
+      var_count = var(outcome, na.rm = TRUE),
+      var_mean_ratio = safe_var_mean(outcome),
+      zero_strata = sum(outcome == 0, na.rm = TRUE),
+      zero_pct = mean(outcome == 0, na.rm = TRUE),
+      mean_dose = mean(dose, na.rm = TRUE),
+      median_dose = median(dose, na.rm = TRUE),
+      min_dose = min(dose, na.rm = TRUE),
+      max_dose = max(dose, na.rm = TRUE),
+      .groups = "drop"
+    )
+}
+
+fit_baseline_models <- function(pilot, endpoint, contrast_name) {
+  
+  # Use common RERF covariates if available.
+  possible_covars <- c("city", "sex", "agxcat", "agecat", "time")
+  covars <- possible_covars[possible_covars %in% names(pilot)]
+  
+  # Minimal model: outcome ~ dose_group + offset(log(pyr))
+  formula_min <- outcome ~ dose_group + offset(log(pyr_used))
+  
+  # Adjusted model
+  if (length(covars) > 0) {
+    formula_adj <- as.formula(
+      paste(
+        "outcome ~ dose_group +",
+        paste(covars, collapse = " + "),
+        "+ offset(log(pyr_used))"
+      )
+    )
+  } else {
+    formula_adj <- formula_min
+  }
+  
+  # Minimal models
+  pois_min <- glm(
+    formula_min,
+    family = poisson(link = "log"),
+    data = pilot
+  )
+  
+  nb_min <- tryCatch(
+    glm.nb(formula_min, data = pilot),
+    error = function(e) NULL
+  )
+  
+  zip_min <- tryCatch(
+    zeroinfl(
+      outcome ~ dose_group | dose_group,
+      offset = log(pyr_used),
+      dist = "poisson",
+      data = pilot
+    ),
+    error = function(e) NULL
+  )
+  
+  zinb_min <- tryCatch(
+    zeroinfl(
+      outcome ~ dose_group | dose_group,
+      offset = log(pyr_used),
+      dist = "negbin",
+      data = pilot
+    ),
+    error = function(e) NULL
+  )
+  
+  # Adjusted models
+  pois_adj <- tryCatch(
+    glm(
+      formula_adj,
+      family = poisson(link = "log"),
+      data = pilot
+    ),
+    error = function(e) NULL
+  )
+  
+  nb_adj <- tryCatch(
+    glm.nb(formula_adj, data = pilot),
+    error = function(e) NULL
+  )
+  
+  # For zero-inflated adjusted models, keep zero part simple.
+  if (length(covars) > 0) {
+    count_formula_text <- paste(
+      "outcome ~ dose_group +",
+      paste(covars, collapse = " + "),
+      "| dose_group"
+    )
+  } else {
+    count_formula_text <- "outcome ~ dose_group | dose_group"
+  }
+  
+  zip_adj <- tryCatch(
+    zeroinfl(
+      as.formula(count_formula_text),
+      offset = log(pyr_used),
+      dist = "poisson",
+      data = pilot
+    ),
+    error = function(e) NULL
+  )
+  
+  zinb_adj <- tryCatch(
+    zeroinfl(
+      as.formula(count_formula_text),
+      offset = log(pyr_used),
+      dist = "negbin",
+      data = pilot
+    ),
+    error = function(e) NULL
+  )
+  
+  get_aic <- function(model) {
+    if (is.null(model)) return(NA_real_)
+    AIC(model)
+  }
+  
+  get_overdisp <- function(model) {
+    if (is.null(model)) return(NA_real_)
+    if (!inherits(model, "glm")) return(NA_real_)
+    sum(residuals(model, type = "pearson")^2) / model$df.residual
+  }
+  
+  comparison <- tibble(
+    endpoint = endpoint,
+    contrast = contrast_name,
+    model_set = c(
+      "minimal", "minimal", "minimal", "minimal",
+      "adjusted", "adjusted", "adjusted", "adjusted"
+    ),
+    model = c(
+      "Poisson",
+      "Negative binomial",
+      "Zero-inflated Poisson",
+      "Zero-inflated negative binomial",
+      "Poisson",
+      "Negative binomial",
+      "Zero-inflated Poisson",
+      "Zero-inflated negative binomial"
+    ),
+    AIC = c(
+      get_aic(pois_min),
+      get_aic(nb_min),
+      get_aic(zip_min),
+      get_aic(zinb_min),
+      get_aic(pois_adj),
+      get_aic(nb_adj),
+      get_aic(zip_adj),
+      get_aic(zinb_adj)
+    ),
+    poisson_overdispersion = c(
+      get_overdisp(pois_min),
+      NA_real_,
+      NA_real_,
+      NA_real_,
+      get_overdisp(pois_adj),
+      NA_real_,
+      NA_real_,
+      NA_real_
+    )
+  ) %>%
+    arrange(model_set, AIC)
+  
+  # Extract dose_group effect from Poisson/NB adjusted models if possible.
+  extract_effect <- function(model, model_name, model_set) {
+    if (is.null(model)) return(NULL)
+    
+    tidy_model <- tryCatch(
+      broom::tidy(model, conf.int = TRUE),
+      error = function(e) NULL
+    )
+    
+    if (is.null(tidy_model)) return(NULL)
+    
+    tidy_model %>%
+      filter(str_detect(term, "dose_group")) %>%
+      mutate(
+        endpoint = endpoint,
+        contrast = contrast_name,
+        model = model_name,
+        model_set = model_set,
+        rate_ratio = exp(estimate),
+        rr_low = exp(conf.low),
+        rr_high = exp(conf.high)
+      ) %>%
+      dplyr::select(
+        endpoint,
+        contrast,
+        model_set,
+        model,
+        term,
+        estimate,
+        std.error,
+        statistic,
+        p.value,
+        rate_ratio,
+        rr_low,
+        rr_high
+      )
+  }
+  
+  effects <- bind_rows(
+    extract_effect(pois_min, "Poisson", "minimal"),
+    extract_effect(nb_min, "Negative binomial", "minimal"),
+    extract_effect(pois_adj, "Poisson", "adjusted"),
+    extract_effect(nb_adj, "Negative binomial", "adjusted")
+  )
+  
+  list(
+    comparison = comparison,
+    effects = effects,
+    models = list(
+      pois_min = pois_min,
+      nb_min = nb_min,
+      zip_min = zip_min,
+      zinb_min = zinb_min,
+      pois_adj = pois_adj,
+      nb_adj = nb_adj,
+      zip_adj = zip_adj,
+      zinb_adj = zinb_adj
+    )
+  )
+}
+
+plot_count_distribution <- function(pilot, endpoint, contrast_name) {
+  
+  p <- ggplot(pilot, aes(x = outcome, fill = dose_group_label)) +
+    geom_bar(position = "dodge") +
+    labs(
+      title = paste("Count distribution:", endpoint),
+      subtitle = contrast_name,
+      x = paste(endpoint, "cases per stratum"),
+      y = "Number of strata",
+      fill = "Dose group"
+    ) +
+    theme_bw(base_size = 13)
+  
+  file_name <- paste0("count_distribution_", endpoint, "_", contrast_name, ".png") %>%
+    gsub("[^A-Za-z0-9_\\.]", "_", .)
+  
+  ggsave(
+    filename = file.path(out_dir, file_name),
+    plot = p,
+    width = 7,
+    height = 5,
+    dpi = 300
+  )
+  
+  return(p)
+}
+
+plot_rate_by_group <- function(summary_table, endpoint, contrast_name) {
+  
+  p <- ggplot(summary_table, aes(x = dose_group_label, y = incidence_rate_per_100k_py)) +
+    geom_col() +
+    labs(
+      title = paste("Incidence rate by dose group:", endpoint),
+      subtitle = contrast_name,
+      x = "Dose group",
+      y = "Cases per 100,000 person-years"
+    ) +
+    theme_bw(base_size = 13)
+  
+  file_name <- paste0("incidence_rate_", endpoint, "_", contrast_name, ".png") %>%
+    gsub("[^A-Za-z0-9_\\.]", "_", .)
+  
+  ggsave(
+    filename = file.path(out_dir, file_name),
+    plot = p,
+    width = 7,
+    height = 5,
+    dpi = 300
+  )
+  
+  return(p)
+}
+
+# Choose pilot contrasts
+
+pilot_specs <- tribble(
+  ~endpoint, ~dose_var, ~contrast_name, ~low_min, ~low_max, ~high_min, ~high_max,
+  
+  "solid",   "cola02w10", "0_0p10_vs_0p10_0p20", 0.000, 0.100, 0.100, 0.200,
+  "stomach", "stoa02w10", "0_0p10_vs_0p10_0p20", 0.000, 0.100, 0.100, 0.200,
+  
+  # Optional secondary contrasts.
+  # These often have many strata and may be useful as sensitivity checks.
+  "solid",   "cola02w10", "0_0p20_vs_0p20_0p50", 0.000, 0.200, 0.200, 0.500,
+  "stomach", "stoa02w10", "0_0p20_vs_0p20_0p50", 0.000, 0.200, 0.200, 0.500
+)
+
+write_csv(
+  pilot_specs,
+  file.path(out_dir, "pilot_specs_tested.csv")
+)
+
+# Run pilot
+
+all_pilot_summaries <- list()
+all_model_comparisons <- list()
+all_effects <- list()
+
+for (i in seq_len(nrow(pilot_specs))) {
+  
+  spec <- pilot_specs[i, ]
+  
+  cat("\nRunning pilot:\n")
+  print(spec)
+  
+  pilot_data <- make_pilot_data(
+    data = solid_data,
+    endpoint = spec$endpoint,
+    dose_var = spec$dose_var,
+    low_min = spec$low_min,
+    low_max = spec$low_max,
+    high_min = spec$high_min,
+    high_max = spec$high_max
+  )
+  
+  # Save analysis data
+  write_csv(
+    pilot_data,
+    file.path(
+      out_dir,
+      paste0("pilot_data_", spec$endpoint, "_", spec$contrast_name, ".csv")
+    )
+  )
+  
+  # Summarize groups
+  pilot_summary <- summarize_pilot(
+    pilot = pilot_data,
+    endpoint = spec$endpoint,
+    dose_var = spec$dose_var,
+    contrast_name = spec$contrast_name
+  )
+  
+  all_pilot_summaries[[i]] <- pilot_summary
+  
+  write_csv(
+    pilot_summary,
+    file.path(
+      out_dir,
+      paste0("pilot_summary_", spec$endpoint, "_", spec$contrast_name, ".csv")
+    )
+  )
+  
+  print(pilot_summary)
+  
+  # Plots
+  print(plot_count_distribution(pilot_data, spec$endpoint, spec$contrast_name))
+  print(plot_rate_by_group(pilot_summary, spec$endpoint, spec$contrast_name))
+  
+  # Models
+  model_results <- fit_baseline_models(
+    pilot = pilot_data,
+    endpoint = spec$endpoint,
+    contrast_name = spec$contrast_name
+  )
+  
+  all_model_comparisons[[i]] <- model_results$comparison
+  all_effects[[i]] <- model_results$effects
+  
+  write_csv(
+    model_results$comparison,
+    file.path(
+      out_dir,
+      paste0("model_comparison_", spec$endpoint, "_", spec$contrast_name, ".csv")
+    )
+  )
+  
+  write_csv(
+    model_results$effects,
+    file.path(
+      out_dir,
+      paste0("dose_group_effects_", spec$endpoint, "_", spec$contrast_name, ".csv")
+    )
+  )
+}
+
+combined_pilot_summary <- bind_rows(all_pilot_summaries)
+combined_model_comparison <- bind_rows(all_model_comparisons)
+combined_effects <- bind_rows(all_effects)
+
+write_csv(
+  combined_pilot_summary,
+  file.path(out_dir, "combined_pilot_group_summaries.csv")
+)
+
+write_csv(
+  combined_model_comparison,
+  file.path(out_dir, "combined_baseline_model_comparisons.csv")
+)
+
+write_csv(
+  combined_effects,
+  file.path(out_dir, "combined_dose_group_effects.csv")
+)
+
+# Create compact Igor tables
+
+igor_summary_table <- combined_pilot_summary %>%
+  mutate(
+    total_cases = round(total_cases, 1),
+    total_pyr = round(total_pyr, 1),
+    incidence_rate_per_100k_py = round(incidence_rate_per_100k_py, 3),
+    var_mean_ratio = round(var_mean_ratio, 3),
+    zero_pct = round(zero_pct, 3),
+    mean_dose = round(mean_dose, 4),
+    median_dose = round(median_dose, 4)
+  ) %>%
+  dplyr::select(
+    endpoint,
+    contrast,
+    dose_group_label,
+    n_strata,
+    total_cases,
+    total_pyr,
+    incidence_rate_per_100k_py,
+    zero_pct,
+    var_mean_ratio,
+    mean_dose,
+    median_dose
+  )
+
+igor_model_table <- combined_model_comparison %>%
+  group_by(endpoint, contrast, model_set) %>%
+  arrange(AIC, .by_group = TRUE) %>%
+  mutate(best_model_in_set = row_number() == 1) %>%
+  ungroup() %>%
+  mutate(
+    AIC = round(AIC, 2),
+    poisson_overdispersion = round(poisson_overdispersion, 3)
+  )
+
+igor_effect_table <- combined_effects %>%
+  mutate(
+    rate_ratio = round(rate_ratio, 3),
+    rr_low = round(rr_low, 3),
+    rr_high = round(rr_high, 3),
+    p.value = round(p.value, 4)
+  )
+
+write_csv(
+  igor_summary_table,
+  file.path(out_dir, "igor_pilot_group_summary_table.csv")
+)
+
+write_csv(
+  igor_model_table,
+  file.path(out_dir, "igor_pilot_model_comparison_table.csv")
+)
+
+write_csv(
+  igor_effect_table,
+  file.path(out_dir, "igor_pilot_dose_group_effect_table.csv")
+)
+
+# Save
+
+sink(file.path(out_dir, "rerf_baseline_model_pilot_summary.txt"))
+
+cat("============================================================\n")
+cat("RERF BASELINE MODEL PILOT SUMMARY\n")
+cat("============================================================\n\n")
+
+cat("Pilot specs tested:\n")
+print(pilot_specs)
+
+cat("\nGroup summaries:\n")
+print(igor_summary_table)
+
+cat("\nModel comparisons:\n")
+print(igor_model_table)
+
+cat("\nDose group effects:\n")
+print(igor_effect_table)
+
+sink()
+
+cat("\nDone. Outputs saved to:\n")
+cat(out_dir, "\n")
+
+```
+

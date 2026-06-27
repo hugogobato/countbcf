@@ -1,0 +1,17 @@
+group,cases,in_all_solid
+oralca,77,yes (exact group)
+digestca,3211,yes (exact group)
+respca,660,yes (exact group)
+femgenca,441,yes (exact group)
+malgenca,137,yes (exact group)
+urinca,205,yes (exact group)
+breast,316,yes
+thyroid,140,yes
+cnsca,97,yes
+bone,9,yes
+connect,10,yes
+thymus,3,yes
+othsol,73,yes
+(named solid incl. breast+thyroid),5379,—
+solid (RERF all-solid total),5513,—
+nmskin (non-melanoma skin),100,NO (RERF convention)

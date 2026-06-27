@@ -1,0 +1,145 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{pierce2000}
+\citation{cologne2019}
+\citation{sakata2019}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Applied Study}{1}{section.1}\protected@file@percent }
+\newlabel{sec:discussion}{{1}{1}{Applied Study}{section.1}{}}
+\citation{hahn2020bayesian}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Data, treatment design, and estimands}{2}{subsection.1.1}\protected@file@percent }
+\newlabel{sec:applied-design}{{1.1}{2}{Data, treatment design, and estimands}{subsection.1.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Crude incidence, zero fraction and dispersion by treatment group. Incidence rises monotonically with dose for both endpoints prior to any covariate adjustment. The high zero-cell fraction is a sparsity artefact of finely cut person-year cells (sampling, not structural, zeros).}}{2}{table.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:applied-baseline}{{1}{2}{Crude incidence, zero fraction and dispersion by treatment group. Incidence rises monotonically with dose for both endpoints prior to any covariate adjustment. The high zero-cell fraction is a sparsity artefact of finely cut person-year cells (sampling, not structural, zeros)}{table.caption.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Average treatment effect: convergence and parametric fragility}{3}{subsection.1.2}\protected@file@percent }
+\newlabel{sec:applied-ate}{{1.2}{3}{Average treatment effect: convergence and parametric fragility}{subsection.1.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces ATE convergence: CountBCF (NB) versus an adjusted NB GLM. Marginal excess rate (cases$/10^5$~PY) and rate ratio with $95\%$ intervals. The two methods track each other on every contrast; CountBCF is mildly conservative. The final column gives the E-value for the point estimate and for the confidence limit nearest the null: the minimum strength of association (on the risk-ratio scale) that an unmeasured confounder would need with \emph  {both} dose and incidence to explain the contrast away.}}{4}{table.caption.2}\protected@file@percent }
+\newlabel{tab:applied-ate}{{2}{4}{ATE convergence: CountBCF (NB) versus an adjusted NB GLM. Marginal excess rate (cases$/10^5$~PY) and rate ratio with $95\%$ intervals. The two methods track each other on every contrast; CountBCF is mildly conservative. The final column gives the E-value for the point estimate and for the confidence limit nearest the null: the minimum strength of association (on the risk-ratio scale) that an unmeasured confounder would need with \emph {both} dose and incidence to explain the contrast away}{table.caption.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces ATE convergence on the absolute scale: CountBCF (NB) versus the adjusted NB GLM, marginal excess rate (cases$/10^5$~PY) with $95\%$ intervals, for all four endpoint $\times $ dose-level contrasts. The two estimators are nearly coincident on every contrast, with CountBCF positioned a touch toward the null --- the expected signature of BCF's regularization. The moderate-dose stomach contrast straddles zero for both methods.}}{4}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:ate-conv}{{1}{4}{ATE convergence on the absolute scale: CountBCF (NB) versus the adjusted NB GLM, marginal excess rate (cases$/10^5$~PY) with $95\%$ intervals, for all four endpoint $\times $ dose-level contrasts. The two estimators are nearly coincident on every contrast, with CountBCF positioned a touch toward the null --- the expected signature of BCF's regularization. The moderate-dose stomach contrast straddles zero for both methods}{figure.caption.3}{}}
+\citation{rosenbaum1983central}
+\citation{pierce2000}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Heterogeneity: the two master gradients}{5}{subsection.1.3}\protected@file@percent }
+\newlabel{sec:applied-cate}{{1.3}{5}{Heterogeneity: the two master gradients}{subsection.1.3}{}}
+\newlabel{fig:err-agex-solid}{{2a}{6}{All solid cancers}{figure.caption.4}{}}
+\newlabel{sub@fig:err-agex-solid}{{a}{6}{All solid cancers}{figure.caption.4}{}}
+\newlabel{fig:err-agex-stomach}{{2b}{6}{Stomach}{figure.caption.4}{}}
+\newlabel{sub@fig:err-agex-stomach}{{b}{6}{Stomach}{figure.caption.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \textbf  {Gradient 1 (multiplicative scale).} CountBCF excess relative risk (ERR $=$ RR $-1$) for the high-dose contrast as a function of age at exposure, by sex (smooths with $95\%$ bands over per-cell posterior means). Solid-cancer ERR falls steeply with older exposure age, then plateaus near $0.25$ around age $50$ with a faint upturn at the oldest, sparsest exposure ages (Section~\ref {sec:applied-divergence}). The stomach slope is far shallower. Sex curves are near-coincident for solid but female-above-male for stomach.}}{6}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:err-agex}{{2}{6}{\textbf {Gradient 1 (multiplicative scale).} CountBCF excess relative risk (ERR $=$ RR $-1$) for the high-dose contrast as a function of age at exposure, by sex (smooths with $95\%$ bands over per-cell posterior means). Solid-cancer ERR falls steeply with older exposure age, then plateaus near $0.25$ around age $50$ with a faint upturn at the oldest, sparsest exposure ages (Section~\ref {sec:applied-divergence}). The stomach slope is far shallower. Sex curves are near-coincident for solid but female-above-male for stomach}{figure.caption.4}{}}
+\newlabel{fig:ear-age-solid}{{3a}{6}{All solid cancers}{figure.caption.5}{}}
+\newlabel{sub@fig:ear-age-solid}{{a}{6}{All solid cancers}{figure.caption.5}{}}
+\newlabel{fig:ear-age-stomach}{{3b}{6}{Stomach}{figure.caption.5}{}}
+\newlabel{sub@fig:ear-age-stomach}{{b}{6}{Stomach}{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {Gradient 2 (absolute scale).} Per-cell CATE (excess cases$/10^5$~PY) for the high-dose contrast against attained age, by sex (points are individual cells; lines are sex-specific smooths). The absolute excess rises with attained age as the baseline incidence climbs, even as the relative multiplier of Figure~\ref {fig:err-agex} fades; the male smooth sits above the female throughout.}}{6}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:ear-age}{{3}{6}{\textbf {Gradient 2 (absolute scale).} Per-cell CATE (excess cases$/10^5$~PY) for the high-dose contrast against attained age, by sex (points are individual cells; lines are sex-specific smooths). The absolute excess rises with attained age as the baseline incidence climbs, even as the relative multiplier of Figure~\ref {fig:err-agex} fades; the male smooth sits above the female throughout}{figure.caption.5}{}}
+\citation{thompson1994}
+\citation{preston2007}
+\citation{grant2017}
+\citation{ozasa2012}
+\citation{sakata2019}
+\citation{grant2017}
+\citation{preston2007}
+\citation{preston2007,ozasa2012}
+\citation{sakata2019}
+\citation{sakata2019}
+\citation{preston2007,ds02}
+\citation{preston2007,grant2017}
+\citation{cologne2019}
+\citation{sakata2019}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces The two master gradients for the high-dose contrast, person-year-weighted. Left: ERR (and EAR) by age at exposure, with the mean attained age at which each exposure-age band is observed. Right: EAR by attained age. Note the EAR \emph  {peak} at age-at-exposure 20--30 even though ERR peaks at the youngest --- the classic EAR-vs-ERR tension (Section~\ref {sec:applied-cate}).}}{7}{table.caption.6}\protected@file@percent }
+\newlabel{tab:applied-gradients}{{3}{7}{The two master gradients for the high-dose contrast, person-year-weighted. Left: ERR (and EAR) by age at exposure, with the mean attained age at which each exposure-age band is observed. Right: EAR by attained age. Note the EAR \emph {peak} at age-at-exposure 20--30 even though ERR peaks at the youngest --- the classic EAR-vs-ERR tension (Section~\ref {sec:applied-cate})}{table.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Convergence with the radiation-epidemiology literature}{7}{subsection.1.4}\protected@file@percent }
+\newlabel{sec:applied-convergence}{{1.4}{7}{Convergence with the radiation-epidemiology literature}{subsection.1.4}{}}
+\newlabel{fig:ear-agex-solid}{{4a}{8}{All solid cancers}{figure.caption.7}{}}
+\newlabel{sub@fig:ear-agex-solid}{{a}{8}{All solid cancers}{figure.caption.7}{}}
+\newlabel{fig:ear-agex-stomach}{{4b}{8}{Stomach}{figure.caption.7}{}}
+\newlabel{sub@fig:ear-agex-stomach}{{b}{8}{Stomach}{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \textbf  {The EAR--ERR tension on the absolute scale.} Per-cell CATE (excess cases$/10^5$~PY) against \emph  {age at exposure}, by sex. Unlike the monotone relative-scale decline of Figure~\ref {fig:err-agex}, the \emph  {absolute} excess is non-monotone in age at exposure --- it peaks for intermediate exposure ages --- because each exposure-age band is observed at a different attained age (Table~\ref {tab:applied-gradients}). The two scales therefore rank the exposure-age groups differently.}}{8}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:ear-agex}{{4}{8}{\textbf {The EAR--ERR tension on the absolute scale.} Per-cell CATE (excess cases$/10^5$~PY) against \emph {age at exposure}, by sex. Unlike the monotone relative-scale decline of Figure~\ref {fig:err-agex}, the \emph {absolute} excess is non-monotone in age at exposure --- it peaks for intermediate exposure ages --- because each exposure-age band is observed at a different attained age (Table~\ref {tab:applied-gradients}). The two scales therefore rank the exposure-age groups differently}{figure.caption.7}{}}
+\newlabel{fig:heatmap-solid}{{5a}{8}{All solid cancers}{figure.caption.8}{}}
+\newlabel{sub@fig:heatmap-solid}{{a}{8}{All solid cancers}{figure.caption.8}{}}
+\newlabel{fig:heatmap-stomach}{{5b}{8}{Stomach}{figure.caption.8}{}}
+\newlabel{sub@fig:heatmap-stomach}{{b}{8}{Stomach}{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \textbf  {The CATE surface.} Posterior-mean excess cases$/10^5$~PY for the high-dose contrast over the age-at-exposure $\times $ attained-age plane. Intensity concentrates toward old attained age and younger-to-middle age at exposure, the joint maximum of the long-fuse relative effect and the rising absolute baseline. This two-dimensional surface is the deconfounded object; the one-dimensional margins of Figures~\ref {fig:err-agex}--\ref {fig:ear-agex} are projections of it.}}{8}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:heatmap}{{5}{8}{\textbf {The CATE surface.} Posterior-mean excess cases$/10^5$~PY for the high-dose contrast over the age-at-exposure $\times $ attained-age plane. Intensity concentrates toward old attained age and younger-to-middle age at exposure, the joint maximum of the long-fuse relative effect and the rising absolute baseline. This two-dimensional surface is the deconfounded object; the one-dimensional margins of Figures~\ref {fig:err-agex}--\ref {fig:ear-agex} are projections of it}{figure.caption.8}{}}
+\citation{preston2007}
+\citation{grant2017}
+\citation{brenner2018,furukawa2013,ron1995}
+\citation{preston2007,walsh2016}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.5}Divergences and contested findings}{9}{subsection.1.5}\protected@file@percent }
+\newlabel{sec:applied-divergence}{{1.5}{9}{Divergences and contested findings}{subsection.1.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{The solid-cancer sex ERR (the substantive divergence).}{9}{section*.9}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \textbf  {The RERF all-solid endpoint includes the female-driving sites.} Incident-case composition of the all-solid count over the 1958--1998 follow-up. Breast ($316$ cases) and thyroid ($140$) --- the highly radiogenic, female-skewed sites --- are constituent members of the aggregate (orange), not exclusions; non-melanoma skin ($100$ cases) is the one canonical exclusion (grey). The named sites shown account for $97.6\%$ of the all-solid total. The female-driving sites are therefore \emph  {present} in our endpoint, but carried at the colon-dose surrogate rather than their own organ dose.}}{10}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:sex-construction}{{6}{10}{\textbf {The RERF all-solid endpoint includes the female-driving sites.} Incident-case composition of the all-solid count over the 1958--1998 follow-up. Breast ($316$ cases) and thyroid ($140$) --- the highly radiogenic, female-skewed sites --- are constituent members of the aggregate (orange), not exclusions; non-melanoma skin ($100$ cases) is the one canonical exclusion (grey). The named sites shown account for $97.6\%$ of the all-solid total. The female-driving sites are therefore \emph {present} in our endpoint, but carried at the colon-dose surrogate rather than their own organ dose}{figure.caption.10}{}}
+\citation{cologne2019}
+\citation{shuryak2010}
+\citation{beirvii2006}
+\citation{grant2017}
+\citation{little2009}
+\citation{cologne2019}
+\citation{grant2017}
+\citation{shuryak2010}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces \textbf  {On their own organ dose, the female-driving sites show their signal.} Excess relative risk for breast and thyroid fitted with their \emph  {own} organ dose (high-dose contrast), by sex: point-ranges are the NB-GLM ERR with $95\%$ confidence intervals, crosses ($\times $) the corresponding CountBCF posterior-mean ERR. Breast carries a strong female excess (GLM ERR $1.63$) and thyroid a large --- if imprecisely estimated --- effect in both sexes. This is the sex-relevant signal that the colon-dosed aggregate flattens toward its common $\approx 0.8$ ERR, and it is recovered automatically once the dose is the correct one.}}{11}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:sex-owndose}{{7}{11}{\textbf {On their own organ dose, the female-driving sites show their signal.} Excess relative risk for breast and thyroid fitted with their \emph {own} organ dose (high-dose contrast), by sex: point-ranges are the NB-GLM ERR with $95\%$ confidence intervals, crosses ($\times $) the corresponding CountBCF posterior-mean ERR. Breast carries a strong female excess (GLM ERR $1.63$) and thyroid a large --- if imprecisely estimated --- effect in both sexes. This is the sex-relevant signal that the colon-dosed aggregate flattens toward its common $\approx 0.8$ ERR, and it is recovered automatically once the dose is the correct one}{figure.caption.11}{}}
+\@writefile{toc}{\contentsline {paragraph}{The age-at-exposure plateau and faint upturn (a contested shape).}{11}{section*.14}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Sex-ERR sensitivity for the high-dose contrast (person-year-weighted ERR by sex). The primary colon-dosed all-solid result is mildly male-leaning (female-to-male $\approx 0.91$); \emph  {excluding} breast and thyroid leaves it essentially unchanged, but relaxing the $2$~Gy cap or raising the high-dose threshold \emph  {reverses} it to the canonical female-higher direction, and breast fitted with its own organ dose recovers a strong female ERR. Per-sex ERR \emph  {levels} carry Monte-Carlo variation across independent fits (the primary baseline below reproduces the female-to-male $\approx 0.91$ of the main analysis); the female-to-male \emph  {ratio} is the stable, inferentially relevant quantity.}}{12}{table.caption.12}\protected@file@percent }
+\newlabel{tab:applied-sexsens}{{4}{12}{Sex-ERR sensitivity for the high-dose contrast (person-year-weighted ERR by sex). The primary colon-dosed all-solid result is mildly male-leaning (female-to-male $\approx 0.91$); \emph {excluding} breast and thyroid leaves it essentially unchanged, but relaxing the $2$~Gy cap or raising the high-dose threshold \emph {reverses} it to the canonical female-higher direction, and breast fitted with its own organ dose recovers a strong female ERR. Per-sex ERR \emph {levels} carry Monte-Carlo variation across independent fits (the primary baseline below reproduces the female-to-male $\approx 0.91$ of the main analysis); the female-to-male \emph {ratio} is the stable, inferentially relevant quantity}{table.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces \textbf  {The residual male tilt is a design artefact.} \emph  {Top:} per-sex person-year-weighted ERR for the high-dose contrast under four dose-design choices. \emph  {Bottom:} the female-to-male ERR ratio for each (dashed line at parity). The primary $2$~Gy-capped, three-level design leaves the ratio just below $1$ (male-leaning); widening the cap to $4$~Gy or moving the high-dose band to $\geq 1$~Gy lifts the female ERR above the male and flips the ratio to the canonical female-higher direction ($\approx 1.30$ and $\approx 1.25$), whereas a finer control cut does not. The plotted values are those of Table~\ref {tab:applied-sexsens}.}}{12}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:sex-design}{{8}{12}{\textbf {The residual male tilt is a design artefact.} \emph {Top:} per-sex person-year-weighted ERR for the high-dose contrast under four dose-design choices. \emph {Bottom:} the female-to-male ERR ratio for each (dashed line at parity). The primary $2$~Gy-capped, three-level design leaves the ratio just below $1$ (male-leaning); widening the cap to $4$~Gy or moving the high-dose band to $\geq 1$~Gy lifts the female ERR above the male and flips the ratio to the canonical female-higher direction ($\approx 1.30$ and $\approx 1.25$), whereas a finer control cut does not. The plotted values are those of Table~\ref {tab:applied-sexsens}}{figure.caption.13}{}}
+\citation{little2009}
+\citation{little2009}
+\citation{icrp131}
+\citation{shuryak2010}
+\citation{uemura2001}
+\citation{camargo2012}
+\citation{preston2007,grant2017}
+\citation{beirvii2006,shuryak2010,little2009}
+\citation{preston2007,grant2017}
+\citation{pierce2000}
+\citation{preston2007,ozasa2012}
+\citation{sakata2019}
+\citation{preston2007,grant2017}
+\citation{walsh2016,brenner2018}
+\citation{preston2007,ds02}
+\citation{sakata2019}
+\citation{preston2007,cologne2019}
+\citation{sakata2019}
+\citation{preston2007}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.6}Synthesis and caveats}{13}{subsection.1.6}\protected@file@percent }
+\newlabel{sec:applied-synthesis}{{1.6}{13}{Synthesis and caveats}{subsection.1.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces \textbf  {The age-at-exposure gradient is largely a mixture effect.} Person-year-weighted ERR for the high-dose contrast against age at exposure, each cancer site fitted with its \emph  {own} organ dose. The steep decline of the colon-dosed all-solid aggregate (green) is \emph  {not} reproduced by its constituent sites: lung and colon ERR are essentially flat --- indeed faintly rising --- and stomach declines only mildly across age at exposure. The aggregate's strong gradient and its old-age curvature are thus substantially properties of the etiologically heterogeneous site \emph  {mixture}, the age-at-exposure analogue of the aggregation artefact of \citet  {little2009}.}}{14}{figure.caption.15}\protected@file@percent }
+\newlabel{fig:site-agex}{{9}{14}{\textbf {The age-at-exposure gradient is largely a mixture effect.} Person-year-weighted ERR for the high-dose contrast against age at exposure, each cancer site fitted with its \emph {own} organ dose. The steep decline of the colon-dosed all-solid aggregate (green) is \emph {not} reproduced by its constituent sites: lung and colon ERR are essentially flat --- indeed faintly rising --- and stomach declines only mildly across age at exposure. The aggregate's strong gradient and its old-age curvature are thus substantially properties of the etiologically heterogeneous site \emph {mixture}, the age-at-exposure analogue of the aggregation artefact of \citet {little2009}}{figure.caption.15}{}}
+\newlabel{fig:subgroups-solid}{{10a}{14}{All solid cancers}{figure.caption.16}{}}
+\newlabel{sub@fig:subgroups-solid}{{a}{14}{All solid cancers}{figure.caption.16}{}}
+\newlabel{fig:subgroups-stomach}{{10b}{14}{Stomach}{figure.caption.16}{}}
+\newlabel{sub@fig:subgroups-stomach}{{b}{14}{Stomach}{figure.caption.16}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces \textbf  {Honest uncertainty that widens where the data thin out.} Person-year-weighted posterior-mean subgroup CATE (excess cases$/10^5$~PY) for the high-dose contrast with $\approx 95\%$ intervals, by age-at-exposure band and sex. The intervals broaden sharply for the oldest-exposed ($40+$) band --- the sparsest stratum --- and the solid-cancer female lower bound reaches zero, exactly the region where the plateau/upturn of Figure~\ref {fig:err-agex} is prior-dominated rather than data-driven.}}{14}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:subgroups}{{10}{14}{\textbf {Honest uncertainty that widens where the data thin out.} Person-year-weighted posterior-mean subgroup CATE (excess cases$/10^5$~PY) for the high-dose contrast with $\approx 95\%$ intervals, by age-at-exposure band and sex. The intervals broaden sharply for the oldest-exposed ($40+$) band --- the sparsest stratum --- and the solid-cancer female lower bound reaches zero, exactly the region where the plateau/upturn of Figure~\ref {fig:err-agex} is prior-dominated rather than data-driven}{figure.caption.16}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Convergence/divergence checklist, CountBCF versus the canonical LSS literature. Comparisons are on shape, sign and ranking, not magnitude.}}{15}{table.caption.17}\protected@file@percent }
+\newlabel{tab:applied-checklist}{{5}{15}{Convergence/divergence checklist, CountBCF versus the canonical LSS literature. Comparisons are on shape, sign and ranking, not magnitude}{table.caption.17}{}}
+\bibstyle{plainnat}
+\bibdata{Applied_Study_Section}
+\bibcite{brenner2018}{{1}{2018}{{Brenner et~al.}}{{Brenner, Preston, Sakata, Sugiyama, Utada, Cahoon, Grant, Mabuchi, and Ozasa}}}
+\bibcite{camargo2012}{{2}{2012}{{Camargo et~al.}}{{Camargo, Goto, Zabaleta, Morgan, Correa, and Rabkin}}}
+\bibcite{cologne2019}{{3}{2019}{{Cologne et~al.}}{{Cologne, Kim, Sugiyama, French, Cullings, Preston, Mabuchi, and Ozasa}}}
+\bibcite{furukawa2013}{{4}{2013}{{Furukawa et~al.}}{{Furukawa, Preston, Funamoto, Yonehara, Ito, Tokuoka, Sugiyama, Soda, Ozasa, and Mabuchi}}}
+\bibcite{grant2017}{{5}{2017}{{Grant et~al.}}{{Grant, Brenner, Sugiyama, Sakata, Sadakane, Utada, Cahoon, Milder, Soda, Cullings, Preston, Mabuchi, and Ozasa}}}
+\bibcite{hahn2020bayesian}{{6}{2020}{{Hahn et~al.}}{{Hahn, Murray, and Carvalho}}}
+\bibcite{icrp131}{{7}{2015}{{ICRP}}{{}}}
+\bibcite{little2009}{{8}{2009}{{Little}}{{}}}
+\bibcite{beirvii2006}{{9}{2006}{{National Research Council}}{{}}}
+\bibcite{ozasa2012}{{10}{2012}{{Ozasa et~al.}}{{Ozasa, Shimizu, Suyama, Kasagi, Soda, Grant, Sakata, Sugiyama, and Kodama}}}
+\bibcite{pierce2000}{{11}{2000}{{Pierce and Preston}}{{}}}
+\bibcite{preston2007}{{12}{2007}{{Preston et~al.}}{{Preston, Ron, Tokuoka, Funamoto, Nishi, Soda, Mabuchi, and Kodama}}}
+\bibcite{ron1995}{{13}{1995}{{Ron et~al.}}{{Ron, Lubin, Shore, Schneider, Tucker, Mabuchi, Boice, Pottern, Hoffman, and Modan}}}
+\bibcite{rosenbaum1983central}{{14}{1983}{{Rosenbaum and Rubin}}{{}}}
+\bibcite{sakata2019}{{15}{2019}{{Sakata et~al.}}{{Sakata, Preston, Brenner, Sugiyama, Grant, Rajaraman, Sadakane, Utada, French, Cahoon, Mabuchi, and Ozasa}}}
+\bibcite{shuryak2010}{{16}{2010}{{Shuryak et~al.}}{{Shuryak, Sachs, and Brenner}}}
+\bibcite{thompson1994}{{17}{1994}{{Thompson et~al.}}{{Thompson, Mabuchi, Ron, Soda, Tokunaga, Ochikubo, Sugimoto, Ikeda, Terasaki, Izumi, and Preston}}}
+\bibcite{uemura2001}{{18}{2001}{{Uemura et~al.}}{{Uemura, Okamoto, Yamamoto, Matsumura, Yamaguchi, Yamakido, Taniyama, Sasaki, and Schlemper}}}
+\bibcite{walsh2016}{{19}{2016}{{Walsh and Zhang}}{{}}}
+\bibcite{ds02}{{20}{2005}{{Young and Kerr}}{{}}}
+\gdef \@abspage@last{18}

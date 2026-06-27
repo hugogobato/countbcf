@@ -7,8 +7,27 @@
 ## Local-only working materials (kept out of the installable package)
 /Papers
 /Papers_old
-/tests
+/Applied_Study/_MACOSX/RERF_data
+/Applied_Study/countbcf_applied_analysis/Literature_Reviews
+/Applied_Study/countbcf_applied_analysis/email_to_coauthors.txt
+/Applied_Study/countbcf_applied_analysis/email_response_to_coauthors.txt
+/Applied_Study/countbcf_applied_analysis/CATE_DEEP_DIVE.md
+/Applied_Study/countbcf_applied_analysis/FINDINGS.md
 ZI_BCF_IMPLEMENTATION.md
+/Applied_Study/CountBCF_Applied_Study_Review.md
+/COBAL
+/Applied_Study/Applied_Study_Revision_Plan.md
+/tests/analysis/
+/tests/results_count/
+/tests/results_zi/
+/tests/run_logs_new/
+collaboration_qa_Claude.md
+collaboration_qa.md
+continuous_treatment_plan_Claude.md
+tests/.claude/
+tests/Experiment_Code_in_Notebooks/
+tests/run_new_methods_local.sh
+tests/convert_to_notebooks.py
 
 .Rhistory
 .Rbuildignore
@@ -23,3 +42,4 @@ src/symbols.rds
 src/*:Zone.Identifier
 *.Rcheck/
 *.tar.gz
+

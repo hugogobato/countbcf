@@ -1,0 +1,9 @@
+endpoint,contrast,model_set,model,AIC,poisson_overdispersion
+solid,0_0p10_vs_0p10_0p20,adjusted,Negative binomial,6802.2222059657715,NA
+solid,0_0p10_vs_0p10_0p20,adjusted,Zero-inflated negative binomial,6806.222885701067,NA
+solid,0_0p10_vs_0p10_0p20,adjusted,Poisson,6827.020243255847,1.1114818986352053
+solid,0_0p10_vs_0p10_0p20,adjusted,Zero-inflated Poisson,6831.021041355969,NA
+solid,0_0p10_vs_0p10_0p20,minimal,Negative binomial,8708.878899612617,NA
+solid,0_0p10_vs_0p10_0p20,minimal,Zero-inflated negative binomial,8710.910593978606,NA
+solid,0_0p10_vs_0p10_0p20,minimal,Zero-inflated Poisson,10088.911904626597,NA
+solid,0_0p10_vs_0p10_0p20,minimal,Poisson,10843.43728304531,3.8928708002050816

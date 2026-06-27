@@ -1,0 +1,33 @@
+endpoint,contrast,model_set,model,AIC,poisson_overdispersion,best_model_in_set
+solid,0_0p10_vs_0p10_0p20,adjusted,Negative binomial,6802.22,NA,TRUE
+solid,0_0p10_vs_0p10_0p20,adjusted,Zero-inflated negative binomial,6806.22,NA,FALSE
+solid,0_0p10_vs_0p10_0p20,adjusted,Poisson,6827.02,1.111,FALSE
+solid,0_0p10_vs_0p10_0p20,adjusted,Zero-inflated Poisson,6831.02,NA,FALSE
+solid,0_0p10_vs_0p10_0p20,minimal,Negative binomial,8708.88,NA,TRUE
+solid,0_0p10_vs_0p10_0p20,minimal,Zero-inflated negative binomial,8710.91,NA,FALSE
+solid,0_0p10_vs_0p10_0p20,minimal,Zero-inflated Poisson,10088.91,NA,FALSE
+solid,0_0p10_vs_0p10_0p20,minimal,Poisson,10843.44,3.893,FALSE
+solid,0_0p20_vs_0p20_0p50,adjusted,Negative binomial,7879.26,NA,TRUE
+solid,0_0p20_vs_0p20_0p50,adjusted,Zero-inflated negative binomial,7883.26,NA,FALSE
+solid,0_0p20_vs_0p20_0p50,adjusted,Poisson,7903.33,1.111,FALSE
+solid,0_0p20_vs_0p20_0p50,adjusted,Zero-inflated Poisson,7907.33,NA,FALSE
+solid,0_0p20_vs_0p20_0p50,minimal,Negative binomial,10002.96,NA,TRUE
+solid,0_0p20_vs_0p20_0p50,minimal,Zero-inflated negative binomial,10004.19,NA,FALSE
+solid,0_0p20_vs_0p20_0p50,minimal,Zero-inflated Poisson,11410.8,NA,FALSE
+solid,0_0p20_vs_0p20_0p50,minimal,Poisson,12183.98,3.628,FALSE
+stomach,0_0p10_vs_0p10_0p20,adjusted,Negative binomial,3634.44,NA,TRUE
+stomach,0_0p10_vs_0p10_0p20,adjusted,Zero-inflated negative binomial,3638.44,NA,FALSE
+stomach,0_0p10_vs_0p10_0p20,adjusted,Poisson,3643.98,0.891,FALSE
+stomach,0_0p10_vs_0p10_0p20,adjusted,Zero-inflated Poisson,3646.26,NA,FALSE
+stomach,0_0p10_vs_0p10_0p20,minimal,Negative binomial,4483.43,NA,TRUE
+stomach,0_0p10_vs_0p10_0p20,minimal,Zero-inflated negative binomial,4484.83,NA,FALSE
+stomach,0_0p10_vs_0p10_0p20,minimal,Zero-inflated Poisson,4630.86,NA,FALSE
+stomach,0_0p10_vs_0p10_0p20,minimal,Poisson,4960.55,1.98,FALSE
+stomach,0_0p20_vs_0p20_0p50,adjusted,Negative binomial,4115.13,NA,TRUE
+stomach,0_0p20_vs_0p20_0p50,adjusted,Zero-inflated negative binomial,4119.13,NA,FALSE
+stomach,0_0p20_vs_0p20_0p50,adjusted,Poisson,4123.49,0.902,FALSE
+stomach,0_0p20_vs_0p20_0p50,adjusted,Zero-inflated Poisson,4125.95,NA,FALSE
+stomach,0_0p20_vs_0p20_0p50,minimal,Zero-inflated negative binomial,5024.48,NA,TRUE
+stomach,0_0p20_vs_0p20_0p50,minimal,Negative binomial,5025.88,NA,FALSE
+stomach,0_0p20_vs_0p20_0p50,minimal,Zero-inflated Poisson,5168.87,NA,FALSE
+stomach,0_0p20_vs_0p20_0p50,minimal,Poisson,5498.34,1.964,FALSE

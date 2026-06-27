@@ -1,0 +1,180 @@
+\begin{thebibliography}{20}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Brenner et~al.(2018)Brenner, Preston, Sakata, Sugiyama, Utada, Cahoon,
+  Grant, Mabuchi, and Ozasa]{brenner2018}
+Alina~V. Brenner, Dale~L. Preston, Ritsu Sakata, Hiromi Sugiyama, Mai Utada,
+  Elizabeth~K. Cahoon, Eric Grant, Kiyohiko Mabuchi, and Kotaro Ozasa.
+\newblock Incidence of breast cancer in the life span study of atomic bomb
+  survivors: 1958--2009.
+\newblock \emph{Radiation Research}, 190\penalty0 (4):\penalty0 433--444, 2018.
+\newblock \doi{10.1667/RR15015.1}.
+
+\bibitem[Camargo et~al.(2012)Camargo, Goto, Zabaleta, Morgan, Correa, and
+  Rabkin]{camargo2012}
+M.~Constanza Camargo, Yasuyuki Goto, Jovanny Zabaleta, Douglas~R. Morgan,
+  Pelayo Correa, and Charles~S. Rabkin.
+\newblock Sex hormones, hormonal interventions, and gastric cancer risk: A
+  meta-analysis.
+\newblock \emph{Cancer Epidemiology, Biomarkers \& Prevention}, 21\penalty0
+  (1):\penalty0 20--38, 2012.
+\newblock \doi{10.1158/1055-9965.EPI-11-0834}.
+
+\bibitem[Cologne et~al.(2019)Cologne, Kim, Sugiyama, French, Cullings, Preston,
+  Mabuchi, and Ozasa]{cologne2019}
+John Cologne, Jihyoun Kim, Hiromi Sugiyama, Benjamin French, Harry~M. Cullings,
+  Dale~L. Preston, Kiyohiko Mabuchi, and Kotaro Ozasa.
+\newblock Effect of heterogeneity in background incidence on inference about
+  the solid-cancer radiation dose response in atomic bomb survivors.
+\newblock \emph{Radiation Research}, 192\penalty0 (4):\penalty0 388--398, 2019.
+\newblock \doi{10.1667/RR15127.1}.
+
+\bibitem[Furukawa et~al.(2013)Furukawa, Preston, Funamoto, Yonehara, Ito,
+  Tokuoka, Sugiyama, Soda, Ozasa, and Mabuchi]{furukawa2013}
+Kyoji Furukawa, Dale Preston, Sachiyo Funamoto, Shuji Yonehara, Masahiro Ito,
+  Shoji Tokuoka, Hiromi Sugiyama, Midori Soda, Kotaro Ozasa, and Kiyohiko
+  Mabuchi.
+\newblock Long-term trend of thyroid cancer risk among japanese atomic-bomb
+  survivors: 60 years after exposure.
+\newblock \emph{International Journal of Cancer}, 132\penalty0 (5):\penalty0
+  1222--1226, 2013.
+\newblock \doi{10.1002/ijc.27749}.
+
+\bibitem[Grant et~al.(2017)Grant, Brenner, Sugiyama, Sakata, Sadakane, Utada,
+  Cahoon, Milder, Soda, Cullings, Preston, Mabuchi, and Ozasa]{grant2017}
+Eric~J. Grant, Alina Brenner, Hiromi Sugiyama, Ritsu Sakata, Atsuko Sadakane,
+  Mai Utada, Elizabeth~K. Cahoon, Cato~M. Milder, Midori Soda, Harry~M.
+  Cullings, Dale~L. Preston, Kiyohiko Mabuchi, and Kotaro Ozasa.
+\newblock Solid cancer incidence among the life span study of atomic bomb
+  survivors: 1958--2009.
+\newblock \emph{Radiation Research}, 187\penalty0 (5):\penalty0 513--537, 2017.
+\newblock \doi{10.1667/RR14492.1}.
+
+\bibitem[Hahn et~al.(2020)Hahn, Murray, and Carvalho]{hahn2020bayesian}
+P.~Richard Hahn, Jared~S. Murray, and Carlos~M. Carvalho.
+\newblock Bayesian regression tree models for causal inference: Regularization,
+  confounding, and heterogeneous effects.
+\newblock \emph{Bayesian Analysis}, 15\penalty0 (3):\penalty0 965--1056, 2020.
+\newblock \doi{10.1214/19-BA1195}.
+
+\bibitem[{ICRP}(2015)]{icrp131}
+{ICRP}.
+\newblock Stem cell biology with respect to carcinogenesis aspects of
+  radiological protection. {ICRP} publication 131.
+\newblock \emph{Annals of the ICRP}, 44\penalty0 (3--4), 2015.
+\newblock \doi{10.1177/0146645315595585}.
+
+\bibitem[Little(2009)]{little2009}
+Mark~P. Little.
+\newblock Heterogeneity of variation of relative risk by age at exposure in the
+  {Japanese} atomic bomb survivors.
+\newblock \emph{Radiation and Environmental Biophysics}, 48\penalty0
+  (3):\penalty0 253--262, 2009.
+\newblock \doi{10.1007/s00411-009-0228-x}.
+
+\bibitem[{National Research Council}(2006)]{beirvii2006}
+{National Research Council}.
+\newblock \emph{Health Risks from Exposure to Low Levels of Ionizing Radiation:
+  {BEIR VII} Phase 2}.
+\newblock The National Academies Press, Washington, DC, 2006.
+\newblock \doi{10.17226/11340}.
+
+\bibitem[Ozasa et~al.(2012)Ozasa, Shimizu, Suyama, Kasagi, Soda, Grant, Sakata,
+  Sugiyama, and Kodama]{ozasa2012}
+Kotaro Ozasa, Yukiko Shimizu, Akihiko Suyama, Fumiyoshi Kasagi, Midori Soda,
+  Eric~J. Grant, Ritsu Sakata, Hiromi Sugiyama, and Kazunori Kodama.
+\newblock Studies of the mortality of atomic bomb survivors, report 14,
+  1950--2003: An overview of cancer and noncancer diseases.
+\newblock \emph{Radiation Research}, 177\penalty0 (3):\penalty0 229--243, 2012.
+\newblock \doi{10.1667/RR2629.1}.
+
+\bibitem[Pierce and Preston(2000)]{pierce2000}
+Donald~A. Pierce and Dale~L. Preston.
+\newblock Radiation-related cancer risks at low doses among atomic bomb
+  survivors.
+\newblock \emph{Radiation Research}, 154\penalty0 (2):\penalty0 178--186, 2000.
+\newblock \doi{10.1667/0033-7587(2000)154[0178:RRCRAL]2.0.CO;2}.
+
+\bibitem[Preston et~al.(2007)Preston, Ron, Tokuoka, Funamoto, Nishi, Soda,
+  Mabuchi, and Kodama]{preston2007}
+Dale~L. Preston, Elaine Ron, Shoji Tokuoka, Sachiyo Funamoto, Nobuo Nishi,
+  Midori Soda, Kiyohiko Mabuchi, and Kazunori Kodama.
+\newblock Solid cancer incidence in atomic bomb survivors: 1958--1998.
+\newblock \emph{Radiation Research}, 168\penalty0 (1):\penalty0 1--64, 2007.
+\newblock \doi{10.1667/RR0763.1}.
+
+\bibitem[Ron et~al.(1995)Ron, Lubin, Shore, Schneider, Tucker, Mabuchi, Boice,
+  Pottern, Hoffman, and Modan]{ron1995}
+Elaine Ron, Jay~H. Lubin, Roy~E. Shore, Arthur~B. Schneider, Margaret~A.
+  Tucker, Kiyohiko Mabuchi, John~D. Boice, Linda~M. Pottern, Daniel~A. Hoffman,
+  and Baruch Modan.
+\newblock Thyroid cancer after exposure to external radiation: A pooled
+  analysis of seven studies.
+\newblock \emph{Radiation Research}, 141\penalty0 (3):\penalty0 259--277, 1995.
+\newblock \doi{10.2307/3579003}.
+
+\bibitem[Rosenbaum and Rubin(1983)]{rosenbaum1983central}
+Paul~R. Rosenbaum and Donald~B. Rubin.
+\newblock The central role of the propensity score in observational studies for
+  causal effects.
+\newblock \emph{Biometrika}, 70\penalty0 (1):\penalty0 41--55, 1983.
+\newblock \doi{10.1093/biomet/70.1.41}.
+
+\bibitem[Sakata et~al.(2019)Sakata, Preston, Brenner, Sugiyama, Grant,
+  Rajaraman, Sadakane, Utada, French, Cahoon, Mabuchi, and Ozasa]{sakata2019}
+Ritsu Sakata, Dale~L. Preston, Alina~V. Brenner, Hiromi Sugiyama, Eric~J.
+  Grant, Preetha Rajaraman, Atsuko Sadakane, Mai Utada, Benjamin French,
+  Elizabeth~K. Cahoon, Kiyohiko Mabuchi, and Kotaro Ozasa.
+\newblock Radiation-related risk of cancers of the upper digestive tract among
+  japanese atomic bomb survivors.
+\newblock \emph{Radiation Research}, 192\penalty0 (3):\penalty0 331--344, 2019.
+\newblock \doi{10.1667/RR15386.1}.
+
+\bibitem[Shuryak et~al.(2010)Shuryak, Sachs, and Brenner]{shuryak2010}
+Igor Shuryak, Rainer~K. Sachs, and David~J. Brenner.
+\newblock Cancer risks after radiation exposure in middle age.
+\newblock \emph{Journal of the National Cancer Institute}, 102\penalty0
+  (21):\penalty0 1628--1636, 2010.
+\newblock \doi{10.1093/jnci/djq346}.
+
+\bibitem[Thompson et~al.(1994)Thompson, Mabuchi, Ron, Soda, Tokunaga, Ochikubo,
+  Sugimoto, Ikeda, Terasaki, Izumi, and Preston]{thompson1994}
+Donald~E. Thompson, Kiyohiko Mabuchi, Elaine Ron, Midori Soda, Masayoshi
+  Tokunaga, Shoji Ochikubo, Susumu Sugimoto, Takayoshi Ikeda, Masao Terasaki,
+  Shizuyo Izumi, and Dale~L. Preston.
+\newblock Cancer incidence in atomic bomb survivors. part {II}: Solid tumors,
+  1958--1987.
+\newblock \emph{Radiation Research}, 137\penalty0 (2S):\penalty0 S17--S67,
+  1994.
+\newblock \doi{10.2307/3578892}.
+
+\bibitem[Uemura et~al.(2001)Uemura, Okamoto, Yamamoto, Matsumura, Yamaguchi,
+  Yamakido, Taniyama, Sasaki, and Schlemper]{uemura2001}
+Naomi Uemura, Shiro Okamoto, Soichiro Yamamoto, Nobutoshi Matsumura, Shuji
+  Yamaguchi, Michio Yamakido, Kiyomi Taniyama, Nobuhisa Sasaki, and Ronald~J.
+  Schlemper.
+\newblock {\textit{Helicobacter pylori}} infection and the development of
+  gastric cancer.
+\newblock \emph{New England Journal of Medicine}, 345\penalty0 (11):\penalty0
+  784--789, 2001.
+\newblock \doi{10.1056/NEJMoa001999}.
+
+\bibitem[Walsh and Zhang(2016)]{walsh2016}
+Linda Walsh and Wei Zhang.
+\newblock Radiation risk models for all solid cancers other than those types of
+  cancer requiring individual assessments after a nuclear accident.
+\newblock \emph{Radiation and Environmental Biophysics}, 55\penalty0
+  (1):\penalty0 9--17, 2016.
+\newblock \doi{10.1007/s00411-015-0625-2}.
+
+\bibitem[Young and Kerr(2005)]{ds02}
+Robert~W. Young and George~D. Kerr, editors.
+\newblock \emph{Reassessment of the Atomic Bomb Radiation Dosimetry for
+  Hiroshima and Nagasaki --- Dosimetry System 2002 ({DS02})}.
+\newblock Radiation Effects Research Foundation, Hiroshima, Japan, 2005.
+
+\end{thebibliography}

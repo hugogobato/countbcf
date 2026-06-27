@@ -1,0 +1,5 @@
+endpoint,dose_var,contrast_name,low_min,low_max,high_min,high_max
+solid,cola02w10,0_0p10_vs_0p10_0p20,0,0.1,0.1,0.2
+stomach,stoa02w10,0_0p10_vs_0p10_0p20,0,0.1,0.1,0.2
+solid,cola02w10,0_0p20_vs_0p20_0p50,0,0.2,0.2,0.5
+stomach,stoa02w10,0_0p20_vs_0p20_0p50,0,0.2,0.2,0.5
