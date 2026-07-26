@@ -1,0 +1,895 @@
+[08:56:59] main fits: 12 chains on 5 workers
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Reading in y
+
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+forest 1 function_group=0 vanilla=0
+forest 1 function_group=0 vanilla=0
+Done.
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.844
+iteration: 1000
+dispersion parameter acceptance rate: 0.857
+iteration: 1000
+dispersion parameter acceptance rate: 0.829
+iteration: 1000
+dispersion parameter acceptance rate: 0.852
+iteration: 1000
+dispersion parameter acceptance rate: 0.815
+iteration: 2000
+dispersion parameter acceptance rate: 0.858
+iteration: 2000
+dispersion parameter acceptance rate: 0.857
+iteration: 2000
+dispersion parameter acceptance rate: 0.854
+iteration: 2000
+dispersion parameter acceptance rate: 0.869
+iteration: 2000
+dispersion parameter acceptance rate: 0.8365
+time for loop: 184
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 191
+time for loop: 192
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 222
+time for loop: 222
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.843
+iteration: 1000
+dispersion parameter acceptance rate: 0.853
+iteration: 1000
+dispersion parameter acceptance rate: 0.838
+iteration: 1000
+dispersion parameter acceptance rate: 0.844
+iteration: 1000
+dispersion parameter acceptance rate: 0.802
+iteration: 2000
+dispersion parameter acceptance rate: 0.8565
+iteration: 2000
+dispersion parameter acceptance rate: 0.8585
+iteration: 2000
+dispersion parameter acceptance rate: 0.835
+iteration: 2000
+dispersion parameter acceptance rate: 0.844
+iteration: 2000
+dispersion parameter acceptance rate: 0.8165
+time for loop: 189
+time for loop: 189
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 205
+time for loop: 199
+time for loop: 200
+iteration: 1000
+dispersion parameter acceptance rate: 0.836
+iteration: 1000
+dispersion parameter acceptance rate: 0.852
+iteration: 2000
+dispersion parameter acceptance rate: 0.837
+iteration: 2000
+dispersion parameter acceptance rate: 0.8545
+time for loop: 145
+time for loop: 149
+[09:06:13] fits done in 9.2 min
+           label rhat_att_ear ess_att_ear rhat_att_err ess_att_err rhat_kappa
+1      solid:low       1.0008       651.0       1.0000       813.8      1.009
+2   solid:medium       1.0225       980.0       0.9995      1109.1      1.034
+3     solid:high       1.0002      1616.5       1.0004      1561.0      1.001
+4    stomach:low       0.9995       276.1       0.9995       708.9      1.018
+5 stomach:medium       0.9995       879.7       0.9995      1102.8      1.025
+6   stomach:high       0.9995      1478.0       0.9995      1375.7      1.066
+  kappa_mean kappa_lo kappa_hi
+1     189.66   61.530   584.68
+2     171.98   55.918   425.15
+3     156.50   55.598   497.68
+4      29.75   11.645    76.72
+5      21.20    9.201    56.20
+6      23.89    8.540    75.10
+            used   (Mb) gc trigger   (Mb)  max used   (Mb)
+Ncells    838318   44.8    1543121   82.5   1252601   66.9
+Vcells 221024096 1686.3  439110473 3350.2 437878007 3340.8
+           label n_cells cases dose_contrast_Gy base_rate   att_ear att_ear_lo
+1      solid:low    8541 10009          0.02987     61.60 -1.181711     -3.753
+2   solid:medium   10166  7715          0.23447     64.41  5.923412      2.270
+3     solid:high    8249  6751          0.92068     62.42 30.367473     24.444
+4    stomach:low    8541  2737          0.03064     17.70 -0.797598     -2.267
+5 stomach:medium   10166  2062          0.24227     18.52  0.008914     -1.919
+6   stomach:high    8249  1776          0.95907     17.51  4.390646      1.694
+  att_ear_hi  att_serr att_serr_lo att_serr_hi  att_err att_err_lo att_err_hi
+1     1.4059 -0.018956    -0.05951     0.02333  0.02617   -0.04522    0.10843
+2     9.5521  0.092273     0.03493     0.15153  0.13852    0.05347    0.23504
+3    35.7151  0.486874     0.38564     0.58019  0.83672    0.65908    1.01385
+4     0.6559 -0.044036    -0.12283     0.03995 -0.02400   -0.12876    0.08813
+5     1.9929  0.001599    -0.09989     0.11194  0.08912   -0.05316    0.24303
+6     7.2565  0.251932     0.09465     0.42618  0.25197    0.09428    0.42541
+  err_per_Gy err_per_Gy_lo err_per_Gy_hi  kappa
+1  -0.634658      -1.99254        0.7810 189.66
+2   0.393541       0.14896        0.6463 171.98
+3   0.528819       0.41886        0.6302 156.50
+4  -1.437336      -4.00938        1.3039  29.75
+5   0.006598      -0.41229        0.4620  21.20
+6   0.262685       0.09869        0.4444  23.89
+   endpoint treated             method     ear  ear_lo  ear_hi     rr  rr_lo
+1     solid    high      CountBCF (NB) 30.2158 23.8505 35.9467 1.4881 1.3813
+2     solid    high      NB (adjusted) 32.7087 27.1376 38.5356 1.5354 1.4395
+3     solid    high Poisson (adjusted) 32.5518 26.8210 38.3281 1.5320 1.4352
+4     solid     low      CountBCF (NB) -0.3184 -2.8967  2.2620 0.9950 0.9537
+5     solid     low      NB (adjusted) -0.1095 -2.6040  2.4036 0.9984 0.9584
+6     solid     low Poisson (adjusted) -0.2138 -2.6805  2.2601 0.9967 0.9572
+7     solid  medium      CountBCF (NB)  6.9499  3.2221 10.6712 1.1117 1.0509
+8     solid  medium      NB (adjusted)  7.3463  3.9570 10.6987 1.1204 1.0639
+9     solid  medium Poisson (adjusted)  7.2471  3.8801 10.6123 1.1186 1.0623
+10  stomach    high      CountBCF (NB)  4.2821  1.6419  7.1110 1.2519 1.0947
+11  stomach    high      NB (adjusted)  5.2977  2.5705  8.1401 1.3191 1.1519
+12  stomach    high Poisson (adjusted)  5.2322  2.5978  8.0220 1.3143 1.1510
+13  stomach     low      CountBCF (NB) -0.5884 -2.0338  0.8664 0.9672 0.8885
+14  stomach     low      NB (adjusted)  0.2963 -1.0480  1.6163 1.0186 0.9398
+15  stomach     low Poisson (adjusted)  0.2606 -1.0030  1.5587 1.0163 0.9416
+16  stomach  medium      CountBCF (NB)  0.2247 -1.5824  2.0944 1.0138 0.9129
+17  stomach  medium      NB (adjusted)  1.0325 -0.6747  2.8023 1.0628 0.9605
+18  stomach  medium Poisson (adjusted)  0.9977 -0.7046  2.7418 1.0606 0.9592
+   rr_hi
+1  1.584
+2  1.635
+3  1.632
+4  1.037
+5  1.040
+6  1.038
+7  1.173
+8  1.178
+9  1.175
+10 1.426
+11 1.495
+12 1.489
+13 1.051
+14 1.100
+15 1.096
+16 1.125
+17 1.173
+18 1.169
+[09:06:29] subgroup tables
+[09:07:55] subgroups separating from the ATE (95% CrI on CATE - ATE excludes 0):
+          label              by           subgroup cases     err  err_lo
+1     solid:low          city_f          Hiroshima  3486 -0.0264 -0.1015
+2     solid:low          city_f           Nagasaki   920  0.2087  0.0765
+3     solid:low           tsx_b                40+  1704 -0.0680 -0.1327
+4     solid:low  city_f x sex_f  Nagasaki | Female   565  0.2494  0.1035
+5     solid:low city_f x agex_b   Nagasaki | 10-19   187  0.3080  0.0960
+6     solid:low city_f x agex_b   Nagasaki | 30-39   210  0.2032  0.0389
+7  solid:medium           sex_f               Male   874  0.0305 -0.0890
+8  solid:medium           sex_f             Female  1238  0.1991  0.0969
+9  solid:medium           age_b                <40    45  0.1173 -0.1015
+10 solid:medium  sex_f x agex_b         Male | 0-9    74  0.0217 -0.1893
+11 solid:medium  sex_f x agex_b       Male | 30-39   165 -0.0371 -0.1935
+12 solid:medium   sex_f x age_b       Female | <40    37  0.2072 -0.0376
+13 solid:medium   sex_f x age_b     Female | 40-59   327  0.2941  0.1405
+14 solid:medium  city_f x sex_f   Hiroshima | Male   722  0.0039 -0.1235
+15   solid:high          agex_b                0-9   109  1.3372  0.8842
+16   solid:high          agex_b              10-19   292  1.0712  0.8007
+17   solid:high          agex_b              30-39   212  0.3524  0.1617
+18   solid:high          agex_b                40+   325  0.3420  0.1781
+19   solid:high           age_b                <40    51  1.3260  0.9119
+20   solid:high           age_b              40-59   356  0.9611  0.7409
+21   solid:high           age_b              60-79   599  0.3758  0.2507
+22   solid:high           age_b                80+   142  0.3270  0.1370
+23   solid:high           tsx_b                <20   166  0.9074  0.6543
+24   solid:high           tsx_b              20-29   236  0.8803  0.6688
+25   solid:high           tsx_b              30-39   315  0.8393  0.6712
+26   solid:high           tsx_b                40+   431  0.6883  0.5272
+27   solid:high  sex_f x agex_b         Male | 0-9    41  1.0027  0.5323
+28   solid:high  sex_f x agex_b       Female | 0-9    68  1.6520  1.0874
+29   solid:high  sex_f x agex_b     Female | 10-19   150  1.2028  0.8685
+30   solid:high  sex_f x agex_b       Male | 30-39    93  0.2485  0.0242
+31   solid:high  sex_f x agex_b     Female | 30-39   119  0.4096  0.1738
+32   solid:high  sex_f x agex_b         Male | 40+   170  0.2175  0.0349
+33   solid:high  sex_f x agex_b       Female | 40+   155  0.4346  0.2105
+34   solid:high   sex_f x age_b         Male | <40    11  1.0314  0.5842
+35   solid:high   sex_f x age_b       Female | <40    40  1.5490  1.0711
+36   solid:high   sex_f x age_b     Female | 40-59   212  1.0781  0.8042
+37   solid:high   sex_f x age_b       Male | 60-79   294  0.2723  0.1303
+38   solid:high   sex_f x age_b     Female | 60-79   305  0.4344  0.2771
+39   solid:high   sex_f x age_b         Male | 80+    66  0.2385  0.0187
+40   solid:high   sex_f x age_b       Female | 80+    76  0.3667  0.1284
+41   solid:high city_f x agex_b     Nagasaki | 0-9    34  1.7745  1.0421
+42   solid:high city_f x agex_b  Hiroshima | 30-39   156  0.3379  0.1219
+43   solid:high city_f x agex_b   Nagasaki | 30-39    56  0.3950  0.1148
+44   solid:high city_f x agex_b    Hiroshima | 40+   270  0.3872  0.1964
+45   solid:high city_f x agex_b     Nagasaki | 40+    55  0.1616 -0.0920
+46  stomach:low  city_f x sex_f  Nagasaki | Female   125  0.1378 -0.0560
+47 stomach:high           sex_f               Male   148  0.2520  0.0943
+48 stomach:high           sex_f             Female   121  0.2520  0.0943
+49 stomach:high          agex_b                0-9    19  0.2521  0.0955
+50 stomach:high          agex_b              10-19    46  0.2519  0.0946
+51 stomach:high          agex_b              20-29    48  0.2519  0.0946
+52 stomach:high          agex_b              30-39    57  0.2519  0.0946
+53 stomach:high          agex_b                40+    99  0.2519  0.0947
+54 stomach:high           age_b              40-59    83  0.2519  0.0946
+55 stomach:high           age_b              60-79   138  0.2519  0.0946
+56 stomach:high           age_b                80+    41  0.2520  0.0947
+57 stomach:high          city_f          Hiroshima   192  0.2520  0.0943
+58 stomach:high          city_f           Nagasaki    77  0.2520  0.0943
+59 stomach:high           tsx_b                <20    51  0.2520  0.0946
+60 stomach:high           tsx_b              20-29    66  0.2520  0.0946
+61 stomach:high           tsx_b              30-39    80  0.2519  0.0946
+62 stomach:high           tsx_b                40+    72  0.2519  0.0946
+63 stomach:high  sex_f x agex_b       Female | 0-9    10  0.2521  0.0954
+64 stomach:high  sex_f x agex_b       Male | 10-19    26  0.2519  0.0946
+65 stomach:high  sex_f x agex_b     Female | 10-19    20  0.2519  0.0946
+66 stomach:high  sex_f x agex_b       Male | 20-29    19  0.2519  0.0946
+67 stomach:high  sex_f x agex_b     Female | 20-29    29  0.2519  0.0946
+68 stomach:high  sex_f x agex_b       Male | 30-39    31  0.2519  0.0946
+69 stomach:high  sex_f x agex_b         Male | 40+    63  0.2519  0.0947
+70 stomach:high  sex_f x agex_b       Female | 40+    36  0.2520  0.0947
+71 stomach:high   sex_f x age_b       Male | 40-59    43  0.2519  0.0946
+72 stomach:high   sex_f x age_b     Female | 40-59    40  0.2519  0.0946
+73 stomach:high   sex_f x age_b       Male | 60-79    79  0.2519  0.0946
+74 stomach:high   sex_f x age_b     Female | 60-79    59  0.2519  0.0946
+75 stomach:high   sex_f x age_b         Male | 80+    24  0.2520  0.0947
+76 stomach:high   sex_f x age_b       Female | 80+    17  0.2520  0.0946
+77 stomach:high  city_f x sex_f   Hiroshima | Male   103  0.2520  0.0945
+78 stomach:high  city_f x sex_f    Nagasaki | Male    45  0.2520  0.0943
+79 stomach:high  city_f x sex_f Hiroshima | Female    89  0.2520  0.0943
+80 stomach:high  city_f x sex_f  Nagasaki | Female    32  0.2520  0.0945
+81 stomach:high city_f x agex_b     Nagasaki | 0-9    12  0.2522  0.0954
+82 stomach:high city_f x agex_b  Hiroshima | 10-19    23  0.2519  0.0946
+83 stomach:high city_f x agex_b   Nagasaki | 10-19    23  0.2519  0.0946
+84 stomach:high city_f x agex_b   Nagasaki | 20-29    15  0.2519  0.0946
+85 stomach:high city_f x agex_b  Hiroshima | 30-39    43  0.2519  0.0946
+86 stomach:high city_f x agex_b   Nagasaki | 30-39    14  0.2519  0.0946
+87 stomach:high city_f x agex_b    Hiroshima | 40+    86  0.2519  0.0947
+88 stomach:high city_f x agex_b     Nagasaki | 40+    13  0.2519  0.0947
+      err_hi     d_err  d_err_lo  d_err_hi separates_err    ear   d_ear
+1   0.058584 -5.26e-02 -0.087233 -0.022479          TRUE -2.825  -1.643
+2   0.365227  1.82e-01  0.078017  0.302754          TRUE  4.521   5.703
+3  -0.000562 -9.42e-02 -0.178834 -0.018113          TRUE -6.438  -5.256
+4   0.418304  2.23e-01  0.093427  0.362690          TRUE  7.538   8.720
+5   0.551036  2.82e-01  0.086346  0.490514          TRUE  5.363   6.544
+6   0.387780  1.77e-01  0.000583  0.371699          TRUE 14.113  15.294
+7   0.167149 -1.08e-01 -0.206476 -0.008934          TRUE  2.716  -3.207
+8   0.312626  6.06e-02  0.005011  0.115826          TRUE  7.723   1.799
+9   0.364738 -2.12e-02 -0.176386  0.165967         FALSE  0.859  -5.064
+10  0.277310 -1.17e-01 -0.298058  0.095726         FALSE  0.943  -4.980
+11  0.131752 -1.76e-01 -0.346846 -0.000776          TRUE -4.751 -10.674
+12  0.499887  6.87e-02 -0.123180  0.301264         FALSE  1.542  -4.381
+13  0.461629  1.56e-01  0.035100  0.285266          TRUE  9.300   3.377
+14  0.149389 -1.35e-01 -0.241424 -0.020569          TRUE  1.380  -4.544
+15  1.835426  5.00e-01  0.161281  0.875047          TRUE 23.441  -6.926
+16  1.364618  2.35e-01  0.073943  0.416722          TRUE 33.276   2.908
+17  0.566785 -4.84e-01 -0.719976 -0.259452          TRUE 23.534  -6.833
+18  0.508097 -4.95e-01 -0.717140 -0.271875          TRUE 37.275   6.908
+19  1.771036  4.89e-01  0.223111  0.792229          TRUE  8.809 -21.558
+20  1.193994  1.24e-01  0.015355  0.234054          TRUE 32.722   2.354
+21  0.501073 -4.61e-01 -0.654811 -0.279351          TRUE 39.554   9.187
+22  0.536252 -5.10e-01 -0.763575 -0.248047          TRUE 59.608  29.240
+23  1.155015  7.07e-02 -0.031415  0.184952         FALSE 15.510 -14.858
+24  1.095137  4.36e-02 -0.014236  0.104465         FALSE 22.121  -8.246
+25  1.017051  2.59e-03 -0.054473  0.064180         FALSE 33.652   3.285
+26  0.857340 -1.48e-01 -0.315645  0.005666         FALSE 56.311  25.944
+27  1.554161  1.66e-01 -0.235657  0.636956         FALSE 18.693 -11.675
+28  2.304614  8.15e-01  0.327802  1.381160          TRUE 27.912  -2.456
+29  1.589023  3.66e-01  0.117178  0.647020          TRUE 32.083   1.716
+30  0.506790 -5.88e-01 -0.841762 -0.318266          TRUE 21.386  -8.981
+31  0.680509 -4.27e-01 -0.701041 -0.153933          TRUE 24.717  -5.650
+32  0.413494 -6.19e-01 -0.854416 -0.371132          TRUE 35.459   5.091
+33  0.670435 -4.02e-01 -0.682613 -0.132486          TRUE 38.626   8.259
+34  1.563706  1.95e-01 -0.164092  0.622536         FALSE  5.064 -25.303
+35  2.067749  7.12e-01  0.352647  1.112871          TRUE 11.644 -18.723
+36  1.365795  2.41e-01  0.059950  0.424459          TRUE 34.423   4.056
+37  0.417551 -5.64e-01 -0.773386 -0.353773          TRUE 46.378  16.011
+38  0.601947 -4.02e-01 -0.630124 -0.192942          TRUE 35.696   5.329
+39  0.494471 -5.98e-01 -0.885493 -0.293871          TRUE 69.802  39.434
+40  0.612505 -4.70e-01 -0.755965 -0.166213          TRUE 55.040  24.673
+41  2.623513  9.38e-01  0.288904  1.723987          TRUE 26.069  -4.298
+42  0.594127 -4.99e-01 -0.756957 -0.229168          TRUE 23.224  -7.144
+43  0.726158 -4.42e-01 -0.732157 -0.103361          TRUE 24.454  -5.914
+44  0.586904 -4.50e-01 -0.696565 -0.205687          TRUE 43.094  12.726
+45  0.433477 -6.75e-01 -0.990215 -0.365363          TRUE 14.015 -16.352
+46  0.370269  1.62e-01 -0.026279  0.358866         FALSE  1.287   2.085
+47  0.425414  1.36e-05 -0.000763  0.000992         FALSE  6.576   2.186
+48  0.425414 -8.50e-06 -0.000621  0.000477         FALSE  3.023  -1.367
+49  0.426204  1.73e-04 -0.011574  0.015045         FALSE  1.146  -3.245
+50  0.425414 -3.39e-05 -0.003241  0.002780         FALSE  2.331  -2.060
+51  0.426204 -5.64e-05 -0.003572  0.002838         FALSE  3.664  -0.726
+52  0.426204 -5.53e-05 -0.003572  0.002838         FALSE  6.902   2.511
+53  0.426046 -2.43e-05 -0.003597  0.003014         FALSE 10.687   6.297
+54  0.426204 -4.04e-05 -0.003241  0.002838         FALSE  2.484  -1.907
+55  0.426204 -5.59e-05 -0.003572  0.002838         FALSE  8.463   4.072
+56  0.425414  6.43e-05 -0.005679  0.005869         FALSE 13.192   8.801
+57  0.425414  2.51e-06 -0.000257  0.000298         FALSE  4.835   0.444
+58  0.425414 -5.20e-06 -0.000616  0.000530         FALSE  3.473  -0.918
+59  0.425413  5.10e-05 -0.007153  0.008241         FALSE  3.238  -1.153
+60  0.425414 -3.38e-06 -0.002441  0.002216         FALSE  4.082  -0.308
+61  0.426204 -3.50e-05 -0.003241  0.002838         FALSE  4.757   0.366
+62  0.426204 -2.22e-05 -0.003241  0.003121         FALSE  5.848   1.458
+63  0.426204  1.62e-04 -0.011502  0.014829         FALSE  0.807  -3.583
+64  0.425414 -3.31e-05 -0.003241  0.002789         FALSE  3.601  -0.790
+65  0.425414 -3.44e-05 -0.003241  0.002752         FALSE  1.441  -2.949
+66  0.426204 -5.64e-05 -0.003572  0.002838         FALSE  7.298   2.907
+67  0.426204 -5.64e-05 -0.003572  0.002838         FALSE  2.629  -1.761
+68  0.426204 -5.59e-05 -0.003572  0.002838         FALSE 10.487   6.096
+69  0.426039 -3.54e-05 -0.003686  0.002953         FALSE 15.484  11.093
+70  0.426052 -1.61e-05 -0.003861  0.003311         FALSE  7.121   2.730
+71  0.426204 -3.49e-05 -0.003241  0.002838         FALSE  3.763  -0.628
+72  0.426204 -4.39e-05 -0.003423  0.002838         FALSE  1.685  -2.706
+73  0.426204 -5.62e-05 -0.003572  0.002838         FALSE 14.071   9.680
+74  0.426204 -5.57e-05 -0.003572  0.002838         FALSE  5.291   0.901
+75  0.425414  5.33e-05 -0.005160  0.005702         FALSE 19.864  15.474
+76  0.425484  6.92e-05 -0.005979  0.005947         FALSE 10.202   5.811
+77  0.425414  1.94e-05 -0.001106  0.001481         FALSE  7.149   2.758
+78  0.425414  2.59e-06 -0.000227  0.000227         FALSE  5.492   1.101
+79  0.425414 -7.56e-06 -0.000462  0.000405         FALSE  3.453  -0.937
+80  0.425414 -1.06e-05 -0.001063  0.000878         FALSE  2.083  -2.307
+81  0.426204  1.84e-04 -0.011854  0.015030         FALSE  1.139  -3.252
+82  0.425414 -3.18e-05 -0.003239  0.002625         FALSE  2.279  -2.112
+83  0.425414 -3.64e-05 -0.003343  0.002789         FALSE  2.393  -1.997
+84  0.426204 -5.64e-05 -0.003572  0.002838         FALSE  3.097  -1.293
+85  0.426204 -5.51e-05 -0.003572  0.002838         FALSE  7.174   2.783
+86  0.426204 -5.60e-05 -0.003572  0.002838         FALSE  6.096   1.705
+87  0.426073 -2.53e-05 -0.003572  0.003031         FALSE 10.950   6.559
+88  0.425939 -2.05e-05 -0.003686  0.003022         FALSE  9.637   5.247
+   d_ear_lo d_ear_hi separates_ear
+1   -2.7833  -0.5493          TRUE
+2    1.9063   9.6599          TRUE
+3  -10.0911  -0.2785          TRUE
+4    4.0340  13.5042          TRUE
+5    0.6098  12.4863          TRUE
+6    3.7791  27.3322          TRUE
+7   -7.6952   1.4929         FALSE
+8   -0.8375   4.3168         FALSE
+9   -8.5435  -1.5073          TRUE
+10 -10.0543  -0.1356          TRUE
+11 -27.9708   7.4205         FALSE
+12  -7.9416  -0.6812          TRUE
+13  -1.4590   8.2067         FALSE
+14  -9.9282   1.1933         FALSE
+15 -14.3809   1.0294         FALSE
+16  -3.0841   9.5926         FALSE
+17 -19.8441   7.0201         FALSE
+18  -8.3944  22.9772         FALSE
+19 -26.8172 -15.8694          TRUE
+20  -3.4071   7.8357         FALSE
+21   0.7724  17.5891          TRUE
+22  -3.5238  64.7778         FALSE
+23 -19.7999  -9.8624          TRUE
+24 -12.2986  -4.3248          TRUE
+25   0.1044   6.5001          TRUE
+26  15.0778  36.4785          TRUE
+27 -20.2424  -2.4155          TRUE
+28 -11.7696   7.7867         FALSE
+29  -6.0783   9.7806         FALSE
+30 -31.1413  15.7065         FALSE
+31 -20.0644   8.8763         FALSE
+32 -22.5123  33.4333         FALSE
+33  -9.8640  27.3827         FALSE
+34 -30.5442 -19.4981          TRUE
+35 -24.5348 -12.6771          TRUE
+36  -3.0875  11.4115         FALSE
+37  -3.9763  35.2313         FALSE
+38  -4.8780  15.8132         FALSE
+39 -23.7504 109.2922         FALSE
+40  -9.4573  58.5376         FALSE
+41 -14.4342   7.9197         FALSE
+42 -22.5563   8.5543         FALSE
+43 -27.4967  18.5038         FALSE
+44  -5.9297  31.7862         FALSE
+45 -45.6119  13.6473         FALSE
+46   0.0980   4.0336          TRUE
+47   0.8333   3.6561          TRUE
+48  -2.2874  -0.5213          TRUE
+49  -5.3952  -1.2755          TRUE
+50  -3.4747  -0.7926          TRUE
+51  -1.4470  -0.1917          TRUE
+52   0.9461   4.4703          TRUE
+53   2.4318  10.5528          TRUE
+54  -3.2001  -0.7407          TRUE
+55   1.5787   6.8326          TRUE
+56   3.3053  14.7967          TRUE
+57   0.1664   0.7992          TRUE
+58  -1.6518  -0.3440          TRUE
+59  -1.9837  -0.4298          TRUE
+60  -0.6383  -0.0498          TRUE
+61   0.0607   0.8030          TRUE
+62   0.5066   2.5818          TRUE
+63  -5.9325  -1.4022          TRUE
+64  -1.6382  -0.1511          TRUE
+65  -4.9282  -1.1516          TRUE
+66   0.9687   5.4725          TRUE
+67  -3.0377  -0.6560          TRUE
+68   2.3034  10.8563          TRUE
+69   4.2752  18.7661          TRUE
+70   1.0100   4.8178          TRUE
+71  -1.3217  -0.0905          TRUE
+72  -4.4722  -1.0581          TRUE
+73   3.6940  16.2657          TRUE
+74   0.2879   1.7532          TRUE
+75   5.7599  26.4721          TRUE
+76   2.1993  10.1566          TRUE
+77   1.0469   4.7408          TRUE
+78   0.3189   2.1732          TRUE
+79  -1.6413  -0.3398          TRUE
+80  -3.8879  -0.8999          TRUE
+81  -5.4286  -1.2765          TRUE
+82  -3.5611  -0.8129          TRUE
+83  -3.4895  -0.7352          TRUE
+84  -2.4161  -0.4250          TRUE
+85   1.0178   5.0016          TRUE
+86   0.4437   3.5695          TRUE
+87   2.5249  10.9263          TRUE
+88   1.9113   9.2361          TRUE
+           label n_treated_cells pct_err_gt0 pct_err_CrI_excl0
+1     solid:high            5681       0.986            0.6302
+2      solid:low            5973       0.581            0.0243
+3   solid:medium            7598       0.828            0.0197
+4   stomach:high            5681       1.000            1.0000
+5    stomach:low            5973       0.543            0.0000
+6 stomach:medium            7598       0.735            0.0000
+  pct_ear_CrI_excl0 err_med err_q10 err_q90 ear_med ear_q10 ear_q90
+1            0.6302  0.5967  0.1593   1.574 27.9498   5.959   73.70
+2            0.0243  0.0263 -0.1218   0.309  0.4064 -16.887   14.44
+3            0.0197  0.1377 -0.0345   0.367  5.8257  -2.242   27.53
+4            1.0000  0.2519  0.2519   0.252  3.7948   0.657   16.17
+5            0.0000  0.0230 -0.1121   0.185  0.0734  -4.720    2.99
+6            0.0000  0.0686 -0.0830   0.300  0.5214  -5.703    2.36
+[09:08:35] CountBCF vs the refitted Preston ERR model
+[09:08:51] subgroups whose CountBCF ERR departs from the Preston-model ERR:
+            label             by       subgroup cases preston_err cbcf_err
+1       solid:low         city_f       Nagasaki   920      0.0456   0.2087
+2       solid:low          tsx_b            40+  1704      0.0244  -0.0680
+3    solid:medium           .all        overall  2112      0.3499   0.1385
+4    solid:medium          sex_f           Male   874      0.2935   0.0305
+5    solid:medium          sex_f         Female  1238      0.3816   0.1991
+6    solid:medium         agex_b            0-9   162      0.7695   0.1110
+7    solid:medium         agex_b          10-19   342      0.3576   0.1435
+8    solid:medium          age_b            <40    45      0.8875   0.1173
+9    solid:medium         city_f      Hiroshima  1776      0.3399   0.1157
+10   solid:medium          tsx_b            <20   324      0.5797   0.1541
+11   solid:medium          tsx_b          20-29   460      0.3492   0.1427
+12   solid:medium sex_f x agex_b     Male | 0-9    74      0.5662   0.0217
+13   solid:medium sex_f x agex_b   Female | 0-9    88      0.9593   0.1944
+14   solid:medium sex_f x agex_b Female | 10-19   162      0.4269   0.1959
+15     solid:high           .all        overall  1148      1.3185   0.8367
+16     solid:high          sex_f           Male   515      1.0751   0.6759
+17     solid:high          sex_f         Female   633      1.4707   0.9373
+18     solid:high         agex_b            0-9   109      3.1041   1.3372
+19     solid:high         agex_b          10-19   292      1.3731   1.0712
+20     solid:high          age_b            <40    51      3.2236   1.3260
+21     solid:high         city_f      Hiroshima   825      1.2881   0.7715
+22     solid:high         city_f       Nagasaki   323      1.3811   0.9716
+23     solid:high          tsx_b            <20   166      2.1471   0.9074
+24     solid:high          tsx_b          20-29   236      1.3165   0.8803
+25     solid:high sex_f x agex_b     Male | 0-9    41      2.3513   1.0027
+26     solid:high sex_f x agex_b   Female | 0-9    68      3.8128   1.6520
+27     solid:high sex_f x agex_b Female | 10-19   150      1.6107   1.2028
+28 stomach:medium           .all        overall   555      0.3612   0.0891
+29 stomach:medium          sex_f           Male   276      0.3031   0.0342
+30 stomach:medium          sex_f         Female   279      0.3938   0.1200
+31 stomach:medium         agex_b            0-9    27      0.7932   0.1313
+32 stomach:medium         agex_b          10-19    82      0.3691   0.1438
+33 stomach:medium         city_f      Hiroshima   475      0.3516   0.0693
+34 stomach:medium          tsx_b            <20   121      0.5984   0.0970
+35 stomach:medium          tsx_b          20-29   149      0.3604   0.0907
+36 stomach:medium          tsx_b          30-39   136      0.2516   0.0847
+37   stomach:high           .all        overall   269      1.3715   0.2520
+38   stomach:high          sex_f           Male   148      1.1174   0.2520
+39   stomach:high          sex_f         Female   121      1.5305   0.2520
+40   stomach:high         agex_b          10-19    46      1.4316   0.2519
+41   stomach:high         agex_b          20-29    48      0.9403   0.2519
+42   stomach:high         agex_b          30-39    57      0.5400   0.2519
+43   stomach:high          age_b          40-59    83      1.0410   0.2519
+44   stomach:high          age_b          60-79   138      0.4638   0.2519
+45   stomach:high         city_f      Hiroshima   192      1.3460   0.2520
+46   stomach:high         city_f       Nagasaki    77      1.4243   0.2520
+47   stomach:high          tsx_b            <20    51      2.2329   0.2520
+48   stomach:high          tsx_b          20-29    66      1.3701   0.2520
+49   stomach:high          tsx_b          30-39    80      0.9644   0.2519
+50   stomach:high          tsx_b            40+    72      0.7290   0.2519
+51   stomach:high sex_f x agex_b   Male | 10-19    26      1.0803   0.2519
+52   stomach:high sex_f x agex_b Female | 10-19    20      1.6778   0.2519
+53   stomach:high sex_f x agex_b Female | 20-29    29      1.0261   0.2519
+54   stomach:high sex_f x agex_b Female | 30-39    26      0.6188   0.2519
+   cbcf_err_lo cbcf_err_hi    diff diff_lo  diff_hi preston_serr cbcf_serr
+1      0.07650    0.365227  0.1631  0.0309  0.31967       0.0167   0.08822
+2     -0.13269   -0.000562 -0.0924 -0.1571 -0.02501       0.0183  -0.05908
+3      0.05347    0.235042 -0.2114 -0.2965 -0.11488       0.1381   0.09227
+4     -0.08899    0.167149 -0.2630 -0.3825 -0.12638       0.0972   0.03489
+5      0.09686    0.312626 -0.1825 -0.2847 -0.06894       0.1703   0.13797
+6     -0.07450    0.330705 -0.6585 -0.8440 -0.43884       0.3678   0.11444
+7     -0.00761    0.314743 -0.2141 -0.3652 -0.04283       0.2118   0.11799
+8     -0.10145    0.364738 -0.7701 -0.9889 -0.52273       0.7355   0.14236
+9      0.02382    0.221583 -0.2242 -0.3161 -0.11835       0.1347   0.07717
+10     0.01574    0.302159 -0.4256 -0.5640 -0.27758       0.1565   0.12072
+11     0.03558    0.262064 -0.2064 -0.3136 -0.08710       0.1345   0.09461
+12    -0.18928    0.277310 -0.5445 -0.7555 -0.28893       0.2435   0.04693
+13    -0.04090    0.475431 -0.7650 -1.0002 -0.48389       0.5079   0.19332
+14     0.01043    0.399659 -0.2311 -0.4165 -0.02728       0.2795   0.11891
+15     0.65908    1.013851 -0.4817 -0.6594 -0.30462       0.5531   0.48687
+16     0.44586    0.943005 -0.3992 -0.6293 -0.13211       0.3962   0.36943
+17     0.72235    1.160045 -0.5334 -0.7484 -0.31067       0.7068   0.60263
+18     0.88421    1.835426 -1.7669 -2.2199 -1.26866       1.5218   1.18352
+19     0.80067    1.364618 -0.3019 -0.5724 -0.00848       0.8199   0.78291
+20     0.91191    1.771036 -1.8977 -2.3117 -1.45260       2.7588   1.32973
+21     0.57082    0.971369 -0.5167 -0.7173 -0.31678       0.5293   0.49258
+22     0.65734    1.323103 -0.4096 -0.7238 -0.05804       0.6135   0.47351
+23     0.65426    1.155015 -1.2398 -1.4929 -0.99213       0.6587   0.47057
+24     0.66880    1.095137 -0.4362 -0.6477 -0.22134       0.5450   0.45759
+25     0.53233    1.554161 -1.3485 -1.8189 -0.79709       1.0597   0.88439
+26     1.08743    2.304614 -2.1608 -2.7254 -1.50819       2.0203   1.51160
+27     0.86849    1.589023 -0.4079 -0.7422 -0.02168       1.0725   0.93514
+28    -0.05316    0.243032 -0.2721 -0.4143 -0.11816       0.1344   0.00160
+29    -0.12272    0.220094 -0.2690 -0.4258 -0.08303       0.1059  -0.03215
+30    -0.05452    0.323319 -0.2738 -0.4483 -0.07044       0.1648   0.03933
+31    -0.06771    0.355455 -0.6618 -0.8609 -0.43770       0.4814   0.11105
+32    -0.04527    0.353684 -0.2253 -0.4144 -0.01545       0.2182   0.10553
+33    -0.07821    0.234387 -0.2823 -0.4298 -0.11717       0.1302  -0.00902
+34    -0.05286    0.268865 -0.5015 -0.6513 -0.32955       0.1602   0.01384
+35    -0.05529    0.247917 -0.2697 -0.4157 -0.11251       0.1297  -0.00696
+36    -0.05985    0.238357 -0.1669 -0.3115 -0.01324       0.1257  -0.01206
+37     0.09428    0.425414 -1.1196 -1.2773 -0.94613       0.5494   0.25193
+38     0.09428    0.425414 -0.8655 -1.0232 -0.69203       0.4401   0.25193
+39     0.09428    0.425414 -1.2786 -1.4362 -1.10511       0.6982   0.25194
+40     0.09465    0.425414 -1.1797 -1.3370 -1.00622       0.8860   0.25191
+41     0.09465    0.426204 -0.6884 -0.8456 -0.51408       0.6394   0.25191
+42     0.09465    0.426204 -0.2880 -0.4453 -0.11376       0.4120   0.25191
+43     0.09465    0.426204 -0.7891 -0.9463 -0.61478       0.8236   0.25192
+44     0.09465    0.426204 -0.2119 -0.3692 -0.03762       0.3731   0.25191
+45     0.09428    0.425414 -1.0941 -1.2518 -0.92063       0.5124   0.25193
+46     0.09432    0.425414 -1.1723 -1.3299 -0.99885       0.6560   0.25193
+47     0.09457    0.425413 -1.9809 -2.1383 -1.80748       0.6896   0.25197
+48     0.09465    0.425414 -1.1181 -1.2754 -0.94467       0.5282   0.25192
+49     0.09465    0.426204 -0.7125 -0.8698 -0.53820       0.5112   0.25191
+50     0.09465    0.426204 -0.4771 -0.6344 -0.30281       0.5054   0.25193
+51     0.09465    0.425414 -0.8284 -0.9857 -0.65492       0.7030   0.25191
+52     0.09465    0.425414 -1.4259 -1.5831 -1.25238       1.2061   0.25191
+53     0.09465    0.426204 -0.7742 -0.9315 -0.59993       0.7758   0.25191
+54     0.09465    0.426204 -0.3669 -0.5242 -0.19260       0.5099   0.25191
+   diff_serr_lo diff_serr_hi departs_serr
+1       -0.0107      0.15415        FALSE
+2       -0.1341     -0.01903         TRUE
+3       -0.1027      0.01301        FALSE
+4       -0.1404      0.01848        FALSE
+5       -0.1076      0.04571        FALSE
+6       -0.4211     -0.07349         TRUE
+7       -0.2185      0.03711        FALSE
+8       -0.8131     -0.33991         TRUE
+9       -0.1198      0.00619        FALSE
+10      -0.1489      0.08499        FALSE
+11      -0.1247      0.04870        FALSE
+12      -0.3874      0.02459        FALSE
+13      -0.5313     -0.06997         TRUE
+14      -0.3182      0.01574        FALSE
+15      -0.1679      0.02644        FALSE
+16      -0.1568      0.10431        FALSE
+17      -0.2430      0.03452        FALSE
+18      -0.7350      0.08983        FALSE
+19      -0.2325      0.17049        FALSE
+20      -1.8633     -0.96525         TRUE
+21      -0.1519      0.07221        FALSE
+22      -0.3126      0.04014        FALSE
+23      -0.3557     -0.01465         TRUE
+24      -0.2135      0.03771        FALSE
+25      -0.5873      0.28793        FALSE
+26      -1.0638      0.12703        FALSE
+27      -0.3995      0.14543        FALSE
+28      -0.2343     -0.02303         TRUE
+29      -0.2665      0.00328        FALSE
+30      -0.2702      0.03497        FALSE
+31      -0.5758     -0.14635         TRUE
+32      -0.2851      0.07743        FALSE
+33      -0.2499     -0.02234         TRUE
+34      -0.2770     -0.00885         TRUE
+35      -0.2489     -0.01920         TRUE
+36      -0.2420     -0.02567         TRUE
+37      -0.4580     -0.12311         TRUE
+38      -0.3506     -0.01281         TRUE
+39      -0.6122     -0.27016         TRUE
+40      -0.7993     -0.45605         TRUE
+41      -0.5476     -0.21517         TRUE
+42      -0.3193      0.01355        FALSE
+43      -0.7339     -0.39734         TRUE
+44      -0.2797      0.05203        FALSE
+45      -0.4237     -0.08720         TRUE
+46      -0.5693     -0.22640         TRUE
+47      -0.6203     -0.24691         TRUE
+48      -0.4369     -0.10100         TRUE
+49      -0.4166     -0.08708         TRUE
+50      -0.4084     -0.07955         TRUE
+51      -0.6113     -0.27616         TRUE
+52      -1.1326     -0.76869         TRUE
+53      -0.6843     -0.34823         TRUE
+54      -0.4188     -0.08309         TRUE
+           label    n cor_err_pearson cor_err_spearman wmean_err_cbcf
+1      solid:low 5973         0.16938          0.16808        0.02617
+2   solid:medium 7598         0.17996          0.28257        0.13852
+3     solid:high 5681         0.57027          0.80109        0.83672
+4    stomach:low 5973        -0.07209         -0.06697       -0.02400
+5 stomach:medium 7598         0.37887          0.70322        0.08912
+6   stomach:high 5681         0.12283          0.19449        0.25197
+  wmean_err_preston wrmse_err cor_ear_pearson cor_ear_spearman wmean_ear_cbcf
+1           0.04668    0.1733        0.007418         -0.01687      -1.181711
+2           0.34993    0.5512        0.163235          0.34090       5.923412
+3           1.31847    1.5949        0.398752          0.57336      30.367473
+4           0.04785    0.1609       -0.021369          0.01613      -0.797598
+5           0.36119    0.5587       -0.001491          0.15799       0.008914
+6           1.37155    2.1259        0.135856          0.35568       4.390646
+  wmean_ear_preston wrmse_ear
+1             1.026    10.866
+2             7.966    11.940
+3            30.366    23.333
+4             1.053     4.319
+5             8.233    10.510
+6            31.630    34.562
+  endpoint treated dose_contrast_Gy      err   err_lo  err_hi err_per_Gy
+1    solid     low          0.02987  0.02617 -0.04522 0.10843  -0.634658
+2    solid  medium          0.23447  0.13852  0.05347 0.23504   0.393541
+3    solid    high          0.92068  0.83672  0.65908 1.01385   0.528819
+4  stomach     low          0.03064 -0.02400 -0.12876 0.08813  -1.437336
+5  stomach  medium          0.24227  0.08912 -0.05316 0.24303   0.006598
+6  stomach    high          0.95907  0.25197  0.09428 0.42541   0.262685
+  err_per_Gy_lo err_per_Gy_hi      serr  serr_lo serr_hi       ear ear_lo
+1      -1.99254        0.7810 -0.018956 -0.05951 0.02333 -1.181711 -3.753
+2       0.14896        0.6463  0.092273  0.03493 0.15153  5.923412  2.270
+3       0.41886        0.6302  0.486874  0.38564 0.58019 30.367473 24.444
+4      -4.00938        1.3039 -0.044036 -0.12283 0.03995 -0.797598 -2.267
+5      -0.41229        0.4620  0.001599 -0.09989 0.11194  0.008914 -1.919
+6       0.09869        0.4444  0.251932  0.09465 0.42618  4.390646  1.694
+   ear_hi
+1  1.4059
+2  9.5521
+3 35.7151
+4  0.6559
+5  1.9929
+6  7.2565
+[09:08:56] 02 done -> /home/hugo_souto/Stuff/Research/countbcf/Applied_Study_v2/analysis/tables

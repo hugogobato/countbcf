@@ -249,6 +249,13 @@ count_bart <- function(
   y_sort <- y[order_vec]
   mu0_sort <- mu0[order_vec]
 
+  # the random-effects design is indexed by observation, so its rows must
+  # follow the same permutation as y and the offset
+  randeff_variance_component_design <- as.matrix(randeff_variance_component_design)
+  randeff_design_sort <- .sort_randeff_design(
+    randeff_design, randeff_variance_component_design, order_vec
+  )
+
   # convert x to matrices
   if (num_designs > 1){
     # X is a list
@@ -371,7 +378,7 @@ count_bart <- function(
       offset = mu0_sort,
       bart_specs = specs,
       bart_designs = designs,
-      random_des = randeff_design,
+      random_des = randeff_design_sort,
       random_var_ix = randeff_variance_component_design,
       random_var = matrix(rep(0.00000001, ncol(randeff_variance_component_design)), ncol = 1),
       random_var_df = randeff_df,

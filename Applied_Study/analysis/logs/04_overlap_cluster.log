@@ -1,0 +1,327 @@
+[09:22:51] (a) propensity / overlap diagnostics
+   contrast ps_model   auc    min   q01   q50   q99   max n_lt_005 n_gt_095
+1       low    const 0.500 0.6993 0.699 0.699 0.699 0.699        0        0
+2       low   simple 0.525 0.6463 0.657 0.700 0.738 0.745        0        0
+3       low     main 0.524 0.4955 0.591 0.708 0.730 0.732        0        0
+4       low     rich 0.525 0.2636 0.535 0.710 0.725 0.766        0        0
+5       low   forest 0.582 0.2195 0.468 0.706 0.830 0.944        0        0
+6    medium    const 0.500 0.7474 0.747 0.747 0.747 0.747        0        0
+7    medium   simple 0.547 0.6476 0.673 0.748 0.811 0.820        0        0
+8    medium     main 0.547 0.3809 0.576 0.761 0.796 0.799        0        0
+9    medium     rich 0.550 0.1367 0.534 0.762 0.784 0.785        0        0
+10   medium   forest 0.685 0.1911 0.483 0.762 0.880 0.932        0        0
+11     high    const 0.500 0.6887 0.689 0.689 0.689 0.689        0        0
+12     high   simple 0.561 0.5440 0.576 0.692 0.782 0.797        0        0
+13     high     main 0.561 0.1166 0.342 0.713 0.745 0.752        0        0
+14     high     rich 0.567 0.0852 0.323 0.715 0.743 0.751        0        0
+15     high   forest 0.771 0.0639 0.272 0.713 0.900 0.952        0        2
+   smd_hiro_raw smd_hiro_ipw smd_agex_raw smd_agex_ipw
+1        0.0555     0.055481      -0.0646    -0.064584
+2        0.0555    -0.001490      -0.0646     0.002055
+3        0.0555    -0.001310      -0.0646    -0.000355
+4        0.0555     0.000649      -0.0646    -0.000231
+5        0.0555    -0.014485      -0.0646    -0.035676
+6        0.1099     0.109928      -0.1135    -0.113485
+7        0.1099    -0.004606      -0.1135     0.007120
+8        0.1099    -0.003158      -0.1135    -0.001040
+9        0.1099     0.000557      -0.1135     0.000221
+10       0.1099    -0.035750      -0.1135    -0.037299
+11       0.0671     0.067056      -0.2058    -0.205810
+12       0.0671    -0.004645      -0.2058     0.012267
+13       0.0671    -0.001538      -0.2058    -0.002429
+14       0.0671    -0.000569      -0.2058    -0.002218
+15       0.0671     0.002109      -0.2058    -0.054340
+    sex_f agex_b   n cases   pyr pihat_min pihat_q05 pihat_med pihat_q95
+1    Male    0-9 578    41 11412     0.700     0.704     0.718     0.731
+2    Male  10-19 590   142 15782     0.693     0.700     0.713     0.726
+3    Male  20-29 460    69  4997     0.641     0.682     0.701     0.714
+4    Male  30-39 479    93  6510     0.545     0.615     0.696     0.732
+5    Male    40+ 654   170  8507     0.243     0.470     0.664     0.737
+6  Female    0-9 560    68 12123     0.714     0.718     0.731     0.742
+7  Female  10-19 575   150 22523     0.707     0.714     0.726     0.737
+8  Female  20-29 586   141 17546     0.655     0.696     0.713     0.725
+9  Female  30-39 535   119 11823     0.523     0.623     0.709     0.741
+10 Female    40+ 664   155 11441     0.183     0.432     0.674     0.748
+   pct_lt_005 pct_gt_095
+1           0          0
+2           0          0
+3           0          0
+4           0          0
+5           0          0
+6           0          0
+7           0          0
+8           0          0
+9           0          0
+10          0          0
+[09:22:57] (b) CountBCF refits across propensity specifications and trimming
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 4 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Reading in y
+
+Done.
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.853
+iteration: 1000
+dispersion parameter acceptance rate: 0.823
+iteration: 1000
+dispersion parameter acceptance rate: 0.833
+iteration: 1000
+dispersion parameter acceptance rate: 0.855
+iteration: 1000
+dispersion parameter acceptance rate: 0.851
+time for loop: 118
+time for loop: 120
+time for loop: 120
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+time for loop: 121
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+Using random effects.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Using random effects.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 146
+iteration: 1000
+dispersion parameter acceptance rate: 0.823
+iteration: 1000
+dispersion parameter acceptance rate: 0.823
+iteration: 1000
+dispersion parameter acceptance rate: 0.844
+iteration: 1000
+dispersion parameter acceptance rate: 0.859
+time for loop: 137
+time for loop: 137
+time for loop: 141
+time for loop: 282
+                                             spec n_cells re_sd att_err
+1                                      PS = const    8249    NA   0.859
+2                                     PS = simple    8249    NA   0.848
+3                                       PS = main    8249    NA   0.841
+4                                       PS = rich    8249    NA   0.837
+5                                     PS = forest    8249    NA   0.898
+6                  trim pihat outside [0.05,0.95]    8249    NA   0.841
+7                  trim pihat outside [0.10,0.90]    8249    NA   0.841
+8 random intercepts: city x sex x age-at-exposure    8249  1.96   0.841
+9       random intercepts: finest survivor cohort    8249  1.91   0.863
+  att_err_lo att_err_hi d_female_male d_female_male_lo d_female_male_hi
+1      0.666       1.06         0.269         0.000945            0.546
+2      0.674       1.06         0.282         0.000127            0.550
+3      0.667       1.03         0.311         0.004259            0.607
+4      0.654       1.04         0.296        -0.000913            0.574
+5      0.676       1.15         0.238        -0.085486            0.576
+6      0.667       1.03         0.311         0.004259            0.607
+7      0.667       1.03         0.311         0.004259            0.607
+8      0.657       1.03         0.224        -0.061586            0.496
+9      0.683       1.05         0.280        -0.037472            0.571
+  d_young_old d_young_old_lo d_young_old_hi
+1       0.815          0.473           1.19
+2       0.844          0.494           1.21
+3       0.795          0.447           1.14
+4       0.773          0.429           1.13
+5       0.913          0.464           1.39
+6       0.795          0.447           1.14
+7       0.795          0.447           1.14
+8       0.817          0.469           1.17
+9       0.869          0.532           1.26
+                                             spec att_err width_err att_ear
+1                                       PS = main  0.8409    0.3648   30.72
+2 random intercepts: city x sex x age-at-exposure  0.8409    0.3694   30.83
+3       random intercepts: finest survivor cohort  0.8634    0.3701   30.84
+  width_ear
+1     11.18
+2     11.23
+3     11.38
+[09:30:05] (d) cluster bootstrap design effect (parametric)
+        term  estimate se_model se_cluster_boot design_effect se_ratio n_boot
+1    bandlow -0.003597  0.02048         0.02105        1.0561    1.028    300
+2 bandmedium  0.111205  0.02594         0.02469        0.9062    0.952    300
+3   bandhigh  0.426100  0.03248         0.03461        1.1350    1.065    300
+[09:30:18] 04 done -> /home/hugo_souto/Stuff/Research/countbcf/Applied_Study_v2/analysis/tables

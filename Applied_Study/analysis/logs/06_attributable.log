@@ -1,0 +1,28 @@
+  endpoint treated   att_ear att_ear_lo att_ear_hi treated_pyr treated_cases
+1    solid     low -1.181711     -3.753     1.4059      729604          4406
+2    solid  medium  5.923412      2.270     9.5521      299812          2112
+3    solid    high 30.367473     24.444    35.7151      122664          1148
+4  stomach     low -0.797598     -2.267     0.6559      729604          1230
+5  stomach  medium  0.008914     -1.919     1.9929      299812           555
+6  stomach    high  4.390646      1.694     7.2565      122664           269
+  excess_cases excess_lo excess_hi attrib_frac    af_lo   af_hi p_cases
+1     -86.2181   -273.83    102.58  -0.0195683 -0.06215 0.02328    4406
+2     177.5909     68.05    286.38   0.0840866  0.03222 0.13560    2112
+3     372.4989    299.84    438.09   0.3244764  0.26118 0.38162    1148
+4     -58.1931   -165.42     47.85  -0.0473114 -0.13449 0.03890    1226
+5       0.2672    -57.54     59.75   0.0004815 -0.10367 0.10765     559
+6      53.8573     20.78     89.01   0.2002131  0.07724 0.33090     266
+  p_excess  p_af
+1       81 0.018
+2      254 0.120
+3      402 0.350
+4       14 0.012
+5       46 0.082
+6       69 0.259
+  endpoint excess_cases      lo    hi cases        af preston_excess
+1    solid      463.872   94.06 827.1  7666  0.060510            737
+2  stomach       -4.069 -202.18 196.6  2054 -0.001981            129
+  preston_cases
+1          7666
+2          2051
+[09:30:19] 06 done -> /home/hugo_souto/Stuff/Research/countbcf/Applied_Study_v2/analysis/tables

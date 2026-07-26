@@ -120,7 +120,16 @@ NB dispersion parameter \eqn{\kappa}.}
 covariates of the mu (prognostic) or tau (moderating) forests.}
 
 \item{randeff_design, randeff_variance_component_design, randeff_scales, randeff_df}{
-Random-effects setup; the defaults disable random effects.}
+Random-effects setup; the 1x1 matrix defaults disable random effects. When
+used, \code{randeff_design} must have one row per observation (in the same
+order as \code{y}) and one column per random-effect coefficient, and
+\code{randeff_variance_component_design} must have one row per column of
+\code{randeff_design}. Note that the random effects are sampled but do
+\emph{not} enter the count likelihood (the fitted log-mean is
+\code{offset + mu_f + z * tau_f} only), so they are carried for
+compatibility with the Gaussian BCF samplers rather than being usable
+group-level effects; a warning is issued when they are enabled. Put group
+indicators in \code{x_control} to model group structure.}
 
 \item{return_trees}{If TRUE, the serialized \code{tree_samples} for each
 forest are returned, enabling counterfactual prediction at new
@@ -189,7 +198,9 @@ heterogeneous treatment effects are more strongly shrunk than the
 prognostic component.
 
 Data are internally sorted by \code{y} so that zeros come first; the
-permutation is returned as \code{order_vec}. The reported
+permutation is returned as \code{order_vec} and is applied to every
+observation-indexed input, including the rows of \code{randeff_design}.
+The reported
 \code{yhat}, \code{yhat_log}, and \code{tau_f_log} rows are in the
 sorted order. The per-forest coefficient matrices (\code{mu_f_post},
 \code{tau_f_post}, etc.) are unsorted (in the original input order)

@@ -36,7 +36,9 @@
 #' prognostic component.
 #'
 #' Data are internally sorted by \code{y} so that zeros come first; the
-#' permutation is returned as \code{order_vec}. The reported
+#' permutation is returned as \code{order_vec} and is applied to every
+#' observation-indexed input, including the rows of \code{randeff_design}.
+#' The reported
 #' \code{yhat}, \code{yhat_log}, and \code{tau_f_log} rows are in the
 #' sorted order. The per-forest coefficient matrices (\code{mu_f_post},
 #' \code{tau_f_post}, etc.) are unsorted (in the original input order)
@@ -95,7 +97,17 @@
 #' @param count_model One of "poisson", "nb", "zipoisson", "zinb".
 #' @param include_pihat One of "control", "moderate", "both", "none". Whether to
 #'   include pihat among covariates of mu (control) or tau (moderate) forests.
-#' @param randeff_design,randeff_variance_component_design,randeff_scales,randeff_df Random-effects setup; defaults disable random effects.
+#' @param randeff_design,randeff_variance_component_design,randeff_scales,randeff_df
+#'   Random-effects setup; the 1x1 matrix defaults disable random effects. When
+#'   used, \code{randeff_design} must have one row per observation (in the same
+#'   order as \code{y}) and one column per random-effect coefficient, and
+#'   \code{randeff_variance_component_design} must have one row per column of
+#'   \code{randeff_design}. Note that the random effects are sampled but do
+#'   \emph{not} enter the count likelihood (the fitted log-mean is
+#'   \code{offset + mu_f + z * tau_f} only), so they are carried for
+#'   compatibility with the Gaussian BCF samplers rather than being usable
+#'   group-level effects; a warning is issued when they are enabled. Put group
+#'   indicators in \code{x_control} to model group structure.
 #' @param return_trees If TRUE, the serialized \code{tree_samples} for each
 #'   forest are returned, enabling counterfactual prediction at new
 #'   \code{X} or \code{z} via \code{\link{get_forest_fit}}. Defaults to FALSE
@@ -275,6 +287,26 @@ countbcf <- function(
   mu0_sort <- mu0[order_vec]
   pihat_sort <- pihat[order_vec, , drop = FALSE]
 
+  ### the random-effects design is indexed by observation, so its rows must
+  ### follow the same permutation as y/z/X/offset
+  randeff_variance_component_design <- as.matrix(randeff_variance_component_design)
+  randeff_design_sort <- .sort_randeff_design(
+    randeff_design, randeff_variance_component_design, order_vec
+  )
+
+  ### the C++ sampler draws the random effects from a Gaussian working model on
+  ### y - allfit, but never adds allfit_random into log_mean (see the log_mean
+  ### updates in src/countbcf.cpp), so they do not enter the count likelihood
+  if (length(randeff_variance_component_design) > 1L) {
+    warning(paste0(
+      "Random effects are sampled but do not enter the count likelihood: the ",
+      "fitted log-mean is offset + mu_f + z * tau_f only. 'random_effects' is ",
+      "therefore a Gaussian working-model artefact, and group structure is ",
+      "absorbed by the mu forest instead. To model groups, pass group ",
+      "indicators in x_control."
+    ), call. = FALSE)
+  }
+
   X_c <- matrix(x_control, ncol = ncol(x_control))[order_vec, , drop = FALSE]
   X_m <- matrix(x_moderate, ncol = ncol(x_moderate))[order_vec, , drop = FALSE]
   if (is_zi) {
@@ -417,7 +449,7 @@ countbcf <- function(
     offset_ = mu0_sort,
     bart_specs = specs,
     bart_designs = designs,
-    random_des = randeff_design,
+    random_des = randeff_design_sort,
     random_var_ix = randeff_variance_component_design,
     random_var = matrix(rep(1e-8, ncol(randeff_variance_component_design)), ncol = 1),
     random_var_df = randeff_df,

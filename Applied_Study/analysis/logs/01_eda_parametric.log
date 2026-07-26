@@ -1,0 +1,246 @@
+[08:53:54] (a) Preston 2007 Table 4 replication
+     stratum cases published_cases cases_ok     pyr published_pyr pyr_reldiff
+1        NIC  3994            3994     TRUE  680744        680744     0.0e+00
+2     <0.005  5603            5603     TRUE  918200        918199     1.0e-06
+3  0.005-0.1  4406            4406     TRUE  729604        729603     1.0e-06
+4    0.1-0.2   968             968     TRUE  145925        145925     0.0e+00
+5    0.2-0.5  1144            1144     TRUE  153886        153846     2.6e-04
+6      0.5-1   688             688     TRUE   81251         81251     0.0e+00
+7        1-2   460             460     TRUE   41413         41412     2.4e-05
+8        2-4   185             185     TRUE   13712         13711     7.3e-05
+9       Male  7969            7969     TRUE 1040281       1040278     3.0e-06
+10    Female  9479            9479     TRUE 1724454       1724452     1.0e-06
+11 Hiroshima 12931           12931     TRUE 1967602       1967601     1.0e-06
+12  Nagasaki  4517            4517     TRUE  797133        797129     5.0e-06
+13     TOTAL 17448           17448     TRUE 2764735       2764730     2.0e-06
+   people published_people people_ok
+1   25247            25247      TRUE
+2   35545            35545      TRUE
+3   27789            27789      TRUE
+4    5527             5527      TRUE
+5    5935             5935      TRUE
+6    3173             3173      TRUE
+7    1647             1647      TRUE
+8     564              564      TRUE
+9   42902            42902      TRUE
+10  62525            62525      TRUE
+11  73430            73430      TRUE
+12  31997            31997      TRUE
+13 105427           105427      TRUE
+[08:53:54]   cases match: TRUE | people match: TRUE | max |PY rel. diff|: 0.00026
+                                 group cases_known_dose preston_table2 matches
+1                               oralca              277            277    TRUE
+2                             digestca            10052          10052    TRUE
+3                               respca             2001           2001    TRUE
+4                             skinbone              400            400    TRUE
+5                               breast             1082           1082    TRUE
+6                             femgenca             1457           1457    TRUE
+7                             malgenca              420            420    TRUE
+8                               urinca              661            741   FALSE
+9                                cnsca              281            281    TRUE
+10                             thyroid              471            471    TRUE
+11                              othsol              254            266   FALSE
+12                sum of the 11 groups            17356          17448   FALSE
+13        solid (RERF all-solid total)            17448          17448    TRUE
+14 non-melanoma skin (inside skinbone)              330            330    TRUE
+15          melanoma (inside skinbone)               17             17    TRUE
+16                             stomach             4730           4730    TRUE
+17                                lung             1759           1759    TRUE
+18                               colon             1516           1516    TRUE
+19                               liver             1494           1494    TRUE
+20                            prostate              387            387    TRUE
+[08:53:54]   all-solid includes non-melanoma skin: TRUE (cells violating: 0)
+[08:53:54] (b) descriptives / dispersion
+       band n_cells n_subjects person_years solid_cases stomach_cases
+1       NIC    1285      25247       680744        3994          1128
+2 reference    2568      35545       918200        5603          1507
+3       low    5973      27789       729604        4406          1230
+4    medium    7598      11462       299812        2112           555
+5      high    5681       4820       122664        1148           269
+  solid_rate_1e4 stomach_rate_1e4 mean_colon_dose_Gy max_colon_dose_Gy
+1          58.67            16.57          0.0000000           0.00000
+2          61.02            16.41          0.0009599           0.00487
+3          60.39            16.86          0.0308282           0.09995
+4          70.44            18.51          0.2354281           0.48670
+5          93.59            21.93          0.9216419           1.99700
+  pct_zero_cells_solid var_mean_solid pct_zero_cells_stomach var_mean_stomach
+1               0.4412          8.099                 0.6444            3.229
+2               0.4720          5.370                 0.6947            2.431
+3               0.6864          3.415                 0.8602            1.703
+4               0.8084          1.645                 0.9350            1.169
+5               0.8389          1.336                 0.9553            1.064
+  mean_agex mean_age pct_female pct_hiroshima
+1     23.09    53.32     0.6157        0.7742
+2     22.94    52.97     0.6270        0.5816
+3     22.53    52.61     0.6229        0.7763
+4     23.68    53.58     0.6406        0.8264
+5     23.25    52.94     0.6151        0.6739
+Warning messages:
+1: In theta.ml(Y, mu, sum(w), w, limit = control$maxit, trace = control$trace >  :
+  iteration limit reached
+2: In theta.ml(Y, mu, sum(w), w, limit = control$maxit, trace = control$trace >  :
+  iteration limit reached
+3: In theta.ml(Y, mu, sum(w), w, limit = control$maxit, trace = control$trace >  :
+  iteration limit reached
+4: In theta.ml(Y, mu, sum(w), w, limit = control$maxit, trace = control$trace >  :
+  iteration limit reached
+5: In theta.ml(Y, mu, sum(w), w, limit = control$maxit, trace = control$trace >  :
+  iteration limit reached
+6: In theta.ml(Y, mu, sum(w), w, limit = control$maxit, trace = control$trace >  :
+  iteration limit reached
+7: In theta.ml(Y, mu, sum(w), w, limit = control$maxit, trace = control$trace >  :
+  iteration limit reached
+8: In theta.ml(Y, mu, sum(w), w, limit = control$maxit, trace = control$trace >  :
+  iteration limit reached
+                                  quantity      value
+1                                  n cells 2.1820e+04
+2                                    cases 1.3269e+04
+3                             person-years 2.0703e+06
+4                             % zero cells 7.4335e-01
+5                  Poisson Pearson X2 / df 1.6856e+00
+6                    Poisson deviance / df 5.9188e-01
+7                          NB theta (size) 1.0037e+02
+8  NB implied var/mean at mean fitted rate 1.0061e+00
+9                              AIC Poisson 2.6980e+04
+10                                  AIC NB 2.6985e+04
+11                   LRT NB vs Poisson (p) 5.0000e-01
+       band person_years agex_mean agex_sd age_mean age_sd female hiroshima
+1 reference       918200     22.94   15.61    52.97  17.12 0.6270    0.5816
+2       low       729604     22.53   15.87    52.61  17.31 0.6229    0.7763
+3    medium       299812     23.68   15.94    53.58  17.25 0.6406    0.8264
+4      high       122664     23.25   14.54    52.94  16.24 0.6151    0.6739
+  gdist_mean smd_agex   smd_age smd_female smd_hiroshima
+1       3969  0.00000  0.000000   0.000000        0.0000
+2       2114 -0.02600 -0.021013  -0.008368        0.4265
+3       1517  0.04692  0.035300   0.028330        0.5567
+4       1212  0.02028 -0.001965  -0.024405        0.1920
+[08:53:56] (d) parametric GLM ATE
+There were 35 warnings (use warnings() to see them)
+   endpoint              model   aic overdisp treated base_rate_1e4      ear
+1     solid  Poisson (minimal) 38995    3.142     low         61.02  -0.6424
+2     solid  Poisson (minimal) 38995    3.142  medium         61.02   9.4125
+3     solid  Poisson (minimal) 38995    3.142    high         61.02  32.6012
+4     solid Poisson (adjusted) 26980    1.686     low         61.17  -0.2138
+5     solid Poisson (adjusted) 26980    1.686  medium         61.17   7.2471
+6     solid Poisson (adjusted) 26980    1.686    high         61.17  32.5518
+7     solid       NB (minimal) 34048       NA     low         84.41  -8.3637
+8     solid       NB (minimal) 34048       NA  medium         84.41  -5.6830
+9     solid       NB (minimal) 34048       NA    high         84.41  21.3761
+10    solid      NB (adjusted) 26985       NA     low         61.08  -0.1095
+11    solid      NB (adjusted) 26985       NA  medium         61.08   7.3463
+12    solid      NB (adjusted) 26985       NA    high         61.08  32.7087
+13  stomach  Poisson (minimal) 16828    4.068     low         16.41   0.4522
+14  stomach  Poisson (minimal) 16828    4.068  medium         16.41   2.1035
+15  stomach  Poisson (minimal) 16828    4.068    high         16.41   5.5589
+16  stomach Poisson (adjusted) 13112    2.175     low         16.65   0.2606
+17  stomach Poisson (adjusted) 13112    2.175  medium         16.65   0.9977
+18  stomach Poisson (adjusted) 13112    2.175    high         16.65   5.2322
+19  stomach       NB (minimal) 44070       NA     low         23.81  -3.1241
+20  stomach       NB (minimal) 44070       NA  medium         23.81 -52.4110
+21  stomach       NB (minimal) 44070       NA    high         23.81 181.0519
+22  stomach      NB (adjusted) 13112       NA     low         16.61   0.2963
+23  stomach      NB (adjusted) 13112       NA  medium         16.61   1.0325
+24  stomach      NB (adjusted) 13112       NA    high         16.61   5.2977
+      ear_lo    ear_hi      rr   rr_lo    rr_hi
+1    -3.0868    1.7421  0.9897 0.95034   1.0290
+2     5.9224   12.7957  1.1544 1.09558   1.2127
+3    27.1347   38.3221  1.5347 1.43861   1.6330
+4    -2.6805    2.2601  0.9967 0.95720   1.0378
+5     3.8801   10.6123  1.1186 1.06231   1.1753
+6    26.8210   38.3281  1.5320 1.43520   1.6324
+7   -14.3669   -2.3923  0.9017 0.83611   0.9703
+8   -12.0124    0.8863  0.9335 0.86371   1.0110
+9    12.5266   30.1311  1.2541 1.14372   1.3687
+10   -2.6040    2.4036  0.9984 0.95839   1.0400
+11    3.9570   10.6987  1.1204 1.06390   1.1779
+12   27.1376   38.5356  1.5354 1.43950   1.6353
+13   -0.7887    1.7265  1.0282 0.95325   1.1094
+14    0.4318    3.8594  1.1288 1.02559   1.2409
+15    2.9531    8.4126  1.3395 1.17781   1.5177
+16   -1.0030    1.5587  1.0163 0.94165   1.0962
+17   -0.7046    2.7418  1.0606 0.95920   1.1689
+18    2.5978    8.0220  1.3143 1.15103   1.4888
+19 -767.3727  564.6403 28.1028 0.03961 171.5044
+20 -707.9488  208.2384 10.6806 0.02529  79.1857
+21 -663.7518 1386.2990 63.0802 0.08072 521.4672
+22   -1.0480    1.6163  1.0186 0.93982   1.1003
+23   -0.6747    2.8023  1.0628 0.96054   1.1731
+24    2.5705    8.1401  1.3191 1.15193   1.4952
+[08:56:42] (e) Preston ERR / EAR model refit
+   model                                         parameter   estimate       se
+1    ERR                         beta_male (at e=30, a=70)  3.357e-01 0.055132
+2    ERR                       beta_female (at e=30, a=70)  5.544e-01 0.070484
+3    ERR                             alpha_agex (per year) -1.645e-02 0.008057
+4    ERR                         alpha_age (log-age power) -1.866e+00 0.356429
+5    ERR % decline in excess per decade of age at exposure  1.517e+01       NA
+6    ERR                                 female:male ratio  1.652e+00       NA
+7    ERR                                         converged  0.000e+00       NA
+8    ERR                                            logLik -1.342e+04       NA
+9    ERR                                               AIC  2.687e+04       NA
+10   EAR                         beta_male (at e=30, a=70)  3.894e+01 7.988837
+11   EAR                       beta_female (at e=30, a=70)  5.783e+01 6.235300
+12   EAR                             alpha_agex (per year) -2.675e-02 0.007962
+13   EAR                         alpha_age (log-age power)  2.246e+00 0.315894
+14   EAR % decline in excess per decade of age at exposure  2.347e+01       NA
+15   EAR                                 female:male ratio  1.485e+00       NA
+16   EAR                                         converged  0.000e+00       NA
+17   EAR                                            logLik -1.342e+04       NA
+18   EAR                                               AIC  2.689e+04       NA
+         lo        hi
+1   0.24501  0.426390
+2   0.43847  0.670364
+3  -0.02970 -0.003193
+4  -2.45210 -1.279451
+5        NA        NA
+6        NA        NA
+7        NA        NA
+8        NA        NA
+9        NA        NA
+10 25.79574 52.079019
+11 47.57330 68.087441
+12 -0.03985 -0.013656
+13  1.72592  2.765214
+14       NA        NA
+15       NA        NA
+16       NA        NA
+17       NA        NA
+18       NA        NA
+              term dcatn     logRR      se     RR  RR_lo RR_hi mean_dose_Gy
+1   factor(dcatn)3     3  0.001710 0.02587 1.0017 0.9522 1.054      0.01060
+2   factor(dcatn)4     4 -0.064079 0.03620 0.9379 0.8737 1.007      0.02886
+3   factor(dcatn)5     5  0.017085 0.04138 1.0172 0.9380 1.103      0.04908
+4   factor(dcatn)6     6 -0.009819 0.05127 0.9902 0.8956 1.095      0.06916
+5   factor(dcatn)7     7  0.091398 0.05484 1.0957 0.9840 1.220      0.09015
+6   factor(dcatn)8     8  0.014723 0.05903 1.0148 0.9040 1.139      0.11215
+7   factor(dcatn)9     9  0.070543 0.06343 1.0731 0.9476 1.215      0.13710
+8  factor(dcatn)10    10  0.014998 0.06718 1.0151 0.8899 1.158      0.16211
+9  factor(dcatn)11    11  0.149929 0.07827 1.1618 0.9965 1.354      0.18682
+10 factor(dcatn)12    12  0.164581 0.06136 1.1789 1.0453 1.330      0.22414
+11 factor(dcatn)13    13  0.208840 0.06200 1.2322 1.0913 1.391      0.27531
+12 factor(dcatn)14    14  0.142136 0.04351 1.1527 1.0585 1.255      0.38827
+13 factor(dcatn)15    15  0.228427 0.05160 1.2566 1.1358 1.390      0.61379
+14 factor(dcatn)16    16  0.468763 0.06088 1.5980 1.4183 1.801      0.86000
+15 factor(dcatn)17    17  0.576671 0.07237 1.7801 1.5447 2.051      1.11359
+16 factor(dcatn)18    18  0.464843 0.09230 1.5918 1.3283 1.907      1.36616
+17 factor(dcatn)19    19  0.818502 0.10874 2.2671 1.8319 2.806      1.61135
+18 factor(dcatn)20    20  0.774230 0.13435 2.1689 1.6668 2.822      1.86361
+   cases    pyr ERR_per_Gy
+1   2084 354134    0.16146
+2    891 153857   -2.15067
+3    660 104369    0.35111
+4    413  66418   -0.14128
+5    358  50826    1.06167
+6    305  47724    0.13226
+7    262  37237    0.53313
+8    232  36530    0.09321
+9    169  24434    0.86581
+10   280  37785    0.79817
+11   274  34596    0.84358
+12   590  81506    0.39337
+13   404  51722    0.41809
+14   284  29529    0.69537
+15   198  17862    0.70053
+16   120  12345    0.43316
+17    86   6852    0.78636
+18    56   4353    0.62723
+[08:56:59] 01 done -> /home/hugo_souto/Stuff/Research/countbcf/Applied_Study_v2/analysis/tables

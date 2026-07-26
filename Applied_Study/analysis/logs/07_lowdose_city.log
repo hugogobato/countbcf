@@ -1,0 +1,363 @@
+[09:34:13] low-dose city check: 13 fits
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Reading in y
+
+Instantiated covariate matrix 1 with 5 columns
+Done.
+design 1
+group setting: 0
+Setting up designs
+
+design Instantiated covariate matrix 2 with 4 columns
+0
+group setting: 0
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Reading in y
+
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix Setting up designs
+
+1 with 5 columnsdesign 
+0
+group setting: 0
+design 1
+Instantiated covariate matrix group setting: 10 with 
+5 columns
+Instantiated covariate matrix 2 with 4 columns
+design 1
+group setting: 0
+Setting up forests
+
+Number of forests: 2
+
+
+Instantiated covariate matrix 2 with 4 columns
+forest 0 function_group=0 vanilla=1
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest forest 1 function_group=10 function_group= vanilla=00
+ vanilla=0
+forest 1 function_group=0 vanilla=0
+Done.
+forest 1 function_group=0 vanilla=0
+forest 1 function_group=0 vanilla=0
+Done.
+Done.
+Done.
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.811
+iteration: 1000
+dispersion parameter acceptance rate: 0.834
+iteration: 1000
+dispersion parameter acceptance rate: 0.831
+iteration: 1000
+dispersion parameter acceptance rate: 0.832
+iteration: 1000
+dispersion parameter acceptance rate: 0.851
+iteration: 1000
+dispersion parameter acceptance rate: 0.84
+time for loop: 132
+time for loop: 134
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 4 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 138
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 151
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 176
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.851
+iteration: 1000
+dispersion parameter acceptance rate: 0.857
+iteration: 1000
+dispersion parameter acceptance rate: 0.846
+iteration: 1000
+dispersion parameter acceptance rate: 0.828
+time for loop: 225
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.835
+iteration: 1000
+dispersion parameter acceptance rate: 0.832
+time for loop: 155
+time for loop: 151
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 6 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 151
+time for loop: 179
+time for loop: 153
+iteration: 1000
+dispersion parameter acceptance rate: 0.837
+time for loop: 142
+time for loop: 140
+                             spec att_serr err_hiroshima err_nagasaki
+1               ntree_moderate=10 -0.01159       -0.0291       0.1356
+2               ntree_moderate=25 -0.01200       -0.0187       0.1838
+3               ntree_moderate=50 -0.01142       -0.0283       0.1988
+4              ntree_moderate=100 -0.01571       -0.0266       0.2244
+5              ntree_moderate=200 -0.01303       -0.0170       0.2417
+6                        a0 x 0.5 -0.02876       -0.0547       0.0753
+7                          a0 x 2 -0.01929       -0.0115       0.2710
+8                      PS = const -0.01453       -0.0259       0.1908
+9                     PS = simple -0.01481       -0.0291       0.2079
+10                      PS = rich -0.01496       -0.0252       0.1912
+11                    PS = forest -0.00543       -0.0340       0.1535
+12 trim pihat outside [0.10,0.90] -0.01142       -0.0283       0.1988
+13    NIC included in control arm -0.01246       -0.0230       0.2398
+   d_naga_hiro d_naga_hiro_lo d_naga_hiro_hi separates
+1        0.165         0.0524          0.269      TRUE
+2        0.202         0.0716          0.330      TRUE
+3        0.227         0.0916          0.378      TRUE
+4        0.251         0.1059          0.423      TRUE
+5        0.259         0.0903          0.449      TRUE
+6        0.130         0.0347          0.225      TRUE
+7        0.282         0.0538          0.545      TRUE
+8        0.217         0.0769          0.362      TRUE
+9        0.237         0.0787          0.389      TRUE
+10       0.216         0.0861          0.367      TRUE
+11       0.188         0.0530          0.324      TRUE
+12       0.227         0.0916          0.378      TRUE
+13       0.263         0.1177          0.437      TRUE
+                       term  estimate      se RR_ratio     lo    hi        p
+1    bandlow:city_fNagasaki 0.1433367 0.04629    1.154 1.0540 1.264 0.001956
+2 bandmedium:city_fNagasaki 0.1048579 0.06566    1.111 0.9764 1.263 0.110260
+3   bandhigh:city_fNagasaki 0.0009322 0.07135    1.001 0.8703 1.151 0.989575
+    lrt_p
+1 0.01235
+2 0.01235
+3 0.01235
+[09:41:30] 07 done -> ./Applied_Study_v2/analysis/tables

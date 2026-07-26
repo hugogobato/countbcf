@@ -43,3 +43,22 @@ src/*:Zone.Identifier
 *.Rcheck/
 *.tar.gz
 
+theory/
+Applied_Study_v2/
+Applied_Study/Applied_Study_Section.aux
+Applied_Study/Applied_Study_Section.tex
+Applied_Study/Applied_Study_Section.bbl
+Applied_Study/Applied_Study_Section.blg
+Applied_Study/Applied_Study_Section.log
+Applied_Study/Applied_Study_Section.out
+
+Applied_Study/EBSCO-FullText-07_23_2026.pdf
+Applied_Study/Preston_2007.pdf
+Applied_Study/LSSinc07design.pdf
+Applied_Study/emails.md
+
+Applied_Study/Low_dose_city_ERR_diff.md
+Applied_Study/analysis/main_cells.rds
+Applied_Study/analysis/preston_fit.rds
+Applied_Study/New_References.bib
+Applied_Study/RESULTS.md

@@ -1,0 +1,834 @@
+[09:08:57] default a0 for the featured contrast = 1
+[09:08:57] A. moderating-forest regularisation: 12 fits
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Reading in y
+
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Instantiated covariate matrix Setting up forests
+
+Number of forests: 12 with 
+
+5
+ columns
+Reading in y
+
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up designs
+
+Setting up forests
+
+design Number of forests: 2
+
+
+0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest forest 0 function_group=0 function_group=0 vanilla=1
+forest 0 function_group=0 vanilla=1
+0 vanilla=1
+forest 1 function_group=0 vanilla=0
+forest 1 function_group=0 vanilla=0
+forest 1 function_group=0 vanilla=0
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Done.
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Reading in y
+
+Done.
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+forest 1 function_group=0 vanilla=0
+Done.
+forest 1 function_group=0 vanilla=0
+Done.
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.837
+iteration: 1000
+dispersion parameter acceptance rate: 0.842
+iteration: 1000
+dispersion parameter acceptance rate: 0.823
+iteration: 1000
+dispersion parameter acceptance rate: 0.824
+iteration: 1000
+dispersion parameter acceptance rate: 0.859
+iteration: 1000
+dispersion parameter acceptance rate: 0.864
+time for loop: 131
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 156
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 166
+time for loop: 167
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 168
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.823
+iteration: 1000
+dispersion parameter acceptance rate: 0.842
+iteration: 1000
+dispersion parameter acceptance rate: 0.836
+iteration: 1000
+dispersion parameter acceptance rate: 0.838
+time for loop: 210
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.823
+iteration: 1000
+dispersion parameter acceptance rate: 0.855
+time for loop: 127
+time for loop: 131
+time for loop: 149
+time for loop: 148
+time for loop: 144
+time for loop: 164
+                              spec att_err att_err_lo att_err_hi d_female_male
+1                ntree_moderate=10   0.684      0.533      0.833        0.0984
+2                ntree_moderate=25   0.812      0.638      0.987        0.2390
+3                ntree_moderate=50   0.841      0.667      1.032        0.3106
+4               ntree_moderate=100   0.891      0.713      1.090        0.2931
+5               ntree_moderate=200   0.920      0.713      1.141        0.3990
+6    tau tree prior (0.05,4) tight   0.846      0.675      1.046        0.1985
+7  tau tree prior (0.25,3) default   0.841      0.667      1.032        0.3106
+8     tau tree prior (0.5,2) loose   0.832      0.667      1.022        0.2598
+9  tau tree prior (0.95,2) mu-like   0.862      0.677      1.060        0.2989
+10                        a0 x 0.5   0.662      0.516      0.823       -0.0342
+11                          a0 x 1   0.841      0.667      1.032        0.3106
+12                          a0 x 2   1.093      0.779      1.518        0.3145
+   d_female_male_lo d_female_male_hi d_young_old d_young_old_lo d_young_old_hi
+1          -0.10216           0.2844       0.597          0.333          0.868
+2          -0.01121           0.5017       0.772          0.450          1.110
+3           0.00426           0.6066       0.795          0.447          1.139
+4          -0.02106           0.6176       0.900          0.560          1.289
+5           0.05332           0.7565       0.982          0.621          1.362
+6          -0.06543           0.4554       0.834          0.487          1.219
+7           0.00426           0.6066       0.795          0.447          1.139
+8          -0.03940           0.5549       0.812          0.480          1.159
+9          -0.02200           0.5830       0.872          0.488          1.263
+10         -0.07234           0.0272       0.475          0.215          0.746
+11          0.00426           0.6066       0.795          0.447          1.139
+12         -0.25061           0.8243       1.301          0.673          2.096
+[09:15:16] B. data perturbations: 14 fits
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 6 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+Reading in y
+
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Setting up designs
+
+design 0
+group setting: Instantiated covariate matrix 1 with 5 columns
+0
+design 1
+group setting: Instantiated covariate matrix 01
+ with 5 columns
+design Instantiated covariate matrix 2 with 4 columns
+1
+group setting: 0
+Setting up forests
+
+Instantiated covariate matrix 2 with 4 columns
+Number of forests: 2
+
+
+forest 0 function_group=Setting up forests
+
+Number of forests: 2
+
+
+0 vanilla=1
+forest 0 function_group=0 vanilla=1
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+forest 1 function_group=0 vanilla=0
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Done.
+forest 1 function_group=0 vanilla=0
+Done.
+forest 1 function_group=0 vanilla=0
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+iteration: 1000
+dispersion parameter acceptance rate: 0.827
+iteration: 1000
+dispersion parameter acceptance rate: 0.823
+iteration: 1000
+dispersion parameter acceptance rate: 0.831
+iteration: 1000
+dispersion parameter acceptance rate: 0.845
+iteration: 1000
+dispersion parameter acceptance rate: 0.87
+time for loop: 121
+time for loop: 121
+time for loop: 122
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 139
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 162
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.85
+iteration: 1000
+dispersion parameter acceptance rate: 0.841
+iteration: 1000
+dispersion parameter acceptance rate: 0.823
+iteration: 1000
+dispersion parameter acceptance rate: 0.847
+time for loop: 227
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+iteration: 1000
+dispersion parameter acceptance rate: 0.81
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.871
+time for loop: 123
+time for loop: 142
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 145
+time for loop: 145
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 120
+time for loop: 75
+iteration: 1000
+dispersion parameter acceptance rate: 0.794
+iteration: 1000
+dispersion parameter acceptance rate: 0.854
+time for loop: 86
+time for loop: 91
+                                spec n_cells cases att_err att_err_lo
+1  baseline (solid, colon bands, NB)    8249  6751   0.841    0.66683
+2                 Poisson likelihood    8249  6751   0.845    0.66904
+3        NIC included in control arm    9534 10745   0.885    0.70156
+4             reference = 0-<100 mGy   14222 11157   0.830    0.66523
+5          high band includes >=2 Gy   10714  6936   1.068    0.85844
+6       solid excl. breast + thyroid    8249  6137   0.556    0.40177
+7      solid excl. non-melanoma skin    8249  6605   0.820    0.64211
+8                solid excl. stomach    8249  4975   0.855    0.66817
+9     non-gender-specific solid only    8249  5502   0.867    0.67594
+10         stomach, colon-dose bands    8249  1776   0.253    0.07835
+11       stomach, stomach-dose bands    8075  1774   0.256    0.09219
+12             lung, lung-dose bands    7636   683   0.768    0.39345
+13           colon, colon-dose bands    8249   584   0.294    0.01072
+14           liver, liver-dose bands    7917   592   0.273   -0.00952
+   att_err_hi ratio_female_male ratio_female_male_lo ratio_female_male_hi
+1       1.032             1.526                1.005                 2.27
+2       1.046             1.546                1.005                 2.27
+3       1.081             1.378                0.933                 2.01
+4       1.012             1.516                1.037                 2.19
+5       1.289             1.379                0.966                 1.97
+6       0.723             1.173                0.731                 1.75
+7       1.034             1.399                0.929                 2.04
+8       1.054             1.241                0.812                 1.85
+9       1.089             1.570                1.050                 2.27
+10      0.429             1.000                0.993                 1.01
+11      0.443             1.000                0.995                 1.01
+12      1.190             2.353                0.994                 6.44
+13      0.596             0.624               -0.591                 2.64
+14      0.595             0.862               -0.538                 2.19
+   d_young_old d_young_old_lo d_young_old_hi
+1     7.95e-01        0.44721        1.13930
+2     8.27e-01        0.48408        1.20501
+3     8.87e-01        0.55473        1.25616
+4     8.06e-01        0.51965        1.14442
+5     1.11e+00        0.73214        1.52019
+6     3.50e-01        0.06939        0.63567
+7     7.83e-01        0.43982        1.17561
+8     7.00e-01        0.33224        1.07263
+9     6.29e-01        0.28475        0.99607
+10   -8.82e-05       -0.00685        0.00659
+11   -2.63e-04       -0.00948        0.00580
+12   -1.10e-01       -0.56410        0.26525
+13    3.42e-02       -0.23315        0.34155
+14    4.66e-02       -0.24225        0.37553
+[09:21:35] C. low-dose sub-cohorts
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 4 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 3 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 4 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 3 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 4 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 3 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+forest 1 function_group=0 vanilla=0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Done.
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.833
+iteration: 1000
+dispersion parameter acceptance rate: 0.844
+iteration: 1000
+dispersion parameter acceptance rate: 0.862
+iteration: 1000
+dispersion parameter acceptance rate: 0.864
+time for loop: 40
+time for loop: 68
+time for loop: 69
+time for loop: 73
+                    spec n_cells cases att_err att_err_lo att_err_hi  att_ear
+1 5-<100 mGy, women only    4360  5474  0.0160    -0.0630     0.0928  0.00842
+2   5-<100 mGy, men only    4181  4535 -0.0291    -0.1332     0.0799 -3.60225
+3  5-<20 mGy, both sexes    3839  7687  0.0233    -0.0552     0.1098 -0.28267
+4  5-<20 mGy, women only    1938  4239  0.0282    -0.0678     0.1251 -0.25448
+  att_ear_lo att_ear_hi
+1      -3.43      3.130
+2      -8.61      0.896
+3      -3.36      2.902
+4      -4.09      3.471
+[09:22:50] 03 done -> /home/hugo_souto/Stuff/Research/countbcf/Applied_Study_v2/analysis/tables
