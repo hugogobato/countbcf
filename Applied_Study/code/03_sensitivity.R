@@ -23,7 +23,7 @@
 #  age-at-exposure gradient of the ERR.
 # =====================================================================
 
-source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study_v2/code/common.R"))
+source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study/code/common.R"))
 suppressMessages(library(countbcf))
 
 d <- read_lss()

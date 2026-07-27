@@ -7,7 +7,7 @@
 #  attributable fraction  = excess cases / observed cases in the band
 # =====================================================================
 
-source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study_v2/code/common.R"))
+source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study/code/common.R"))
 
 cells <- read_csv(file.path(TAB, "T16_countbcf_cate_cells.csv.gz"), show_col_types = FALSE) %>%
   mutate(endpoint = sub(":.*", "", label), treated = sub(".*:", "", label))

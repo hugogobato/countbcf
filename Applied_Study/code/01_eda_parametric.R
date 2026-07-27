@@ -12,7 +12,7 @@
 #      compared against what the canonical parametric form can represent.
 # =====================================================================
 
-source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study_v2/code/common.R"))
+source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study/code/common.R"))
 set.seed(SEED)
 
 d <- read_lss()

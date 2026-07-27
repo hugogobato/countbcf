@@ -3,7 +3,7 @@
 # 05  Publication figures, built from the tables written by 01-04.
 # =====================================================================
 
-source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study_v2/code/common.R"))
+source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study/code/common.R"))
 suppressMessages({library(ggplot2); library(scales)})
 
 theme_set(theme_bw(base_size = 12))

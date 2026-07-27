@@ -22,9 +22,7 @@ countbcf(
   nztree_control = 100,
   nztree_moderate = 50,
   a0 = NA,
-  a0_tau = NA,
   z_conc = 3.5/sqrt(2),
-  z_conc_tau = NA,
   base_control = 0.95,
   power_control = 2,
   base_moderate = 0.25,
@@ -84,17 +82,12 @@ forests \eqn{\mu_{f_0}, \mu_{f_1}} (used in ZI models).}
 \item{nztree_moderate}{Number of trees in the zero-inflation moderating
 forests \eqn{\tau_{f_0}, \tau_{f_1}} (used in ZI models).}
 
-\item{a0}{Concentration parameter of the count-component leaf prior.
-\code{NA} uses the default estimator from Murray (2021).}
+\item{a0}{Concentration parameter of the count-component leaf prior, shared by
+the mu and tau forests. \code{NA} uses the default estimator from Murray
+(2021).}
 
-\item{a0_tau}{Concentration parameter for the \eqn{\tau} leaf prior in the
-count component. Default is \code{a0/2}, shrinking heterogeneous treatment
-effects more strongly than the prognostic component.}
-
-\item{z_conc}{Concentration parameter of the zero-inflation leaf prior.}
-
-\item{z_conc_tau}{Concentration parameter for the \eqn{\tau} leaf prior in
-the zero-inflation component. Default is \code{z_conc/2}.}
+\item{z_conc}{Concentration parameter of the zero-inflation leaf prior, shared
+by the mu and tau forests.}
 
 \item{base_control}{Base for the BART tree prior on the prognostic forests.}
 
@@ -192,10 +185,15 @@ with \eqn{Y_i = 0} when \eqn{S_i = 1} and
 
 The leaf prior is the GIG mixture from Murray (2021), with
 concentration \code{a0} (count component) and \code{z_conc}
-(zero-inflation components). The \eqn{\tau} forests are given
-smaller concentration (\code{a0/2}, \code{z_conc/2} by default) so that
-heterogeneous treatment effects are more strongly shrunk than the
-prognostic component.
+(zero-inflation components). The \eqn{\mu} and \eqn{\tau} forests within a
+component share this leaf concentration; the stronger shrinkage of the
+\eqn{\tau} (treatment-effect) forests is delivered by the tree-count ratio
+and the stub-biased tree-shape prior rather than by a separate concentration.
+With the leaf scale calibrated for \code{ntree_control} trees but applied to
+the smaller \code{ntree_moderate}-tree \eqn{\tau} forest, the implied prior on
+the treatment-effect function has standard deviation
+\code{a0 * sqrt(ntree_moderate / ntree_control)}, so heterogeneous treatment
+effects are more strongly shrunk than the prognostic component.
 
 Data are internally sorted by \code{y} so that zeros come first; the
 permutation is returned as \code{order_vec} and is applied to every

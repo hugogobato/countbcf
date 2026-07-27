@@ -30,8 +30,8 @@ suppressMessages({
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
 ROOT   <- Sys.getenv("CBCF_ROOT", unset = ".")
-DATA   <- file.path(ROOT, "Applied_Study_v2", "lssinc07.csv")
-OUTDIR <- file.path(ROOT, "Applied_Study_v2", "analysis")
+DATA   <- file.path(ROOT, "Applied_Study", "lssinc07.csv")
+OUTDIR <- file.path(ROOT, "Applied_Study", "analysis")
 TAB    <- file.path(OUTDIR, "tables")
 PLT    <- file.path(OUTDIR, "plots")
 for (p in c(OUTDIR, TAB, PLT)) dir.create(p, showWarnings = FALSE, recursive = TRUE)
@@ -329,8 +329,12 @@ summarise_fit <- function(cells, logmu, logrr, label, scale = 1e4) {
 #' same draws, CATE_g - ATE.  A subgroup is flagged `separates = TRUE` only
 #' if the 95% credible interval of that DIFFERENCE excludes zero, i.e. the
 #' subgroup is distinguishable from the global effect rather than merely
-#' having a different point estimate.
-subgroup_table <- function(cells, logmu, logrr, by, label = "", treated_only = TRUE,
+#' having a different point estimate.  The reference is the textbook
+#' population ATE: both the subgroup CATE and the ATE are person-year weighted
+#' over the whole cohort (all cells), so the ATE here is identical to the
+#' headline `ate_*` in `summarise_fit`.  Set `treated_only = TRUE` only if you
+#' deliberately want the treated-arm (ATT) framing instead.
+subgroup_table <- function(cells, logmu, logrr, by, label = "", treated_only = FALSE,
                            min_cases = 10, scale = 1e4) {
   w   <- cells$pyr
   ear <- ear_mat(logmu, logrr, scale)

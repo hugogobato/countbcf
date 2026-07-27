@@ -30,10 +30,15 @@
 #'
 #' The leaf prior is the GIG mixture from Murray (2021), with
 #' concentration \code{a0} (count component) and \code{z_conc}
-#' (zero-inflation components). The \eqn{\tau} forests are given
-#' smaller concentration (\code{a0/2}, \code{z_conc/2} by default) so that
-#' heterogeneous treatment effects are more strongly shrunk than the
-#' prognostic component.
+#' (zero-inflation components). The \eqn{\mu} and \eqn{\tau} forests within a
+#' component share this leaf concentration; the stronger shrinkage of the
+#' \eqn{\tau} (treatment-effect) forests is delivered by the tree-count ratio
+#' and the stub-biased tree-shape prior rather than by a separate
+#' concentration. With the leaf scale calibrated for \code{ntree_control}
+#' trees but applied to the smaller \code{ntree_moderate}-tree \eqn{\tau}
+#' forest, the implied prior on the treatment-effect function has standard
+#' deviation \code{a0 * sqrt(ntree_moderate / ntree_control)}, so heterogeneous
+#' treatment effects are more strongly shrunk than the prognostic component.
 #'
 #' Data are internally sorted by \code{y} so that zeros come first; the
 #' permutation is returned as \code{order_vec} and is applied to every
@@ -82,11 +87,10 @@
 #' @param ntree_moderate Number of trees in tau^{(0)} (count component).
 #' @param nztree_control Number of trees in mu^{(0)} for zero-inflation odds (used in ZI models).
 #' @param nztree_moderate Number of trees in tau^{(0)} for zero-inflation odds (used in ZI models).
-#' @param a0 Concentration parameter for count-component leaf prior. NA gives a default estimate.
-#' @param a0_tau Concentration parameter for tau leaf prior in the count component.
-#'   Smaller than a0 to encourage smaller heterogeneous treatment effects. Default is a0/2.
-#' @param z_conc Concentration parameter for zero-inflation odds mu-leaf prior.
-#' @param z_conc_tau Concentration parameter for zero-inflation odds tau-leaf prior. Default is z_conc/2.
+#' @param a0 Concentration parameter for count-component leaf prior (shared by
+#'   the mu and tau forests). NA gives a default estimate.
+#' @param z_conc Concentration parameter for zero-inflation odds leaf prior
+#'   (shared by the mu and tau forests).
 #' @param base_control Base for tree prior on mu^{(0)} trees.
 #' @param power_control Power for tree prior on mu^{(0)} trees.
 #' @param base_moderate Base for tree prior on tau^{(0)} trees.
@@ -197,9 +201,7 @@ countbcf <- function(
   nztree_control = 100,
   nztree_moderate = 50,
   a0 = NA,
-  a0_tau = NA,
   z_conc = 3.5 / sqrt(2),
-  z_conc_tau = NA,
   base_control = 0.95,
   power_control = 2,
   base_moderate = 0.25,
@@ -341,37 +343,26 @@ countbcf <- function(
     a0 <- 0.5 * (log(max(y_star, 1)) - mean(mu0_sort))
     if (!is.finite(a0) || a0 <= 0) a0 <- 1
   }
-  if (is.na(a0_tau)) a0_tau <- a0 / 2
-
+  # The mu and tau forests within a component share this leaf concentration.
+  # Stronger shrinkage of the tau forests is delivered by their smaller tree
+  # count and stub-biased tree-shape prior, not by a separate concentration:
+  # with the leaf scale calibrated for ntree_control trees but applied to the
+  # ntree_moderate-tree tau forest, the implied tau-function prior SD is
+  # a0 * sqrt(ntree_moderate / ntree_control).
   log_leaf_var_mu <- a0^2 / ntree_control
   c_start_mu <- ntree_control / a0^2 + 0.5
   leaf_c_mu <- optim(c_start_mu, fn = function(x) (trigamma(x) - log_leaf_var_mu)^2,
                      method = "Brent", lower = 0, upper = 1e9)$par
   leaf_d_mu <- exp(digamma(leaf_c_mu))
 
-  log_leaf_var_tau <- a0_tau^2 / ntree_moderate
-  c_start_tau <- ntree_moderate / a0_tau^2 + 0.5
-  leaf_c_tau <- optim(c_start_tau, fn = function(x) (trigamma(x) - log_leaf_var_tau)^2,
-                      method = "Brent", lower = 0, upper = 1e9)$par
-  leaf_d_tau <- exp(digamma(leaf_c_tau))
-
   if (is_zi) {
-    if (is.na(z_conc_tau)) z_conc_tau <- z_conc / 2
-
     z_leaf_var_mu <- z_conc^2 / nztree_control
     z_c_start_mu <- nztree_control / z_conc^2 + 0.5
     z_c_mu <- optim(z_c_start_mu, fn = function(x) (trigamma(x) - z_leaf_var_mu)^2,
                     method = "Brent", lower = 0, upper = 1e9)$par
     z_d_mu <- exp(digamma(z_c_mu))
-
-    z_leaf_var_tau <- z_conc_tau^2 / nztree_moderate
-    z_c_start_tau <- nztree_moderate / z_conc_tau^2 + 0.5
-    z_c_tau <- optim(z_c_start_tau, fn = function(x) (trigamma(x) - z_leaf_var_tau)^2,
-                     method = "Brent", lower = 0, upper = 1e9)$par
-    z_d_tau <- exp(digamma(z_c_tau))
   } else {
     z_c_mu <- 0; z_d_mu <- 0
-    z_c_tau <- 0; z_d_tau <- 0
   }
 
   ### leaf-scale (Sigma0) is unused in the loglinear leaf draw but required by the spec.
@@ -419,31 +410,20 @@ countbcf <- function(
     ))
   }
 
-  ### the C++ side picks (leaf_c, leaf_d) for group 0 and (z_c, z_d) for groups 1/2,
-  ### and chooses between mu/tau within a group via the spec.vanilla flag is
-  ### handled inside fit_loglinear; for the leaf-prior c, d we need different
-  ### values for mu vs tau, so override via spec
-  for (k in seq_along(specs)) {
-    fg <- specs[[k]]$function_group
-    is_tau <- !specs[[k]]$vanilla
-    if (fg == 0) {
-      specs[[k]]$leaf_c <- if (is_tau) leaf_c_tau else leaf_c_mu
-      specs[[k]]$leaf_d <- if (is_tau) leaf_d_tau else leaf_d_mu
-    } else {
-      specs[[k]]$leaf_c <- if (is_tau) z_c_tau else z_c_mu
-      specs[[k]]$leaf_d <- if (is_tau) z_d_tau else z_d_mu
-    }
-  }
+  ### The C++ sampler picks the leaf-prior (c, d) purely from function_group:
+  ### (leaf_c, leaf_d) for group 0 (count) and (z_c, z_d) for groups 1/2 (ZI).
+  ### The mu and tau forests within a group therefore share the same (c, d);
+  ### the mu/tau scale separation is delivered by the tree-count difference
+  ### and the stub-biased tree-shape prior, not by a per-forest concentration.
 
   ### ghost lambda/nu (unused for count models)
   lambda <- 1
   nu <- 3
 
-  ### NOTE: the C++ countbcf currently selects c, d from the function args
-  ### using function_group. So we pass mu-versions as the primary and rely
-  ### on the spec.vanilla flag if we later refine to allow per-spec c/d.
-  ### For now: mu and tau within a group share the same (c, d) — the leaf
-  ### scale separation between mu and tau is handled by ntree differences.
+  ### The C++ countbcf selects (c, d) from these function args using
+  ### function_group; mu and tau within a group share the same (c, d), and the
+  ### leaf-scale separation between mu and tau is handled by the ntree
+  ### difference and the tree-shape prior.
   const_args <- list(
     y_     = y_sort,
     offset_ = mu0_sort,
@@ -469,7 +449,7 @@ countbcf <- function(
   ### this package's namespace by the R wrapper (this function) of the same
   ### name. Calling `countbcf:::countbcf` resolves to the wrapper itself,
   ### producing an "argument 20 matches multiple formal arguments" error
-  ### because `z_c` partial-matches `z_conc`/`z_conc_tau` in the wrapper's
+  ### because `z_c` partial-matches `z_conc` in the wrapper's
   ### formal-argument list. Bypass the namespace lookup by invoking the
   ### compiled function directly through .Call.
   fit_raw <- with(const_args, .Call(

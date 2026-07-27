@@ -13,7 +13,7 @@
 #    Preston (2007) ERR model to isolate what is genuinely new.
 # =====================================================================
 
-source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study_v2/code/common.R"))
+source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study/code/common.R"))
 suppressMessages(library(countbcf))
 
 d <- read_lss()
@@ -128,7 +128,7 @@ BY <- list(c("sex_f"), c("agex_b"), c("age_b"), c("city_f"), c("tsx_b"),
 sg <- bind_rows(lapply(pool, function(p) {
   cl <- add_bands(p$cells)
   bind_rows(lapply(BY, function(b)
-    subgroup_table(cl, p$logmu, p$logrr, b, label = p$label, treated_only = TRUE)))
+    subgroup_table(cl, p$logmu, p$logrr, b, label = p$label, treated_only = FALSE)))
 }))
 write_csv(sg, file.path(TAB, "T15_subgroup_cate.csv"))
 

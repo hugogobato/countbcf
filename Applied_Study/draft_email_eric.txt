@@ -1,0 +1,22 @@
+Hi Eric,
+
+Thank you, these are all correct and genuinely useful catches. I have gone through each one and made the fixes, and I wanted to walk you through what I decided in each case.
+
+On a0_tau, you diagnosed it exactly right: the R layer computes a separate leaf concentration for the treatment forests, but the C++ sampler selects the leaf prior purely by function group and only ever reads the prognostic values, so a0_tau and z_conc_tau were inert. After thinking about it I decided to go the opposite way from wiring them live, and instead remove both arguments entirely. The reason is that the stronger shrinkage of the treatment-effect forests is already delivered, without any knob, by their smaller number of trees (50 against 250) and the stub-biased tree-shape prior. With the leaf scale calibrated for 250 trees but applied to the 50-tree tau forest, the implied prior standard deviation on the treatment-effect function is a0 times sqrt(50/250), about 0.45 a0, so tau is shrunk toward zero more strongly than mu by construction. I would rather keep this as a single adaptive default than expose a second concentration that a user has to reason about and tune, and keeping the dead argument around was the real defect since it silently did nothing. I have removed a0_tau and z_conc_tau and everything derived from them from countbcf(), updated the roxygen and the man page, and documented the mechanism.
+
+One practical consequence worth flagging: because the knob was inert, none of the reported results depended on it, so nothing needed rerunning on that account. The regularisation sensitivity we report varies the number of moderating trees and an a0 multiplier, and both of those levers genuinely act on tau under the current code, so that analysis already exercises the effective prior scale.
+
+Your path observation was right too. I fixed all the Applied_Study_v2 references throughout the scripts, RESULTS.md, and the section source so they point at Applied_Study.
+
+The cluster-bootstrap caption was also wrong as you said. The design effect column is the ratio of the bootstrap variance to the model variance, not the ratio of standard errors, so I corrected the caption to define it that way. The numbers in the table were already the variance ratios, so only the wording changed.
+
+On the low-dose city robustness table, you were right that it referred to thirteen specifications but showed eleven. The underlying results file does have all thirteen (five moderating-tree counts, two leaf-concentration multipliers, four propensity specifications, trimming, and the not-in-city group), and the table had simply dropped the 25-tree and 100-tree rows. I restored both, so the table now shows all thirteen and matches the text.
+
+On the subgroup contrast, you correctly spotted that it was subtracting the treated-arm mean rather than the population ATE. I agree that is the cleaner and more standard choice, so I changed the reference to the textbook CATE minus ATE, where both the subgroup CATE and the ATE are person-year weighted over the whole cohort, and I reran the main CountBCF fits. The headline average effects reproduced identically, as expected, since only the subgroup reference changed. The heterogeneity conclusions are essentially unchanged: age at exposure and attained age remain the dominant credibly separating modifiers, sex and city still do not separate at high dose, the medium-dose sex effect still separates, and the low-dose city difference is untouched because it comes from a separate script that already compared exposed cells. A handful of small subgroups now clear the separation bar that did not before, which is just the added power from standardising over the full cohort. I updated the heterogeneity table, the figure, and the surrounding text, and recompiled the section PDF.
+
+I left the CountBCF-versus-Preston surface comparison as it was, evaluated at the exposed cells, since that is the natural place to put two dose-response surfaces side by side, but let me know if you would rather have that on the same all-cohort footing.
+
+Thanks again for the careful read. Happy to send the updated package and section whenever you want to look.
+
+Best,
+Hugo

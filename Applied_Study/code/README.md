@@ -8,7 +8,7 @@ used in `../../Applied_Study/`.
 
 ```bash
 cd <repo root>
-CBCF_CORES=6 bash Applied_Study_v2/code/run_all.sh
+CBCF_CORES=6 bash Applied_Study/code/run_all.sh
 ```
 
 Roughly 40 minutes on a 20-thread machine with ~12 GB of free RAM.
