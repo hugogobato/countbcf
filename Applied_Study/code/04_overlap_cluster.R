@@ -14,8 +14,15 @@
 #  (d) the LSS person-year table repeats each survivor across attained-age
 #      and calendar-period cells.  The independent-Poisson likelihood
 #      therefore understates variance.  Two checks: a cluster bootstrap of
-#      the parametric model (design effect) and a CountBCF fit with random
-#      intercepts at the survivor-cohort level.
+#      the parametric model (design effect) and CountBCF refits that carry
+#      the survivor-cohort grouping explicitly.
+#
+#      NOTE on random effects.  countbcf()'s randeff_* arguments are INERT:
+#      the random effects are sampled but never enter the count likelihood
+#      (R/countbcf.R:109-113), so a `cluster_re = TRUE` fit is numerically a
+#      no-random-effect fit and must not be reported as a random-intercept
+#      model.  The documented way to carry group structure is a group
+#      indicator in x_control, which is what the two grouping rows below do.
 # =====================================================================
 
 source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study/code/common.R"))
@@ -105,42 +112,52 @@ score_fit <- function(r, spec) {
   m <- draw_wmean(err, w, gi(cl$sex_f == "Male"))
   f <- draw_wmean(err, w, gi(cl$sex_f == "Female"))
   y <- draw_wmean(err, w, gi(cl$agex < 20)); o <- draw_wmean(err, w, gi(cl$agex >= 40))
+  sg <- function(k) draw_serr(r$logmu, r$logrr, w, gi(k))     # standardised footing
   as_tibble(c(list(spec = spec, n_cells = nrow(cl), cases = sum(cl$outcome)),
               qsum(draw_wmean(err, w, tr), "att_err"),
               qsum(draw_wmean(ear, w, tr), "att_ear"),
               qsum(draw_serr(r$logmu, r$logrr, w, tr), "att_serr"),
+              qsum(sg(cl$sex_f == "Female") - sg(cl$sex_f == "Male"), "d_serr_female_male"),
+              qsum(sg(cl$agex < 20) - sg(cl$agex >= 40), "d_serr_young_old"),
               qsum(f - m, "d_female_male"), qsum(y - o, "d_young_old")))
 }
 
 ps_grid <- bind_rows(
   tibble(spec = paste0("PS = ", PS_LIST), ps = PS_LIST, trim = NA_real_,
-         re = FALSE, re_var = "cluster"),
+         group = NA_character_),
   tibble(spec = c("trim pihat outside [0.05,0.95]", "trim pihat outside [0.10,0.90]"),
-         ps = "main", trim = c(0.05, 0.10), re = FALSE, re_var = "cluster"),
-  tibble(spec = c("random intercepts: city x sex x age-at-exposure",
-                  "random intercepts: finest survivor cohort"),
-         ps = "main", trim = NA_real_, re = TRUE,
-         re_var = c("cohort", "cluster")))
+         ps = "main", trim = c(0.05, 0.10), group = NA_character_),
+  # Survivor-cohort structure carried as a group INDICATOR in the prognostic
+  # forest (the documented mechanism), not via the inert randeff_* arguments.
+  tibble(spec = c("cohort indicator in prognostic forest: city x sex x age-at-exposure",
+                  "cohort indicator in prognostic forest: finest survivor cohort"),
+         ps = "main", trim = NA_real_, group = c("cohort", "cluster")))
 
 res <- mclapply(seq_len(nrow(ps_grid)), function(k) {
   g <- ps_grid[k, ]
-  r <- tryCatch(fit_cbcf(sub_hi, label = g$spec, ps_spec = g$ps,
+  s <- sub_hi; xcv <- c("agex", "age", "sex", "city")
+  if (!is.na(g$group)) {
+    s$group_id <- as.integer(droplevels(factor(s[[g$group]])))
+    xcv <- c(xcv, "group_id")
+  }
+  r <- tryCatch(fit_cbcf(s, label = g$spec, ps_spec = g$ps,
                          trim = if (is.na(g$trim)) NULL else g$trim,
-                         cluster_re = g$re, re_var = g$re_var,
+                         x_control_vars = xcv,
                          nburn = NBURN_SENS, nsim = NSIM_SENS),
                 error = function(e) { stamp("FAILED ", g$spec, ": ", conditionMessage(e)); NULL })
   if (is.null(r)) return(NULL)
-  out <- score_fit(r, g$spec) %>% mutate(re_sd = mean(r$re_sd), .after = spec)
+  out <- score_fit(r, g$spec) %>% mutate(n_groups = if (is.na(g$group)) NA_integer_
+                                         else length(unique(s$group_id)), .after = spec)
   rm(r); gc(verbose = FALSE); out
 }, mc.cores = n_workers(5), mc.preschedule = FALSE)
 ps_sens <- bind_rows(res)
 write_csv(ps_sens, file.path(TAB, "T26_propensity_cluster_sensitivity.csv"))
-print(as.data.frame(ps_sens %>% dplyr::select(spec, n_cells, re_sd, att_err, att_err_lo,
+print(as.data.frame(ps_sens %>% dplyr::select(spec, n_cells, n_groups, att_err, att_err_lo,
   att_err_hi, d_female_male, d_female_male_lo, d_female_male_hi,
   d_young_old, d_young_old_lo, d_young_old_hi)), digits = 3)
 
-# interval-width comparison: independent cells vs random intercepts
-widths <- ps_sens %>% filter(grepl("^PS = main|^random intercepts", spec)) %>%
+# interval-width comparison: plain independent cells vs explicit cohort grouping
+widths <- ps_sens %>% filter(grepl("^PS = main|^cohort indicator", spec)) %>%
   transmute(spec, att_err, width_err = att_err_hi - att_err_lo,
             att_ear, width_ear = att_ear_hi - att_ear_lo)
 write_csv(widths, file.path(TAB, "T27_cluster_interval_widths.csv"))

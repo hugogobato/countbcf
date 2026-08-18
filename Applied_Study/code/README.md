@@ -27,8 +27,10 @@ Roughly 40 minutes on a 20-thread machine with ~12 GB of free RAM.
 | `03_sensitivity.R` | (A) regularisation of the moderating forest, (B) data perturbations (site composition, NIC, reference band, dose cap, likelihood, organ-dose banding), (C) low-dose sub-cohorts matching Dropkin (2016). |
 | `04_overlap_cluster.R` | propensity-model comparison and overlap diagnostics, trimming sensitivity, subgroup overlap, CountBCF with random intercepts, and a cluster bootstrap of the parametric model. |
 | `06_attributable.R` | excess cases and attributable fractions, placed next to Preston Tables 9 and 15. |
-| `07_lowdose_city.R` | a dedicated robustness battery for the one genuinely new modifier the main analysis turns up: the Hiroshima-vs-Nagasaki ERR difference at 5–<100 mGy. Thirteen CountBCF refits plus an explicit parametric dose × city interaction test. |
-| `05_figures.R` | all figures. Runs last because it reads the tables written by 01–04 and 06. |
+| `07_lowdose_city.R` | the robustness battery for the low-dose Hiroshima-vs-Nagasaki ERR difference: moderating-forest prior scale and depth prior, shared leaf concentration, four propensity specifications, a trim that actually bites, and the NIC group. Plus an explicit parametric dose × city interaction test. |
+| `08_city_footing.R` | the follow-up on that difference. Chain-wise draws, R-hat, ESS and Monte-Carlo standard error for the standardised city statistic; E-values and per-Gy rescaling; the RERF distance-stratified reference constructions (outer proximal 2.5–3.0 km vs distal 3–10 km, city × distance in the score and in the prognostic forest); the low band split into 5–<20 / 20–<50 / 50–<100 mGy to separate a dose gradient from a step at the 5 mGy boundary; site-composition perturbations; and the parametric analogue under four reference-group constructions. |
+| `09_stomach_sweep.R` | repeats the twelve-setting moderating-forest regularisation grid for the stomach high-dose contrast, recording the standardised and per-cell subgroup flags, surface flatness, and the age, sex, and city contrasts. |
+| `05_figures.R` | all figures. Runs last because it reads the tables written by 01–04 and 06–09. |
 
 ## Estimands
 
@@ -60,9 +62,27 @@ point estimates.
   fit as extra control-arm cells with an NIC indicator in the prognostic forest.
 - Cells with weighted colon dose ≥ 2 Gy are excluded from the primary analysis
   and restored in a sensitivity fit.
-- Ground distance from the hypocentre is deliberately kept out of the propensity
-  model: it is the dose mechanism rather than a confounder, and conditioning on
-  it destroys overlap.
+- Ground distance from the hypocentre is deliberately kept out of the *primary*
+  propensity model: it is the dose mechanism rather than a confounder, and
+  conditioning on it destroys overlap. `08_city_footing.R` relaxes this in a
+  dedicated family of fits, using the coarse `<3 km` / `>=3 km` ring, which is a
+  baseline-composition variable rather than the continuous assignment variable.
+  Note the structural fact behind that choice: the 5–<100 mGy band contains no
+  cell beyond 2.71 km, so reference cells beyond 3.22 km have probability zero
+  of low-band membership — the same positivity argument that excludes the NIC
+  group, one ring closer in.
 - `agex` and `age` determine calendar year, birth cohort and time since exposure
-  exactly (`year = age − agex + 1946`), so only those two are given to the
-  forests alongside sex and city.
+  (`year = age − agex + t0`, with the implied `t0` between 1945.594 and 1945.611
+  across all cells, i.e. 6 and 9 August 1945 to within about six days), so only
+  those two are given to the forests alongside sex and city.
+- The **standardised ERR** is the footing every subgroup claim is made on.
+  Scripts that score subgroups report both footings; the `*_serr_*` columns are
+  the ones the manuscript uses.
+- `countbcf`'s `randeff_*` arguments are **inert** — the random effects are
+  sampled but never enter the count likelihood (`R/countbcf.R:109-113`). Group
+  structure goes in `x_control` instead. Never label a `cluster_re = TRUE` fit a
+  random-intercept model.
+- `a0` is the leaf concentration **shared** by the prognostic and moderating
+  forests (`R/countbcf.R:90`), with implied treatment-effect prior scale
+  `a0 * sqrt(ntree_moderate / ntree_control)`. A moderating-forest-only sweep
+  uses `ntree_moderate`, `base_moderate` or `power_moderate`.

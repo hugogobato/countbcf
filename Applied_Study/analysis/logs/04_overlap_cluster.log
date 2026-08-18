@@ -1,4 +1,4 @@
-[09:22:51] (a) propensity / overlap diagnostics
+[20:56:50] (a) propensity / overlap diagnostics
    contrast ps_model   auc    min   q01   q50   q99   max n_lt_005 n_gt_095
 1       low    const 0.500 0.6993 0.699 0.699 0.699 0.699        0        0
 2       low   simple 0.525 0.6463 0.657 0.700 0.738 0.745        0        0
@@ -53,7 +53,7 @@
 8           0          0
 9           0          0
 10          0          0
-[09:22:57] (b) CountBCF refits across propensity specifications and trimming
+[20:56:56] (b) CountBCF refits across propensity specifications and trimming
 Reading in y
 
 Setting up designs
@@ -89,24 +89,6 @@ Number of forests: 2
 
 forest 0 function_group=0 vanilla=1
 forest 1 function_group=0 vanilla=0
-Reading in y
-
-Done.
-Setting up designs
-
-design 0
-group setting: 0
-Instantiated covariate matrix 1 with 5 columns
-design 1
-group setting: 0
-Instantiated covariate matrix 2 with 4 columns
-Setting up forests
-
-Number of forests: 2
-
-
-forest 0 function_group=0 vanilla=1
-forest 1 function_group=0 vanilla=0
 Done.
 Reading in y
 
@@ -126,22 +108,6 @@ Number of forests: 2
 forest 0 function_group=0 vanilla=1
 forest 1 function_group=0 vanilla=0
 Done.
-
-Beginning MCMC:
-iteration: 0
-dispersion parameter acceptance rate: 0
-
-Beginning MCMC:
-iteration: 0
-dispersion parameter acceptance rate: 0
-
-Beginning MCMC:
-iteration: 0
-dispersion parameter acceptance rate: 0
-
-Beginning MCMC:
-iteration: 0
-dispersion parameter acceptance rate: 0
 Reading in y
 
 Setting up designs
@@ -164,68 +130,137 @@ Done.
 Beginning MCMC:
 iteration: 0
 dispersion parameter acceptance rate: 0
-iteration: 1000
-dispersion parameter acceptance rate: 0.853
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
 iteration: 1000
 dispersion parameter acceptance rate: 0.823
-iteration: 1000
-dispersion parameter acceptance rate: 0.833
 iteration: 1000
 dispersion parameter acceptance rate: 0.855
 iteration: 1000
+dispersion parameter acceptance rate: 0.853
+iteration: 1000
+dispersion parameter acceptance rate: 0.833
+time for loop: 158
+time for loop: 160
+time for loop: 160
+time for loop: 161
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 6 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.823
+iteration: 1000
+dispersion parameter acceptance rate: 0.823
+iteration: 1000
 dispersion parameter acceptance rate: 0.851
-time for loop: 118
-time for loop: 120
-time for loop: 120
+iteration: 1000
+dispersion parameter acceptance rate: 0.851
+time for loop: 326
+time for loop: 326
+time for loop: 345
+time for loop: 369
 Reading in y
 
 Setting up designs
 
 design 0
 group setting: 0
-Instantiated covariate matrix 1 with 5 columns
-design 1
-group setting: 0
-Instantiated covariate matrix 2 with 4 columns
-Setting up forests
-
-Number of forests: 2
-
-
-forest 0 function_group=0 vanilla=1
-forest 1 function_group=0 vanilla=0
-Done.
-time for loop: 121
-
-Beginning MCMC:
-iteration: 0
-dispersion parameter acceptance rate: 0
-Reading in y
-
-Setting up designs
-
-design 0
-group setting: 0
-Instantiated covariate matrix 1 with 5 columns
-design 1
-group setting: 0
-Instantiated covariate matrix 2 with 4 columns
-Setting up forests
-
-Number of forests: 2
-
-
-forest 0 function_group=0 vanilla=1
-forest 1 function_group=0 vanilla=0
-Done.
-Using random effects.
-Reading in y
-
-Setting up designs
-
-design 0
-group setting: 0
-Instantiated covariate matrix 1 with 5 columns
+Instantiated covariate matrix 1 with 6 columns
 design 1
 group setting: 0
 Instantiated covariate matrix 2 with 4 columns
@@ -241,87 +276,50 @@ Done.
 Beginning MCMC:
 iteration: 0
 dispersion parameter acceptance rate: 0
-
-Beginning MCMC:
-iteration: 0
-dispersion parameter acceptance rate: 0
-Using random effects.
-Reading in y
-
-Setting up designs
-
-design 0
-group setting: 0
-Instantiated covariate matrix 1 with 5 columns
-design 1
-group setting: 0
-Instantiated covariate matrix 2 with 4 columns
-Setting up forests
-
-Number of forests: 2
-
-
-forest 0 function_group=0 vanilla=1
-forest 1 function_group=0 vanilla=0
-Done.
-
-Beginning MCMC:
-iteration: 0
-dispersion parameter acceptance rate: 0
-time for loop: 146
 iteration: 1000
-dispersion parameter acceptance rate: 0.823
-iteration: 1000
-dispersion parameter acceptance rate: 0.823
-iteration: 1000
-dispersion parameter acceptance rate: 0.844
-iteration: 1000
-dispersion parameter acceptance rate: 0.859
-time for loop: 137
-time for loop: 137
-time for loop: 141
-time for loop: 282
-                                             spec n_cells re_sd att_err
-1                                      PS = const    8249    NA   0.859
-2                                     PS = simple    8249    NA   0.848
-3                                       PS = main    8249    NA   0.841
-4                                       PS = rich    8249    NA   0.837
-5                                     PS = forest    8249    NA   0.898
-6                  trim pihat outside [0.05,0.95]    8249    NA   0.841
-7                  trim pihat outside [0.10,0.90]    8249    NA   0.841
-8 random intercepts: city x sex x age-at-exposure    8249  1.96   0.841
-9       random intercepts: finest survivor cohort    8249  1.91   0.863
-  att_err_lo att_err_hi d_female_male d_female_male_lo d_female_male_hi
-1      0.666       1.06         0.269         0.000945            0.546
-2      0.674       1.06         0.282         0.000127            0.550
-3      0.667       1.03         0.311         0.004259            0.607
-4      0.654       1.04         0.296        -0.000913            0.574
-5      0.676       1.15         0.238        -0.085486            0.576
-6      0.667       1.03         0.311         0.004259            0.607
-7      0.667       1.03         0.311         0.004259            0.607
-8      0.657       1.03         0.224        -0.061586            0.496
-9      0.683       1.05         0.280        -0.037472            0.571
-  d_young_old d_young_old_lo d_young_old_hi
-1       0.815          0.473           1.19
-2       0.844          0.494           1.21
-3       0.795          0.447           1.14
-4       0.773          0.429           1.13
-5       0.913          0.464           1.39
-6       0.795          0.447           1.14
-7       0.795          0.447           1.14
-8       0.817          0.469           1.17
-9       0.869          0.532           1.26
-                                             spec att_err width_err att_ear
-1                                       PS = main  0.8409    0.3648   30.72
-2 random intercepts: city x sex x age-at-exposure  0.8409    0.3694   30.83
-3       random intercepts: finest survivor cohort  0.8634    0.3701   30.84
-  width_ear
-1     11.18
-2     11.23
-3     11.38
-[09:30:05] (d) cluster bootstrap design effect (parametric)
+dispersion parameter acceptance rate: 0.847
+time for loop: 493
+                                                                 spec n_cells
+1                                                          PS = const    8249
+2                                                         PS = simple    8249
+3                                                           PS = main    8249
+4                                                           PS = rich    8249
+5                                                         PS = forest    8249
+6                                      trim pihat outside [0.05,0.95]    8249
+7                                      trim pihat outside [0.10,0.90]    8249
+8 cohort indicator in prognostic forest: city x sex x age-at-exposure    8249
+9       cohort indicator in prognostic forest: finest survivor cohort    8249
+  n_groups att_err att_err_lo att_err_hi d_female_male d_female_male_lo
+1       NA   0.859      0.666       1.06         0.269         0.000945
+2       NA   0.848      0.674       1.06         0.282         0.000127
+3       NA   0.841      0.667       1.03         0.311         0.004259
+4       NA   0.837      0.654       1.04         0.296        -0.000913
+5       NA   0.898      0.676       1.15         0.238        -0.085486
+6       NA   0.841      0.667       1.03         0.311         0.004259
+7       NA   0.841      0.667       1.03         0.311         0.004259
+8       60   0.852      0.661       1.04         0.286        -0.030619
+9      432   0.888      0.707       1.09         0.307        -0.023285
+  d_female_male_hi d_young_old d_young_old_lo d_young_old_hi
+1            0.546       0.815          0.473           1.19
+2            0.550       0.844          0.494           1.21
+3            0.607       0.795          0.447           1.14
+4            0.574       0.773          0.429           1.13
+5            0.576       0.913          0.464           1.39
+6            0.607       0.795          0.447           1.14
+7            0.607       0.795          0.447           1.14
+8            0.577       0.864          0.516           1.22
+9            0.650       0.912          0.545           1.30
+                                                                 spec att_err
+1                                                           PS = main  0.8409
+2 cohort indicator in prognostic forest: city x sex x age-at-exposure  0.8519
+3       cohort indicator in prognostic forest: finest survivor cohort  0.8885
+  width_err att_ear width_ear
+1    0.3648   30.72     11.18
+2    0.3767   30.63     11.03
+3    0.3850   31.15     11.71
+[21:14:35] (d) cluster bootstrap design effect (parametric)
         term  estimate se_model se_cluster_boot design_effect se_ratio n_boot
 1    bandlow -0.003597  0.02048         0.02105        1.0561    1.028    300
 2 bandmedium  0.111205  0.02594         0.02469        0.9062    0.952    300
 3   bandhigh  0.426100  0.03248         0.03461        1.1350    1.065    300
-[09:30:18] 04 done -> /home/hugo_souto/Stuff/Research/countbcf/Applied_Study_v2/analysis/tables
+[21:15:25] 04 done -> ./Applied_Study/analysis/tables

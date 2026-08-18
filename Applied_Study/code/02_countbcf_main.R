@@ -61,10 +61,27 @@ conv <- bind_rows(lapply(unique(jobs$label), function(lab) {
                                           which(f$cells$z == 1)))
   ch_err <- lapply(ff, function(f) draw_wmean(exp(f$logrr) - 1, f$cells$pyr,
                                               which(f$cells$z == 1)))
+  # the standardised ERR is the footing the manuscript quotes, so it needs its
+  # own R-hat / ESS rather than inheriting the per-cell channel's
+  ch_serr <- lapply(ff, function(f) draw_serr(f$logmu, f$logrr, f$cells$pyr,
+                                              which(f$cells$z == 1)))
+  # ... and so does the city statistic, the one genuinely new modifier
+  ch_city <- lapply(ff, function(f) {
+    w <- f$cells$pyr; tr <- which(f$cells$z == 1)
+    gi <- function(k) intersect(which(k), tr)
+    draw_serr(f$logmu, f$logrr, w, gi(f$cells$city_f == "Nagasaki")) -
+      draw_serr(f$logmu, f$logrr, w, gi(f$cells$city_f == "Hiroshima"))
+  })
   ka <- lapply(ff, function(f) f$kappa)
+  re_ear <- rhat_ess(ch); re_err <- rhat_ess(ch_err)
+  re_ser <- rhat_ess(ch_serr); re_cty <- rhat_ess(ch_city)
   tibble(label = lab,
-         rhat_att_ear = rhat_ess(ch)["rhat"],   ess_att_ear = rhat_ess(ch)["ess"],
-         rhat_att_err = rhat_ess(ch_err)["rhat"], ess_att_err = rhat_ess(ch_err)["ess"],
+         rhat_att_ear = re_ear[["rhat"]],   ess_att_ear = re_ear[["ess"]],
+         rhat_att_err = re_err[["rhat"]],   ess_att_err = re_err[["ess"]],
+         rhat_att_serr = re_ser[["rhat"]],  ess_att_serr = re_ser[["ess"]],
+         mcse_att_serr = sd(unlist(ch_serr)) / sqrt(re_ser[["ess"]]),
+         rhat_city_serr = re_cty[["rhat"]], ess_city_serr = re_cty[["ess"]],
+         mcse_city_serr = sd(unlist(ch_city)) / sqrt(re_cty[["ess"]]),
          rhat_kappa = rhat_ess(ka)["rhat"],
          kappa_mean = mean(unlist(ka)),
          kappa_lo = quantile(unlist(ka), .025), kappa_hi = quantile(unlist(ka), .975))
@@ -133,10 +150,23 @@ sg <- bind_rows(lapply(pool, function(p) {
 write_csv(sg, file.path(TAB, "T15_subgroup_cate.csv"))
 
 stamp("subgroups separating from the ATE (95% CrI on CATE - ATE excludes 0):")
-print(as.data.frame(sg %>% filter(enough, separates_err | separates_ear) %>%
-  dplyr::select(label, by, subgroup, cases, err, err_lo, err_hi,
-                d_err, d_err_lo, d_err_hi, separates_err,
+print(as.data.frame(sg %>% filter(enough, separates_err | separates_ear | separates_serr) %>%
+  dplyr::select(label, by, subgroup, cases, serr, serr_lo, serr_hi,
+                d_serr, d_serr_lo, d_serr_hi, separates_serr,
+                err, d_err, d_err_lo, d_err_hi, separates_err,
                 ear, d_ear, d_ear_lo, d_ear_hi, separates_ear)), digits = 3)
+
+# Multiplicity accounting.  Every separation test run anywhere in the study is
+# counted here, so the manuscript can quote the denominator rather than only
+# the flags it chooses to tabulate.
+mult <- sg %>% group_by(label) %>%
+  summarise(n_tests = n(), n_with_enough_cases = sum(enough),
+            n_sep_standardised = sum(enough & separates_serr),
+            n_sep_percell = sum(enough & separates_err),
+            n_sep_ear = sum(enough & separates_ear), .groups = "drop") %>%
+  bind_rows(summarise(., label = "TOTAL", across(where(is.numeric), sum)))
+write_csv(mult, file.path(TAB, "T15b_multiplicity_accounting.csv"))
+print(as.data.frame(mult))
 
 # per-cell CATE dump (compressed)
 cells_out <- bind_rows(lapply(pool, function(p) {
@@ -229,12 +259,20 @@ newness <- bind_rows(lapply(pool, function(p)
          departs_serr = (diff_serr_lo > 0) | (diff_serr_hi < 0),
          departs_ear  = (diff_ear_lo > 0) | (diff_ear_hi < 0))
 write_csv(newness, file.path(TAB, "T17_vs_preston_model.csv"))
+# The manuscript quotes departures on the STANDARDISED scale, so the print
+# filter must select on departs_serr, not on the per-cell flag.  Both flags
+# are shown so the two footings can never be conflated again.
 stamp("subgroups whose CountBCF ERR departs from the Preston-model ERR:")
-print(as.data.frame(newness %>% filter(departs, cases >= 20) %>%
-  dplyr::select(label, by, subgroup, cases, preston_err, cbcf_err,
-                cbcf_err_lo, cbcf_err_hi, diff, diff_lo, diff_hi,
-                preston_serr, cbcf_serr, diff_serr_lo, diff_serr_hi,
-                departs_serr)), digits = 3)
+print(as.data.frame(newness %>% filter(departs_serr | departs, cases >= 20) %>%
+  dplyr::select(label, by, subgroup, cases,
+                preston_serr, cbcf_serr, diff_serr, diff_serr_lo, diff_serr_hi,
+                departs_serr,
+                preston_err, cbcf_err, diff, diff_lo, diff_hi, departs)), digits = 3)
+dep_count <- newness %>% group_by(label) %>%
+  summarise(n_subgroups = n(), departs_standardised = sum(departs_serr),
+            departs_percell = sum(departs), .groups = "drop")
+write_csv(dep_count, file.path(TAB, "T17b_departure_counts.csv"))
+print(as.data.frame(dep_count))
 
 # cell-level agreement between the two surfaces (treated cells)
 agree <- bind_rows(lapply(pool, function(p) {

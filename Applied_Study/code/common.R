@@ -213,11 +213,17 @@ fit_cbcf <- function(sub, label = "", ps_spec = "main", pihat = NULL,
 
   re_design <- matrix(1); re_q <- matrix(1)
   if (cluster_re) {
-    # NOTE: countbcf() sorts y/z/X/offset/pihat by order(y) internally but
-    # passes randeff_design through unsorted, so it must be pre-permuted here.
+    # WARNING: this switch is INERT as a group-level effect.  countbcf()
+    # samples the random effects but they do not enter the count likelihood
+    # (the fitted log-mean is offset + mu_f + z * tau_f only); see
+    # R/countbcf.R:109-113.  Any fit made with cluster_re = TRUE is therefore
+    # numerically a no-random-effect fit with an extra sampled variance
+    # component, and must not be labelled a random-intercept model.  To model
+    # group structure, put the group indicator in x_control_vars instead.
+    # countbcf() also sorts randeff_design itself (R/countbcf.R:295), so the
+    # rows are passed through in the original observation order.
     g  <- droplevels(factor(sub[[re_var]]))
     D  <- model.matrix(~ g - 1)
-    D  <- D[order(sub$outcome), , drop = FALSE]
     re_design <- D
     re_q <- matrix(1, nrow = ncol(D), ncol = 1)
   }

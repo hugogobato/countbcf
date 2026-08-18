@@ -106,17 +106,18 @@ f5 <- sg %>% filter(enough, by %in% c("sex_f", "agex_b", "age_b", "city_f"),
          by = recode(by, sex_f = "Sex", agex_b = "Age at exposure",
                      age_b = "Attained age", city_f = "City"),
          subgroup = factor(subgroup, levels = rev(unique(subgroup))))
-p5 <- ggplot(f5, aes(subgroup, d_err, colour = separates_err)) +
+# standardised footing throughout, matching the tables
+p5 <- ggplot(f5, aes(subgroup, d_serr, colour = separates_serr)) +
   geom_hline(yintercept = 0, linetype = 2, colour = "grey55") +
-  geom_pointrange(aes(ymin = d_err_lo, ymax = d_err_hi), size = .35) +
+  geom_pointrange(aes(ymin = d_serr_lo, ymax = d_serr_hi), size = .35) +
   coord_flip() +
   facet_grid(by ~ band_lab, scales = "free_y", space = "free_y") +
   scale_colour_manual(values = c(`TRUE` = "#B5442A", `FALSE` = "grey45"),
                       labels = c(`TRUE` = "separates from ATE", `FALSE` = "not distinguishable"),
                       name = NULL) +
-  labs(x = NULL, y = "Subgroup ERR minus overall ERR (posterior, 95% CrI)",
+  labs(x = NULL, y = "Subgroup standardised ERR minus overall standardised ERR (95% CrI)",
        title = "Which subgroups are genuinely different from the average effect?",
-       subtitle = "All solid cancers. A subgroup counts only if the CrI on the DIFFERENCE excludes zero") +
+       subtitle = "All solid cancers, standardised footing. A subgroup counts only if the CrI on the DIFFERENCE excludes zero") +
   theme(legend.position = "bottom")
 gg(p5, "F05_subgroup_separation.png", 10, 7)
 
@@ -185,13 +186,16 @@ gg(p9, "F09_overlap.png", 10, 4.2)
 # ---------------------------------------------------------------------
 # F10  sensitivity of the featured quantities
 # ---------------------------------------------------------------------
+# All three panels on the standardised footing, so the figure and
+# Tables 10-11 report the same quantities.
 mk_sens <- function(df, ttl) {
   long <- bind_rows(
-    df %>% transmute(spec, q = "overall ERR", est = att_err, lo = att_err_lo, hi = att_err_hi),
-    df %>% transmute(spec, q = "female minus male ERR", est = d_female_male,
-                     lo = d_female_male_lo, hi = d_female_male_hi),
-    df %>% transmute(spec, q = "ERR: exposed <20 minus 40+", est = d_young_old,
-                     lo = d_young_old_lo, hi = d_young_old_hi)) %>%
+    df %>% transmute(spec, q = "overall standardised ERR", est = att_serr,
+                     lo = att_serr_lo, hi = att_serr_hi),
+    df %>% transmute(spec, q = "female minus male ERR", est = d_serr_female_male,
+                     lo = d_serr_female_male_lo, hi = d_serr_female_male_hi),
+    df %>% transmute(spec, q = "ERR: exposed <20 minus 40+", est = d_serr_young_old,
+                     lo = d_serr_young_old_lo, hi = d_serr_young_old_hi)) %>%
     mutate(spec = factor(spec, levels = rev(df$spec)))
   ggplot(long, aes(spec, est)) +
     geom_hline(yintercept = 0, linetype = 2, colour = "grey55") +

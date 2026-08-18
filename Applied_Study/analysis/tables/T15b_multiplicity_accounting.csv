@@ -1,0 +1,8 @@
+label,n_tests,n_with_enough_cases,n_sep_standardised,n_sep_percell,n_sep_ear
+solid:high,49,49,27,26,7
+solid:low,49,49,5,7,5
+solid:medium,49,49,2,5,5
+stomach:high,49,49,0,0,47
+stomach:low,49,49,0,0,1
+stomach:medium,49,49,0,0,0
+TOTAL,294,294,34,38,65

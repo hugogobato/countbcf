@@ -19,8 +19,22 @@
 #       * Poisson vs negative-binomial likelihood.
 #
 #  Every fit is scored on the same three quantities the main analysis
-#  features: the ATT on the ERR scale, the female:male ERR ratio, and the
-#  age-at-exposure gradient of the ERR.
+#  features: the ATT on the ERR scale, the female:male ERR difference, and
+#  the age-at-exposure gradient of the ERR.
+#
+#  Each of those is reported on BOTH footings, because the manuscript quotes
+#  the STANDARDISED ERR (ratio of person-year weighted counterfactual rates)
+#  everywhere: `*_serr_*` columns are the standardised versions and are the
+#  ones the tables use; the plain `d_female_male` / `d_young_old` columns are
+#  the person-year weighted mean of the per-cell ERR (average of ratios) and
+#  are kept only so the two footings can be cross-checked.
+#
+#  Labelling note (I. Shuryak, August 2026 review): ntree_moderate and the
+#  (base, power) depth prior are MODERATING-forest knobs, whereas a0 is the
+#  leaf concentration SHARED by both forests (R/countbcf.R:90), with the
+#  implied treatment-effect prior scale a0 * sqrt(ntree_moderate /
+#  ntree_control).  An a0 sweep therefore moves the prognostic surface too and
+#  is labelled as such rather than as a moderating-forest-only sweep.
 # =====================================================================
 
 source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study/code/common.R"))
@@ -42,10 +56,20 @@ score_fit <- function(r, spec) {
   o <- draw_wmean(err, w, gi(cl$agex >= 40))
   hi <- draw_wmean(err, w, gi(cl$city_f == "Hiroshima"))
   na <- draw_wmean(err, w, gi(cl$city_f == "Nagasaki"))
+  # ... and the same four contrasts on the standardised footing, which is what
+  # the manuscript tabulates
+  sg <- function(k) draw_serr(r$logmu, r$logrr, w, gi(k))
+  sm <- sg(cl$sex_f == "Male");      sf <- sg(cl$sex_f == "Female")
+  sy <- sg(cl$agex < 20);            so <- sg(cl$agex >= 40)
+  shi <- sg(cl$city_f == "Hiroshima"); sna <- sg(cl$city_f == "Nagasaki")
   as_tibble(c(list(spec = spec, n_cells = nrow(cl), cases = sum(cl$outcome),
                    kappa = mean(r$kappa)),
               qsum(att, "att_err"), qsum(ear2, "att_ear"),
               qsum(draw_serr(r$logmu, r$logrr, w, tr), "att_serr"),
+              qsum(sf - sm, "d_serr_female_male"),
+              qsum(sy - so, "d_serr_young_old"),
+              qsum(sna - shi, "d_serr_naga_hiro"),
+              qsum(sf, "serr_female"), qsum(sm, "serr_male"),
               qsum(f - m, "d_female_male"), qsum(f / m, "ratio_female_male"),
               qsum(y - o, "d_young_old"), qsum(hi - na, "d_hiro_naga")))
 }
@@ -75,7 +99,10 @@ gridA <- bind_rows(
          ntree_moderate = 50,
          base_moderate = c(0.05, 0.25, 0.5, 0.95),
          power_moderate = c(4, 3, 2, 2), a0mult = 1),
-  tibble(spec = paste0("a0 x ", c(0.5, 1, 2)), ntree_moderate = 50,
+  # a0 is SHARED by the mu and tau forests, so this sweep is not a
+  # moderating-forest-only sweep; the label says so.
+  tibble(spec = paste0("a0 x ", c(0.5, 1, 2), " (both forests)"),
+         ntree_moderate = 50,
          base_moderate = 0.25, power_moderate = 3, a0mult = c(0.5, 1, 2)))
 
 # default a0 (the value countbcf would pick) so the multiplier is meaningful
@@ -92,10 +119,16 @@ resA <- mclapply(seq_len(nrow(gridA)), function(k) {
            a0 = a0_default * g$a0mult)
 }, mc.cores = n_workers(6), mc.preschedule = FALSE)
 A <- bind_rows(resA) %>% mutate(family = "A. tau regularisation", .before = 1)
+# The (0.25,3) depth prior and a0 x 1 ARE the default specification, so three
+# of the twelve rows are the same fit reported once per sweep; flag it here so
+# the table caption can say "twelve rows, ten distinct fits".
+A$is_default_repeat <- as.vector(duplicated(round(cbind(
+  A$att_serr, A$d_serr_young_old, A$d_serr_female_male), 8)))
 write_csv(A, file.path(TAB, "T20_sensitivity_tau_prior.csv"))
-print(as.data.frame(A %>% dplyr::select(spec, att_err, att_err_lo, att_err_hi,
-  d_female_male, d_female_male_lo, d_female_male_hi,
-  d_young_old, d_young_old_lo, d_young_old_hi)), digits = 3)
+print(as.data.frame(A %>% dplyr::select(spec, att_serr, att_serr_lo, att_serr_hi,
+  d_serr_female_male, d_serr_female_male_lo, d_serr_female_male_hi,
+  d_serr_young_old, d_serr_young_old_lo, d_serr_young_old_hi)), digits = 3)
+cat("rows that repeat the default specification: ", sum(A$is_default_repeat), "\n")
 
 # =====================================================================
 # B. Data perturbations
@@ -132,9 +165,9 @@ resB <- mclapply(seq_len(nrow(gridB)), function(k) {
 }, mc.cores = n_workers(6), mc.preschedule = FALSE)
 B <- bind_rows(resB) %>% mutate(family = "B. data perturbation", .before = 1)
 write_csv(B, file.path(TAB, "T21_sensitivity_data.csv"))
-print(as.data.frame(B %>% dplyr::select(spec, n_cells, cases, att_err, att_err_lo,
-  att_err_hi, ratio_female_male, ratio_female_male_lo, ratio_female_male_hi,
-  d_young_old, d_young_old_lo, d_young_old_hi)), digits = 3)
+print(as.data.frame(B %>% dplyr::select(spec, n_cells, cases, att_serr, att_serr_lo,
+  att_serr_hi, d_serr_female_male, d_serr_female_male_lo, d_serr_female_male_hi,
+  d_serr_young_old, d_serr_young_old_lo, d_serr_young_old_hi)), digits = 3)
 
 # =====================================================================
 # C. Low-dose sub-cohorts (the range Dropkin 2016 re-analysed with GAMs)

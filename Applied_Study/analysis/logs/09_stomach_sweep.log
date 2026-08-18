@@ -1,0 +1,389 @@
+[15:14:36] stomach high-dose contrast: 8249 cells, 1776 cases, 269 exposed cases
+[15:14:36] default a0 for the stomach contrast = 1
+[15:14:36] stomach regularisation sweep: 12 fits
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+forest 1 function_group=0 vanilla=0
+Done.
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+forest 1 function_group=0 vanilla=0
+Done.
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.818
+iteration: 1000
+dispersion parameter acceptance rate: 0.831
+iteration: 1000
+dispersion parameter acceptance rate: 0.847
+iteration: 1000
+dispersion parameter acceptance rate: 0.832
+iteration: 1000
+dispersion parameter acceptance rate: 0.819
+iteration: 1000
+dispersion parameter acceptance rate: 0.827
+time for loop: 315
+time for loop: 330
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 359
+time for loop: 361
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+time for loop: 419
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.847
+iteration: 1000
+dispersion parameter acceptance rate: 0.832
+iteration: 1000
+dispersion parameter acceptance rate: 0.777
+time for loop: 537
+iteration: 1000
+dispersion parameter acceptance rate: 0.827
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.847
+time for loop: 330
+time for loop: 380
+time for loop: 377
+iteration: 1000
+dispersion parameter acceptance rate: 0.853
+time for loop: 377
+time for loop: 376
+time for loop: 428
+                              spec att_serr att_serr_lo att_serr_hi het_sd_err
+1                ntree_moderate=10    0.226      0.0775       0.390   0.000707
+2                ntree_moderate=25    0.242      0.0839       0.417   0.002595
+3                ntree_moderate=50    0.253      0.0784       0.429   0.004178
+4               ntree_moderate=100    0.255      0.0825       0.427   0.007474
+5               ntree_moderate=200    0.260      0.0886       0.452   0.012363
+6    tau tree prior (0.05,4) tight    0.252      0.0803       0.422   0.000793
+7  tau tree prior (0.25,3) default    0.253      0.0784       0.429   0.004178
+8     tau tree prior (0.5,2) loose    0.253      0.0877       0.416   0.008969
+9  tau tree prior (0.95,2) mu-like    0.248      0.0870       0.419   0.041361
+10         a0 x 0.5 (both forests)    0.234      0.0852       0.397   0.075388
+11           a0 x 1 (both forests)    0.253      0.0784       0.429   0.004178
+12           a0 x 2 (both forests)    0.184      0.0358       0.356   1.136490
+   het_sd_err_lo het_sd_err_hi n_sep_serr n_sep_percell max_abs_d_serr
+1       0.000000       0.00685          0             0       4.21e-05
+2       0.000000       0.02355          0             0       1.42e-04
+3       0.000000       0.02906          0             0       1.93e-04
+4       0.000000       0.03494          0             0       3.84e-04
+5       0.000368       0.04311          0             0       6.26e-04
+6       0.000000       0.00847          0             0       9.53e-05
+7       0.000000       0.02906          0             0       1.93e-04
+8       0.000000       0.04253          0             0       6.10e-04
+9       0.013833       0.09544          0             0       6.55e-03
+10      0.026559       0.14895          0             0       5.32e-02
+11      0.000000       0.02906          0             0       1.93e-04
+12      0.685262       1.87971          9            15       1.67e+00
+   widest_d_serr_ci
+1           0.00236
+2           0.01934
+3           0.02595
+4           0.04319
+5           0.06267
+6           0.00129
+7           0.02595
+8           0.05090
+9           0.16345
+10          0.33716
+11          0.02595
+12          3.07617
+
+-- subgroup contrasts on the standardised footing --
+                              spec d_serr_female_male d_serr_female_male_lo
+1                ntree_moderate=10          -6.38e-06             -7.94e-05
+2                ntree_moderate=25           1.67e-06             -2.26e-04
+3                ntree_moderate=50           1.67e-05             -3.56e-04
+4               ntree_moderate=100           4.56e-05             -5.01e-04
+5               ntree_moderate=200           5.77e-05             -8.70e-04
+6    tau tree prior (0.05,4) tight           2.55e-07             -3.34e-05
+7  tau tree prior (0.25,3) default           1.67e-05             -3.56e-04
+8     tau tree prior (0.5,2) loose           4.27e-05             -6.00e-04
+9  tau tree prior (0.95,2) mu-like           2.65e-04             -1.94e-03
+10         a0 x 0.5 (both forests)           3.56e-02             -1.42e-01
+11           a0 x 1 (both forests)           1.67e-05             -3.56e-04
+12           a0 x 2 (both forests)           1.45e-01             -1.81e-01
+   d_serr_female_male_hi d_serr_young_old d_serr_young_old_lo
+1               6.21e-05         2.22e-06           -0.000468
+2               1.99e-04        -2.39e-05           -0.002043
+3               4.68e-04        -6.99e-05           -0.002715
+4               1.01e-03        -1.06e-04           -0.004149
+5               1.16e-03        -2.05e-04           -0.005053
+6               5.71e-05         8.10e-06           -0.000346
+7               4.68e-04        -6.99e-05           -0.002715
+8               1.08e-03        -2.16e-04           -0.004354
+9               2.57e-03        -1.86e-03           -0.015673
+10              2.24e-01         3.01e-02           -0.090772
+11              4.68e-04        -6.99e-05           -0.002715
+12              5.03e-01         3.04e-01           -0.120399
+   d_serr_young_old_hi d_serr_naga_hiro d_serr_naga_hiro_lo d_serr_naga_hiro_hi
+1             0.000354         1.53e-06           -5.08e-05            0.000061
+2             0.001357        -2.83e-06           -2.02e-04            0.000163
+3             0.002089        -1.74e-05           -4.02e-04            0.000212
+4             0.003536        -2.86e-05           -7.22e-04            0.000423
+5             0.004796        -5.83e-05           -1.18e-03            0.000673
+6             0.000321         5.73e-07           -3.37e-05            0.000048
+7             0.002089        -1.74e-05           -4.02e-04            0.000212
+8             0.003938        -4.06e-05           -8.03e-04            0.000505
+9             0.009586        -2.93e-04           -2.44e-03            0.001665
+10            0.176993         4.77e-02           -1.27e-01            0.231838
+11            0.002089        -1.74e-05           -4.02e-04            0.000212
+12            0.768375         1.41e-01           -2.09e-01            0.508805
+
+rows that repeat the default specification:  2 
+specifications in which ANY subgroup separates on the standardised scale:  1  of  12 
+range of het_sd_err across the sweep:  0.000707  to  1.14 
+range of att_serr across the sweep:    0.184  to  0.26 
+[15:31:34] 09 done -> /home/hugo_souto/Stuff/Research/countbcf/Applied_Study/analysis/tables
