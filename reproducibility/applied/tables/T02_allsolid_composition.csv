@@ -1,0 +1,21 @@
+group,cases_known_dose,preston_table2,matches
+oralca,277,277,TRUE
+digestca,10052,10052,TRUE
+respca,2001,2001,TRUE
+skinbone,400,400,TRUE
+breast,1082,1082,TRUE
+femgenca,1457,1457,TRUE
+malgenca,420,420,TRUE
+urinca,661,741,FALSE
+cnsca,281,281,TRUE
+thyroid,471,471,TRUE
+othsol,254,266,FALSE
+sum of the 11 groups,17356,17448,FALSE
+solid (RERF all-solid total),17448,17448,TRUE
+non-melanoma skin (inside skinbone),330,330,TRUE
+melanoma (inside skinbone),17,17,TRUE
+stomach,4730,4730,TRUE
+lung,1759,1759,TRUE
+colon,1516,1516,TRUE
+liver,1494,1494,TRUE
+prostate,387,387,TRUE

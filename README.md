@@ -12,11 +12,15 @@ This repository contains two things:
    simulation pipeline, runners, analysis scripts, and outputs behind
    the working paper:
 
-   > Souto, H. G., Wang, E. & Shuryak, I. (2026). *CountBCF: Bayesian Causal Forests for Count
+   > Souto, H. G., Wang, E., Brenner, A. V. & Shuryak, I. (2026). *CountBCF: Bayesian Causal Forests for Count
    > and Zero-Inflated Count Outcomes.*
 
    Part II below documents the layout, the experimental design, and
-   how to re-run the simulation studies end-to-end.
+   how to re-run the simulation studies end-to-end. Final applied artifacts and
+   simulation summaries are in [reproducibility/](reproducibility/README.md).
+   See the [applied-analysis instructions](Applied_Study/code/README.md) for
+   sequential execution with a memory limit and the distinction between
+   historical results and targeted revision reruns.
 
 The package extends the Bayesian Causal Forest (BCF) of
 Hahn, Murray and Carvalho (2020) to count and zero-inflated count
@@ -44,7 +48,7 @@ install.packages("remotes")
 if (!require("devtools")) {
   install.packages("devtools")
 }
-devtools::install_github("hugogobato/countbcf")
+devtools::install_github("hugogobato/ZI_BCF")
 library(countbcf)
 ```
 
@@ -61,7 +65,7 @@ install.packages("remotes")
 if (!require("devtools")) {
   install.packages("devtools")
 }
-devtools::install_github("hugogobato/countbcf")
+devtools::install_github("hugogobato/ZI_BCF")
 library(countbcf)
 ```
 
@@ -192,7 +196,9 @@ countbcf(
   randeff_variance_component_design = matrix(1),
   randeff_scales = 1, randeff_df = 3,
   return_trees = FALSE,
-  debug = FALSE
+  debug = FALSE,
+  x_control_predict = NULL, x_moderate_predict = x_control_predict,
+  pihat_predict = NULL
 )
 ```
 
@@ -207,7 +213,8 @@ countbcf(
 | `mu_f_log`, `tau_f_log`, `mu_f0_log`, …       | `n × nsim`     | sorted-order in-sample fits (kept for backwards-compatibility with `countbart`)        |
 | `kappa`, `kappa_acpt`                         | `length nsim`  | NB dispersion posterior and M-H acceptance rate (NB / ZINB only)                       |
 | `control_fit$tree_samples`, …                 | object         | serialized `tree_samples` per forest (when `return_trees = TRUE`)                      |
-| `random_effects`, `random_effects_sd`         | varies         | random-effects posteriors                                                              |
+| `random_effects`, `random_effects_sd`         | varies         | auxiliary output; these effects do not enter the count likelihood |
+| `mu_f_predict`, `tau_f_predict` | `nsim × n_predict` | optional count-component coefficients at supplied prediction rows, without saving trees |
 | `sigma`                                       | `length nsim`  | placeholder; unused in count models                                                    |
 
 ---
@@ -228,13 +235,18 @@ the `bd → drmu → fit` block:
 3. **Per-group log f**: an auxiliary `log_f_per_group[g][k]` summing
    the in-sample fit of every forest in group `g` keeps the
    `r_tree` updates consistent across all six forests.
-4. **kappa, latent variables, random effects**: identical to
-   `countbart`.
+4. **kappa and latent variables** use the inherited count-likelihood updates.
+   The existing random-effect arguments do not add a random intercept to the
+   count likelihood and must not be used to claim cluster-adjusted inference.
 
 Internally the data are sorted by `y` so that zeros come first
 (required by the C++ kernel); `order_vec` is returned so you can map
 sorted-order outputs (`yhat`, `*_log`) back to the original units. The
-`*_post` matrices are already in the original order.
+`*_post` matrices are already in the original order. Optional prediction
+matrices evaluate only the two count-component forests at the supplied rows,
+using training cutpoints; they do not enter fitting or predict the four
+zero-inflation forests. See `tests/check_prediction_rows.R` for checks that
+prediction rows leave fitted draws unchanged.
 
 ---
 
@@ -252,32 +264,28 @@ wants to verify or extend the simulation study.
 
 ```
 tests/
-├── _generate_runners.R       # emits one self-contained R script per (study, method, DGP, cell)
-├── runners_count/            # ~56 emitted runners for the count-only sub-study
-├── runners_zi/               # ~56 emitted runners for the zero-inflated sub-study
-├── sim_count.R, sim_zi.R     # data-generating functions called by every runner
-├── results_count/            # one .rds per runner: posterior samples + per-replicate truths
-├── results_zi/
-└── analysis/
-    ├── analyze_results.R     # aggregates .rds files into per-cell metrics
-    ├── summary_count.csv     # one row per cell, all metrics
-    ├── summary_zi.csv
-    ├── plots/                # PNGs used as figures in the paper
-    └── tables/               # LaTeX tables used in the paper
-
-Papers/
-├── CountBCF_Merged.tex       # paper source
-├── refs.bib                  # bibliography
-└── CountBCF_Merged.pdf       # compiled paper (when present)
+├── _generate_runners.R       # self-contained scripts per method/design configuration
+├── runners_count/, runners_zi/
+├── sim_count.R, sim_zi.R     # data-generating functions
+├── analyze_results.R        # aggregate CSV replicates, or rebuild from public summaries
+└── analysis/                # local regenerated summaries, tables and plots
+Applied_Study/
+├── lssinc07.csv             # public incidence table
+├── code/                    # analysis, plotting and whitelist export
+└── analysis/                # applied tables, plots and local model objects
+reproducibility/
+├── applied/                 # final tables and required model/posterior objects
+├── simulations/             # aggregate summaries and successful-replicate counts
+├── environment/             # targeted-run provenance
+├── analysis_source_snapshot.zip
+└── source_manifest.json     # base commit and source/data hashes
 ```
 
-`tests/Experiment_Code_in_Notebooks/` contains Jupyter / Colab notebook
-versions of the runners (one cell per `.R` runner) generated by
-`tests/convert_to_notebooks.py`; use these on Google Colab to avoid the
-local C++ toolchain. The paper itself includes figures from
-`tests/analysis/plots/` via a relative `\graphicspath` directive, so
-the document compiles directly against the analysis output without any
-file copying.
+Rebuild simulation tables and plots from the public aggregate archive with
+`CBCF_SIM_SUMMARY_INPUT=reproducibility/simulations Rscript tests/analyze_results.R`.
+Original per-replicate CSVs, when available locally, can instead be aggregated
+from `tests/results_count/` and `tests/results_zi/`. Historical execution
+provenance is incomplete; a source snapshot does not establish a past clean run.
 
 ## Factor grid and DGPs
 
@@ -342,7 +350,7 @@ Columns suffixed `_sd` are the cross-replicate SDs of the corresponding
 (`rmse_yhat`, `bias_yhat`, `mae_cate`, `cate_bias`, `cate_cor`,
 `cate_cov50_mean`, `cate_sd_true`, `pct_zero`, `pct_struct_zero`) are
 present in the CSV for diagnostic completeness but are not used in the
-paper write-up; consult `tests/analysis/analyze_results.R` for the
+paper write-up; consult `tests/analyze_results.R` for the
 definitions.
 
 ## Plot pipeline

@@ -111,6 +111,8 @@ read_study <- function(dir_path, study_name) {
   bind_rows(rows)
 }
 
+SUMMARY_INPUT <- Sys.getenv("CBCF_SIM_SUMMARY_INPUT")
+if (!nzchar(SUMMARY_INPUT)) {
 raw_count <- read_study(RESULTS_DIRS$count, "count")
 raw_zi    <- read_study(RESULTS_DIRS$zi,    "zi")
 
@@ -165,6 +167,14 @@ summary_zi    <- summary_all %>% filter(study == "zi")
 
 write_csv(summary_count, file.path(OUT_DIR, "summary_count.csv"))
 write_csv(summary_zi,    file.path(OUT_DIR, "summary_zi.csv"))
+
+} else {
+  summary_count <- read_csv(file.path(SUMMARY_INPUT, "summary_count.csv"), show_col_types = FALSE)
+  summary_zi <- read_csv(file.path(SUMMARY_INPUT, "summary_zi.csv"), show_col_types = FALSE)
+  summary_all <- bind_rows(summary_count, summary_zi)
+  write_csv(summary_count, file.path(OUT_DIR, "summary_count.csv"))
+  write_csv(summary_zi, file.path(OUT_DIR, "summary_zi.csv"))
+}
 
 ###############################################################################
 ## 3. Reference-cell tables (N = 250, P = 5, ATE = 1.25)
@@ -290,8 +300,8 @@ write_tex_table <- function(ref, out_path, caption, label) {
     "\\centering",
     "\\begin{tabular*}{\\linewidth}{ @{\\extracolsep{\\fill}} ll cc cccc @{}}",
     "\\toprule",
-    " &  & \\multicolumn{2}{c}{ATE} & \\multicolumn{4}{c}{CATE} \\\\",
-    "\\cmidrule(lr){3-4} \\cmidrule(lr){5-8}",
+    " &  & \\multicolumn{3}{c}{ATE} & \\multicolumn{3}{c}{CATE} \\\\",
+    "\\cmidrule(lr){3-5} \\cmidrule(lr){6-8}",
     paste("DGP & Method & RMSE & Cov.\\,95 & Avg.\\ CI Width &",
           "PEHE & Cov.\\,95 & Avg.\\ CI Width95 \\\\"),
     "\\midrule"
@@ -616,9 +626,14 @@ FACTOR_PRETTY <- c(N = "sample size N", P = "covariate count p",
                    ATE = "target ATE")
 
 # Successful replicates (out of 100) per (study, method, dgp, cell).
+if (!nzchar(SUMMARY_INPUT)) {
 completeness_cell <- raw_all %>%
   group_by(study, method, dgp, N, P, ate_target) %>%
   summarise(n_total = dplyr::n(), n_success = sum(success), .groups = "drop")
+  write_csv(completeness_cell, file.path(OUT_DIR, "replicate_completeness.csv"))
+} else {
+  completeness_cell <- read_csv(file.path(SUMMARY_INPUT, "replicate_completeness.csv"), show_col_types = FALSE)
+}
 
 methods_in <- function(summary_df) {
   intersect(METHOD_ORDER, unique(summary_df$method))
@@ -1149,16 +1164,16 @@ md_to_tex <- function(lines) {
   for (ln in out) {
     is_item <- grepl("^\\\\item ", ln)
     if (is_item && !in_item) {
-      final <- c(final, "\\begin{itemize}")
+      final <- c(final, "\\begin{enumerate}")
       in_item <- TRUE
     }
     if (!is_item && in_item) {
-      final <- c(final, "\\end{itemize}")
+      final <- c(final, "\\end{enumerate}")
       in_item <- FALSE
     }
     final <- c(final, ln)
   }
-  if (in_item) final <- c(final, "\\end{itemize}")
+  if (in_item) final <- c(final, "\\end{enumerate}")
   final
 }
 

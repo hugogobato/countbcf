@@ -1,0 +1,278 @@
+Combined completed profile checkpoints; both identities and current source/data hashes verified.
+$R_version
+[1] "R version 4.5.2 (2025-10-31)"
+
+$countbcf_version
+[1] "1.0.0"
+
+$settings
+$settings$nburn
+[1] 5000
+
+$settings$nsim
+[1] 1000
+
+$settings$nthin
+[1] 10
+
+$settings$seeds
+[1] 20261724 20262724
+
+$settings$count_model
+[1] "nb"
+
+$settings$include_pihat
+[1] "control"
+
+$settings$ntree_control
+[1] 250
+
+$settings$ntree_moderate
+[1] 50
+
+$settings$base_moderate
+[1] 0.25
+
+$settings$power_moderate
+[1] 3
+
+$settings$a0
+[1] NA
+
+$settings$variables
+[1] "agex" "age"  "sex"  "city"
+
+$settings$dose_group
+[1] "0.5-<2 Gy versus in-city <5 mGy"
+
+$settings$grid
+  sex city agex age  sex_f    city_f     pihat city_weight dose_contrast_Gy
+1   1    1   30  70   Male Hiroshima 0.7178788   0.6545981        0.9446666
+2   1    2   30  70   Male  Nagasaki 0.6991691   0.3454019        0.9446666
+3   2    1   30  70 Female Hiroshima 0.7293456   0.6860360        0.9056776
+4   2    2   30  70 Female  Nagasaki 0.7135756   0.3139640        0.9056776
+
+
+           quantity      mean         lo      med        hi      sd   rhat
+1            err_hi -0.026870 -0.0998085 -0.02874  0.056620 0.04059 0.9996
+2            err_na  0.210102  0.0744818  0.20438  0.368612 0.07692 1.0050
+3           serr_hi -0.043076 -0.0890551 -0.04322  0.001456 0.02321 1.0011
+4           serr_na  0.086295  0.0002357  0.08558  0.173856 0.04282 0.9995
+5           att_err  0.026136 -0.0434718  0.02429  0.107707 0.03952 1.0000
+6          att_serr -0.018918 -0.0602938 -0.01903  0.023063 0.02127 1.0009
+7           ate_err  0.052693 -0.0193759  0.05113  0.135892 0.04059 1.0010
+8          ate_serr -0.005328 -0.0474482 -0.00523  0.037358 0.02158 1.0019
+9       cate_err_hi -0.024254 -0.0959813 -0.02616  0.057168 0.03960 0.9999
+10      cate_err_na  0.207368  0.0741645  0.20229  0.362987 0.07530 1.0063
+11     cate_serr_hi -0.041073 -0.0866714 -0.04122  0.003463 0.02321 1.0020
+12     cate_serr_na  0.082999 -0.0030029  0.08250  0.170271 0.04280 0.9998
+13          base_hi 66.503606 64.2456492 66.49376 68.849990 1.17937 1.0042
+14          base_na 54.352238 52.0305967 54.34803 56.703306 1.18286 0.9996
+15  d_naga_hiro_err  0.236971  0.0933138  0.23439  0.395137 0.07743 1.0058
+16 d_naga_hiro_serr  0.129372  0.0382130  0.12915  0.222687 0.04687 0.9998
+17       sep_hi_err -0.076946 -0.1279139 -0.07612 -0.030006 0.02527 1.0079
+18       sep_na_err  0.154676  0.0603165  0.15302  0.257130 0.05079 1.0079
+19      sep_hi_serr -0.035745 -0.0609867 -0.03568 -0.010038 0.01317 0.9995
+20      sep_na_serr  0.088328  0.0238711  0.08786  0.155730 0.03371 0.9996
+      ess      mcse mcse_mean mcse_q025 mcse_q975 lo_over_mcse
+1   751.7 0.0014806 0.0014806  0.003206 0.0033518    -31.13030
+2  1150.1 0.0022682 0.0022682  0.004739 0.0070566     15.71832
+3   623.6 0.0009295 0.0009295  0.002095 0.0021668    -42.50209
+4  2142.6 0.0009251 0.0009251  0.003927 0.0029890      0.06003
+5   707.2 0.0014859 0.0014859  0.002163 0.0028997    -20.10097
+6   630.6 0.0008471 0.0008471  0.001552 0.0013793    -38.84601
+7   746.0 0.0014862 0.0014862  0.001711 0.0052435    -11.32119
+8   697.6 0.0008170 0.0008170  0.001502 0.0016596    -31.58886
+9   720.6 0.0014753 0.0014753  0.002032 0.0026972    -47.22461
+10 1104.7 0.0022657 0.0022657  0.004983 0.0065121     14.88422
+11  632.9 0.0009227 0.0009227  0.002021 0.0018851    -42.89048
+12 2117.6 0.0009301 0.0009301  0.003328 0.0036440     -0.90233
+13  641.0 0.0465806 0.0465806  0.110906 0.0513873    579.28069
+14 1046.9 0.0365581 0.0365581  0.049549 0.0748728   1050.07954
+15 1701.4 0.0018772 0.0018772  0.005603 0.0064329     16.65413
+16 2838.6 0.0008797 0.0008797  0.002131 0.0027936     17.93048
+17 1694.7 0.0006138 0.0006138  0.002154 0.0017872    -59.37071
+18 1694.7 0.0012338 0.0012338  0.003512 0.0043399     17.17677
+19 2700.4 0.0002534 0.0002534  0.001132 0.0007523    -53.85522
+20 2511.1 0.0006727 0.0006727  0.001771 0.0018880     13.47532
+                              quantity dose_contrast_Gy      err     err_lo
+1            Hiroshima, ratio of rates          0.03150 -0.04308 -0.0890551
+2             Nagasaki, ratio of rates          0.02459  0.08630  0.0002357
+3 Nagasaki - Hiroshima, ratio of rates               NA  0.12937  0.0382130
+4             Hiroshima, per-cell mean          0.03150 -0.02687 -0.0998085
+5              Nagasaki, per-cell mean          0.02459  0.21010  0.0744818
+6  Nagasaki - Hiroshima, per-cell mean               NA  0.23697  0.0933138
+    err_hi     rr  rr_lo rr_hi err_per_Gy err_per_Gy_lo err_per_Gy_hi
+1 0.001456 0.9569 0.9109 1.001    -1.3673     -2.826772       0.04623
+2 0.173856 1.0863 1.0002 1.174     3.5097      0.009586       7.07078
+3 0.222687     NA     NA    NA         NA            NA            NA
+4 0.056620 0.9731 0.9002 1.057    -0.8529     -3.168106       1.79721
+5 0.368612 1.2101 1.0745 1.369     8.5449      3.029205      14.99158
+6 0.395137     NA     NA    NA         NA            NA            NA
+  evalue_point evalue_ci
+1        1.262     1.000
+2        1.392     1.016
+3           NA        NA
+4        1.196     1.000
+5        1.714     1.357
+6           NA        NA
+                                                           interpretation
+1 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+2 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+3              Difference of ERRs; RR, E-value and dose slope not defined
+4 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+5 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+6              Difference of ERRs; RR, E-value and dose slope not defined
+[22:19:52] 11 archived posterior tables rebuilt -> ./Applied_Study/analysis/tables
+           quantity      mean         lo      med        hi      sd   rhat
+1            err_hi -0.026870 -0.0998085 -0.02874  0.056620 0.04059 0.9996
+2            err_na  0.210102  0.0744818  0.20438  0.368612 0.07692 1.0050
+3           serr_hi -0.043076 -0.0890551 -0.04322  0.001456 0.02321 1.0011
+4           serr_na  0.086295  0.0002357  0.08558  0.173856 0.04282 0.9995
+5           att_err  0.026136 -0.0434718  0.02429  0.107707 0.03952 1.0000
+6          att_serr -0.018918 -0.0602938 -0.01903  0.023063 0.02127 1.0009
+7           ate_err  0.052693 -0.0193759  0.05113  0.135892 0.04059 1.0010
+8          ate_serr -0.005328 -0.0474482 -0.00523  0.037358 0.02158 1.0019
+9       cate_err_hi -0.024254 -0.0959813 -0.02616  0.057168 0.03960 0.9999
+10      cate_err_na  0.207368  0.0741645  0.20229  0.362987 0.07530 1.0063
+11     cate_serr_hi -0.041073 -0.0866714 -0.04122  0.003463 0.02321 1.0020
+12     cate_serr_na  0.082999 -0.0030029  0.08250  0.170271 0.04280 0.9998
+13          base_hi 66.503606 64.2456492 66.49376 68.849990 1.17937 1.0042
+14          base_na 54.352238 52.0305967 54.34803 56.703306 1.18286 0.9996
+15  d_naga_hiro_err  0.236971  0.0933138  0.23439  0.395137 0.07743 1.0058
+16 d_naga_hiro_serr  0.129372  0.0382130  0.12915  0.222687 0.04687 0.9998
+17       sep_hi_err -0.076946 -0.1279139 -0.07612 -0.030006 0.02527 1.0079
+18       sep_na_err  0.154676  0.0603165  0.15302  0.257130 0.05079 1.0079
+19      sep_hi_serr -0.035745 -0.0609867 -0.03568 -0.010038 0.01317 0.9995
+20      sep_na_serr  0.088328  0.0238711  0.08786  0.155730 0.03371 0.9996
+      ess      mcse mcse_mean mcse_q025 mcse_q975 lo_over_mcse
+1   751.7 0.0014806 0.0014806  0.003206 0.0033518    -31.13030
+2  1150.1 0.0022682 0.0022682  0.004739 0.0070566     15.71832
+3   623.6 0.0009295 0.0009295  0.002095 0.0021668    -42.50209
+4  2142.6 0.0009251 0.0009251  0.003927 0.0029890      0.06003
+5   707.2 0.0014859 0.0014859  0.002163 0.0028997    -20.10097
+6   630.6 0.0008471 0.0008471  0.001552 0.0013793    -38.84601
+7   746.0 0.0014862 0.0014862  0.001711 0.0052435    -11.32119
+8   697.6 0.0008170 0.0008170  0.001502 0.0016596    -31.58886
+9   720.6 0.0014753 0.0014753  0.002032 0.0026972    -47.22461
+10 1104.7 0.0022657 0.0022657  0.004983 0.0065121     14.88422
+11  632.9 0.0009227 0.0009227  0.002021 0.0018851    -42.89048
+12 2117.6 0.0009301 0.0009301  0.003328 0.0036440     -0.90233
+13  641.0 0.0465806 0.0465806  0.110906 0.0513873    579.28069
+14 1046.9 0.0365581 0.0365581  0.049549 0.0748728   1050.07954
+15 1701.4 0.0018772 0.0018772  0.005603 0.0064329     16.65413
+16 2838.6 0.0008797 0.0008797  0.002131 0.0027936     17.93048
+17 1694.7 0.0006138 0.0006138  0.002154 0.0017872    -59.37071
+18 1694.7 0.0012338 0.0012338  0.003512 0.0043399     17.17677
+19 2700.4 0.0002534 0.0002534  0.001132 0.0007523    -53.85522
+20 2511.1 0.0006727 0.0006727  0.001771 0.0018880     13.47532
+                              quantity dose_contrast_Gy      err     err_lo
+1            Hiroshima, ratio of rates          0.03150 -0.04308 -0.0890551
+2             Nagasaki, ratio of rates          0.02459  0.08630  0.0002357
+3 Nagasaki - Hiroshima, ratio of rates               NA  0.12937  0.0382130
+4             Hiroshima, per-cell mean          0.03150 -0.02687 -0.0998085
+5              Nagasaki, per-cell mean          0.02459  0.21010  0.0744818
+6  Nagasaki - Hiroshima, per-cell mean               NA  0.23697  0.0933138
+    err_hi     rr  rr_lo rr_hi err_per_Gy err_per_Gy_lo err_per_Gy_hi
+1 0.001456 0.9569 0.9109 1.001    -1.3673     -2.826772       0.04623
+2 0.173856 1.0863 1.0002 1.174     3.5097      0.009586       7.07078
+3 0.222687     NA     NA    NA         NA            NA            NA
+4 0.056620 0.9731 0.9002 1.057    -0.8529     -3.168106       1.79721
+5 0.368612 1.2101 1.0745 1.369     8.5449      3.029205      14.99158
+6 0.395137     NA     NA    NA         NA            NA            NA
+  evalue_point evalue_ci
+1        1.262     1.000
+2        1.392     1.016
+3           NA        NA
+4        1.196     1.000
+5        1.714     1.357
+6           NA        NA
+                                                           interpretation
+1 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+2 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+3              Difference of ERRs; RR, E-value and dose slope not defined
+4 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+5 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+6              Difference of ERRs; RR, E-value and dose slope not defined
+Failed to connect to system scope bus via local transport: Operation not permitted (consider using --machine=<user>@.host --user to connect to bus of other user)
+Warning message:
+In system("timedatectl", intern = TRUE) :
+  running command 'timedatectl' had status 1
+[22:24:20] 11 archived posterior tables rebuilt -> ./Applied_Study/analysis/tables
+Warning message:
+Fixed-profile MCMC diagnostics need attention; retained-draw quantiles are not validated credible intervals. See T42b_profile_mcmc.csv. 
+           quantity      mean         lo      med        hi      sd   rhat
+1            err_hi -0.026870 -0.0998085 -0.02874  0.056620 0.04059 0.9996
+2            err_na  0.210102  0.0744818  0.20438  0.368612 0.07692 1.0050
+3           serr_hi -0.043076 -0.0890551 -0.04322  0.001456 0.02321 1.0011
+4           serr_na  0.086295  0.0002357  0.08558  0.173856 0.04282 0.9995
+5           att_err  0.026136 -0.0434718  0.02429  0.107707 0.03952 1.0000
+6          att_serr -0.018918 -0.0602938 -0.01903  0.023063 0.02127 1.0009
+7           ate_err  0.052693 -0.0193759  0.05113  0.135892 0.04059 1.0010
+8          ate_serr -0.005328 -0.0474482 -0.00523  0.037358 0.02158 1.0019
+9       cate_err_hi -0.024254 -0.0959813 -0.02616  0.057168 0.03960 0.9999
+10      cate_err_na  0.207368  0.0741645  0.20229  0.362987 0.07530 1.0063
+11     cate_serr_hi -0.041073 -0.0866714 -0.04122  0.003463 0.02321 1.0020
+12     cate_serr_na  0.082999 -0.0030029  0.08250  0.170271 0.04280 0.9998
+13          base_hi 66.503606 64.2456492 66.49376 68.849990 1.17937 1.0042
+14          base_na 54.352238 52.0305967 54.34803 56.703306 1.18286 0.9996
+15  d_naga_hiro_err  0.236971  0.0933138  0.23439  0.395137 0.07743 1.0058
+16 d_naga_hiro_serr  0.129372  0.0382130  0.12915  0.222687 0.04687 0.9998
+17       sep_hi_err -0.076946 -0.1279139 -0.07612 -0.030006 0.02527 1.0079
+18       sep_na_err  0.154676  0.0603165  0.15302  0.257130 0.05079 1.0079
+19      sep_hi_serr -0.035745 -0.0609867 -0.03568 -0.010038 0.01317 0.9995
+20      sep_na_serr  0.088328  0.0238711  0.08786  0.155730 0.03371 0.9996
+      ess      mcse mcse_mean mcse_q025 mcse_q975 lo_over_mcse
+1   751.7 0.0014806 0.0014806  0.003206 0.0033518    -31.13030
+2  1150.1 0.0022682 0.0022682  0.004739 0.0070566     15.71832
+3   623.6 0.0009295 0.0009295  0.002095 0.0021668    -42.50209
+4  2142.6 0.0009251 0.0009251  0.003927 0.0029890      0.06003
+5   707.2 0.0014859 0.0014859  0.002163 0.0028997    -20.10097
+6   630.6 0.0008471 0.0008471  0.001552 0.0013793    -38.84601
+7   746.0 0.0014862 0.0014862  0.001711 0.0052435    -11.32119
+8   697.6 0.0008170 0.0008170  0.001502 0.0016596    -31.58886
+9   720.6 0.0014753 0.0014753  0.002032 0.0026972    -47.22461
+10 1104.7 0.0022657 0.0022657  0.004983 0.0065121     14.88422
+11  632.9 0.0009227 0.0009227  0.002021 0.0018851    -42.89048
+12 2117.6 0.0009301 0.0009301  0.003328 0.0036440     -0.90233
+13  641.0 0.0465806 0.0465806  0.110906 0.0513873    579.28069
+14 1046.9 0.0365581 0.0365581  0.049549 0.0748728   1050.07954
+15 1701.4 0.0018772 0.0018772  0.005603 0.0064329     16.65413
+16 2838.6 0.0008797 0.0008797  0.002131 0.0027936     17.93048
+17 1694.7 0.0006138 0.0006138  0.002154 0.0017872    -59.37071
+18 1694.7 0.0012338 0.0012338  0.003512 0.0043399     17.17677
+19 2700.4 0.0002534 0.0002534  0.001132 0.0007523    -53.85522
+20 2511.1 0.0006727 0.0006727  0.001771 0.0018880     13.47532
+                              quantity dose_contrast_Gy      err     err_lo
+1            Hiroshima, ratio of rates          0.03150 -0.04308 -0.0890551
+2             Nagasaki, ratio of rates          0.02459  0.08630  0.0002357
+3 Nagasaki - Hiroshima, ratio of rates               NA  0.12937  0.0382130
+4             Hiroshima, per-cell mean          0.03150 -0.02687 -0.0998085
+5              Nagasaki, per-cell mean          0.02459  0.21010  0.0744818
+6  Nagasaki - Hiroshima, per-cell mean               NA  0.23697  0.0933138
+    err_hi     rr  rr_lo rr_hi err_per_Gy err_per_Gy_lo err_per_Gy_hi
+1 0.001456 0.9569 0.9109 1.001    -1.3673     -2.826772       0.04623
+2 0.173856 1.0863 1.0002 1.174     3.5097      0.009586       7.07078
+3 0.222687     NA     NA    NA         NA            NA            NA
+4 0.056620 0.9731 0.9002 1.057    -0.8529     -3.168106       1.79721
+5 0.368612 1.2101 1.0745 1.369     8.5449      3.029205      14.99158
+6 0.395137     NA     NA    NA         NA            NA            NA
+  evalue_point evalue_ci
+1        1.262     1.000
+2        1.392     1.016
+3           NA        NA
+4        1.196     1.000
+5        1.714     1.357
+6           NA        NA
+                                                           interpretation
+1 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+2 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+3              Difference of ERRs; RR, E-value and dose slope not defined
+4 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+5 City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling
+6              Difference of ERRs; RR, E-value and dose slope not defined
+Failed to connect to system scope bus via local transport: Operation not permitted (consider using --machine=<user>@.host --user to connect to bus of other user)
+Warning message:
+In system("timedatectl", intern = TRUE) :
+  running command 'timedatectl' had status 1
+[22:27:48] 11 archived posterior tables rebuilt -> ./Applied_Study/analysis/tables

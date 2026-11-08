@@ -22,6 +22,9 @@
 #     of the NIC group.
 # =====================================================================
 
+local_library <- Sys.getenv("CBCF_R_LIBRARY")
+if (nzchar(local_library)) .libPaths(c(local_library, .libPaths()))
+
 suppressMessages({
   library(dplyr); library(readr); library(tibble); library(tidyr)
   library(splines); library(MASS); library(parallel)
@@ -31,7 +34,7 @@ suppressMessages({
 
 ROOT   <- Sys.getenv("CBCF_ROOT", unset = ".")
 DATA   <- file.path(ROOT, "Applied_Study", "lssinc07.csv")
-OUTDIR <- file.path(ROOT, "Applied_Study", "analysis")
+OUTDIR <- Sys.getenv("CBCF_OUTDIR", unset = file.path(ROOT, "Applied_Study", "analysis"))
 TAB    <- file.path(OUTDIR, "tables")
 PLT    <- file.path(OUTDIR, "plots")
 for (p in c(OUTDIR, TAB, PLT)) dir.create(p, showWarnings = FALSE, recursive = TRUE)
@@ -413,5 +416,15 @@ evalue_ci <- function(lo, hi) {
   b + sqrt(b * (b - 1))
 }
 
-n_workers <- function(want) max(1L, min(as.integer(want),
-                                        as.integer(Sys.getenv("CBCF_CORES", "6"))))
+n_workers <- function(want) {
+  requested <- suppressWarnings(as.integer(Sys.getenv("CBCF_CORES", "1")))
+  if (!is.finite(requested) || requested < 1L) requested <- 1L
+  # A forest fit can allocate several copies of the posterior matrices.
+  # Leave ample memory for the desktop and any unrelated experiments.
+  available <- tryCatch({
+    ln <- readLines("/proc/meminfo")
+    as.numeric(sub(".*?([0-9]+).*", "\\1", ln[grepl("^MemAvailable:", ln)])) / 1024^2
+  }, error = function(e) NA_real_)
+  safe <- if (is.finite(available)) max(1L, floor((available - 8) / 6)) else 1L
+  max(1L, min(as.integer(want), requested, safe))
+}

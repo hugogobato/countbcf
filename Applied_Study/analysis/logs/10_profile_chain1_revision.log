@@ -1,0 +1,65 @@
+[17:13:15] before profile chain 1: host available 21.9 GiB; VmPeak:	 1808704 kB; VmRSS:	  218524 kB
+Reading in y
+
+Setting up designs
+
+design 0
+group setting: 0
+Instantiated covariate matrix 1 with 5 columns
+design 1
+group setting: 0
+Instantiated covariate matrix 2 with 4 columns
+Setting up forests
+
+Number of forests: 2
+
+
+forest 0 function_group=0 vanilla=1
+forest 1 function_group=0 vanilla=0
+Done.
+
+Beginning MCMC:
+iteration: 0
+dispersion parameter acceptance rate: 0
+iteration: 1000
+dispersion parameter acceptance rate: 0.836
+iteration: 2000
+dispersion parameter acceptance rate: 0.855
+iteration: 3000
+dispersion parameter acceptance rate: 0.867
+iteration: 4000
+dispersion parameter acceptance rate: 0.87
+iteration: 5000
+dispersion parameter acceptance rate: 0.8696
+iteration: 6000
+dispersion parameter acceptance rate: 0.873667
+iteration: 7000
+dispersion parameter acceptance rate: 0.874143
+iteration: 8000
+dispersion parameter acceptance rate: 0.871625
+iteration: 9000
+dispersion parameter acceptance rate: 0.871889
+iteration: 10000
+dispersion parameter acceptance rate: 0.8726
+iteration: 11000
+dispersion parameter acceptance rate: 0.874091
+iteration: 12000
+dispersion parameter acceptance rate: 0.87425
+iteration: 13000
+dispersion parameter acceptance rate: 0.873692
+iteration: 14000
+dispersion parameter acceptance rate: 0.873786
+time for loop: 854
+[17:27:30] sampler returned for chain 1: host available 20.2 GiB; VmPeak:	 2482904 kB; VmRSS:	  982012 kB
+[17:27:31] profile chain 1 checkpoint saved
+Warning messages:
+1: In regularize.values(x, y, ties, missing(ties), na.rm = na.rm) :
+  collapsing to unique 'x' values
+2: In regularize.values(x, y, ties, missing(ties), na.rm = na.rm) :
+  collapsing to unique 'x' values
+3: In regularize.values(x, y, ties, missing(ties), na.rm = na.rm) :
+  collapsing to unique 'x' values
+4: In regularize.values(x, y, ties, missing(ties), na.rm = na.rm) :
+  collapsing to unique 'x' values
+5: In regularize.values(x, y, ties, missing(ties), na.rm = na.rm) :
+  collapsing to unique 'x' values

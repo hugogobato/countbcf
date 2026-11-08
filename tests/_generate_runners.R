@@ -336,7 +336,13 @@ PKG_COUNTBCF <- 'install.packages("remotes")
 if (!require("devtools")) {
   install.packages("devtools")
 }
-devtools::install_github("hugogobato/countbcf")
+# Prefer the frozen revision source when supplied; otherwise use the reviewed base.
+countbcf_source <- Sys.getenv("CBCF_PACKAGE_SOURCE")
+if (nzchar(countbcf_source)) {
+  devtools::install_local(countbcf_source, upgrade="never")
+} else {
+  devtools::install_github("hugogobato/ZI_BCF", ref="793685085dc22cd0359c69fb195dca3c50bac924", upgrade="never")
+}
 library(countbcf)'
 
 PKG_MASS <- 'if (!requireNamespace("MASS", quietly = TRUE)) install.packages("MASS")'

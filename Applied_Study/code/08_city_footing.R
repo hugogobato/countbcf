@@ -1,36 +1,17 @@
 #!/usr/bin/env Rscript
-# =====================================================================
-# 08  The low-dose city contrast, settled on ONE footing, with the
-#     domain follow-up requested by the co-authors (Aug 2026 review).
-#
-# Igor Shuryak asked for:
-#   (a) one footing for the city contrast, used everywhere.  We adopt the
-#       standardised ERR (ratio of PY-weighted counterfactual rates), the
-#       quantity comparable with a Poisson rate ratio, as argued in
-#       Section "Data, treatment design and estimands";
-#   (b) chain-wise draws for the standardised city statistic, so that the
-#       lower credible bound can be compared with Monte-Carlo error;
-#   (c) an E-value and a per-Gy rescaling for the city contrast;
-#   (d) the low band split into 5-<20 / 20-<50 / 50-<100 mGy within each
-#       city: a real dose effect gives a GRADIENT inside the band, a
-#       population offset gives a STEP at the 5 mGy boundary;
-#   (e) the distance-stratified refit and its sign reversal, in full;
-#   (f) site-composition perturbations on the low-band city contrast;
-#   (g) the Hiroshima and Nagasaki reference-arm baseline rates, directly.
-#
-# Alina Brenner asked for the RERF reference-group construction:
-#   within each city the minimally exposed (0-<5 mGy) survivors split into
-#   OUTER PROXIMAL (2.5-3.0 km) and DISTAL (3-10 km), with the outer
-#   proximal group serving as the reference category, plus a city x
-#   distance (<3 / >=3 km) term in the propensity model.  In this file
-#   distcat == 1 is the proximal ring (gdist 2473-2997 m among the 0-<5 mGy
-#   cells) and distcat == 2 is the distal ring (gdist 3219-7577 m).
-#
-# Outputs: T34 .. T40 in analysis/tables.
-# =====================================================================
+# Low-dose city comparisons: posterior diagnostics and reference-group checks.
+# Primary summaries are ratios of person-year-weighted counterfactual rates
+# minus one, with quantile-specific Monte Carlo errors. E-values and dose
+# rescalings are defined only for each city's rate ratio, not ERR differences.
+# Dose-subcategory estimates are exploratory and do not identify a gradient.
+# Reference constructions split minimally exposed survivors into outer-proximal
+# (2.5-3 km) and distal (3-10 km) groups; distcat is the released grouping.
+# In this file, observed reference-cell distances are 2473-2997 m proximally
+# and 3219-7577 m distally. Outputs: T34-T40 in analysis/tables.
 
 source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study/code/common.R"))
 suppressMessages(library(countbcf))
+stopifnot(requireNamespace("posterior", quietly = TRUE))
 
 QUICK <- nzchar(Sys.getenv("CBCF_QUICK"))
 NB <- if (QUICK) 200L else NBURN_MAIN
@@ -118,18 +99,27 @@ derived <- function(s) c(s, list(
   sep_hi_serr = s$cate_serr_hi - s$ate_serr,
   sep_na_serr = s$cate_serr_na - s$ate_serr))
 chains <- lapply(chains, derived)
+saveRDS(list(chains = chains, nburn = NB, nsim = NS,
+             seeds = SEED + 1000L * (1:2),
+             estimand = "ratio of person-year-weighted counterfactual rates minus one"),
+        file.path(OUTDIR, "city_statistic_draws.rds"))
 
 QOI <- names(chains[[1]])
 mcmc_tab <- bind_rows(lapply(QOI, function(q) {
   ch <- lapply(chains, `[[`, q)
   re <- rhat_ess(ch)
   x  <- unlist(ch)
+  # Quantile uncertainty is different from uncertainty in the posterior mean.
+  # posterior expects iterations x chains and estimates the ESS for each tail.
+  qmcse <- posterior::mcse_quantile(do.call(cbind, ch), probs = c(.025, .975))
   tibble(quantity = q, mean = mean(x), lo = quantile(x, .025),
          med = quantile(x, .5), hi = quantile(x, .975), sd = sd(x),
          rhat = re[["rhat"]], ess = re[["ess"]],
          mcse = sd(x) / sqrt(re[["ess"]]),
-         # how many Monte-Carlo standard errors the lower bound sits above 0
-         lo_over_mcse = quantile(x, .025) / (sd(x) / sqrt(re[["ess"]])))
+         mcse_mean = sd(x) / sqrt(re[["ess"]]),
+         mcse_q025 = unname(qmcse[1]), mcse_q975 = unname(qmcse[2]),
+         # Descriptive numerical margin for the lower endpoint, not a test.
+         lo_over_mcse = quantile(x, .025) / unname(qmcse[1]))
 }))
 write_csv(mcmc_tab, file.path(TAB, "T34_city_footing_mcmc.csv"))
 print(as.data.frame(mcmc_tab), digits = 4)
@@ -149,26 +139,42 @@ dc_all <- dose_contrast(sub_low)
 dc_hi  <- dose_contrast(sub_low, sub_low$city_f == "Hiroshima")
 dc_na  <- dose_contrast(sub_low, sub_low$city_f == "Nagasaki")
 
-ev_row <- function(nm, draws, dc) {
+ev_row <- function(nm, draws, dc, difference = FALSE) {
   e   <- as.numeric(c(mean(draws), quantile(draws, c(.025, .975))))
-  R   <- 1 + e
-  evp <- evalue_pt(R[1]); evc <- evalue_ci(R[2], R[3])
-  tibble(quantity = nm, dose_contrast_Gy = dc,
+  # A difference of ERRs is not a rate ratio, so it has no E-value obtained
+  # by adding one. Nor is dividing the city difference by pooled dose a slope.
+  R   <- if (difference) rep(NA_real_, 3) else 1 + e
+  evp <- if (difference) NA_real_ else evalue_pt(R[1])
+  evc <- if (difference) NA_real_ else evalue_ci(R[2], R[3])
+  scaled <- if (difference) rep(NA_real_, 3) else e / dc
+  tibble(quantity = nm, dose_contrast_Gy = if (difference) NA_real_ else dc,
          err = e[1], err_lo = e[2], err_hi = e[3],
          rr = R[1], rr_lo = R[2], rr_hi = R[3],
-         err_per_Gy = e[1] / dc, err_per_Gy_lo = e[2] / dc,
-         err_per_Gy_hi = e[3] / dc,
-         evalue_point = evp, evalue_ci = evc)
+         err_per_Gy = scaled[1], err_per_Gy_lo = scaled[2],
+         err_per_Gy_hi = scaled[3],
+         evalue_point = evp, evalue_ci = evc,
+         interpretation = if (difference) "Difference of ERRs; RR, E-value and dose slope not defined" else
+           "City-specific band ERR; ERR/Gy is a descriptive dose-contrast rescaling")
 }
 ev_city <- bind_rows(
-  ev_row("Hiroshima, standardised", pooled$serr_hi, dc_hi),
-  ev_row("Nagasaki, standardised",  pooled$serr_na, dc_na),
-  ev_row("Nagasaki - Hiroshima, standardised", pooled$d_naga_hiro_serr, dc_all),
+  ev_row("Hiroshima, ratio of rates", pooled$serr_hi, dc_hi),
+  ev_row("Nagasaki, ratio of rates",  pooled$serr_na, dc_na),
+  ev_row("Nagasaki - Hiroshima, ratio of rates", pooled$d_naga_hiro_serr, dc_all, difference = TRUE),
   ev_row("Hiroshima, per-cell mean", pooled$err_hi, dc_hi),
   ev_row("Nagasaki, per-cell mean",  pooled$err_na, dc_na),
-  ev_row("Nagasaki - Hiroshima, per-cell mean", pooled$d_naga_hiro_err, dc_all))
+  ev_row("Nagasaki - Hiroshima, per-cell mean", pooled$d_naga_hiro_err, dc_all, difference = TRUE))
 write_csv(ev_city, file.path(TAB, "T35_city_evalues.csv"))
 print(as.data.frame(ev_city), digits = 4)
+
+# The diagnostic repair requires only these two chains. Historical distance,
+# subcategory and site fits need not be rerun when this switch is selected.
+if (identical(Sys.getenv("CBCF_CITY_DIAGNOSTICS_ONLY"), "1")) {
+  dir.create(file.path(OUTDIR, "logs"), recursive = TRUE, showWarnings = FALSE)
+  writeLines(capture.output(sessionInfo()),
+             file.path(OUTDIR, "logs", "sessionInfo_08.txt"))
+  stamp("08 city diagnostics done -> ", TAB)
+  quit(save = "no", status = 0)
+}
 
 # =====================================================================
 # 3.  Alina's distance-stratified designs + Igor's distance refit

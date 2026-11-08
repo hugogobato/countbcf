@@ -135,6 +135,10 @@ List countbcf(arma::vec y_,
   std::vector<xinfo> x_info(num_designs);
   std::vector<arma::mat> Omega(num_designs);
   std::vector<size_t> covariate_dim(num_designs);
+  // Optional out-of-sample rows use the original cutpoints and do not enter
+  // the likelihood or tree proposals. Only their coefficients are retained.
+  std::vector<std::vector<double> > prediction_x(num_designs);
+  std::vector<size_t> prediction_n(num_designs, 0);
 
   for(size_t i=0; i<num_designs; i++) {
 
@@ -158,6 +162,13 @@ List countbcf(arma::vec y_,
     }
     size_t p = x[i].size()/n;
     covariate_dim[i] = p;
+    if (dtemp.containsElementNamed("X_predict")) {
+      NumericMatrix xp = dtemp["X_predict"];
+      if (xp.nrow() != p || xp.ncol() < 1)
+        stop("X_predict must have matching covariate rows and positive prediction columns");
+      prediction_x[i].assign(xp.begin(), xp.end());
+      prediction_n[i] = xp.ncol();
+    }
 
     Rcout << "Instantiated covariate matrix " << i+1 << " with " << p << " columns" << endl;
 
@@ -378,10 +389,21 @@ List countbcf(arma::vec y_,
   arma::mat random_sd_post(nd, random_var.n_elem);
 
   std::vector<arma::cube> post_coefs(num_forests);
+  std::vector<arma::cube> post_prediction_coefs(num_forests);
+  std::vector<dinfo> prediction_di(num_forests);
   for(size_t j=0; j<num_forests; ++j) {
     arma::cube tt(di[j].basis_dim, di[j].n, nd);
     tt.fill(0);
     post_coefs[j] = tt;
+    List spec = bart_specs[j];
+    int desi = spec["design_index"];
+    if (prediction_n[desi] > 0) {
+      prediction_di[j].n = prediction_n[desi];
+      prediction_di[j].p = covariate_dim[desi];
+      prediction_di[j].basis_dim = di[j].basis_dim;
+      prediction_di[j].x = prediction_x[desi].data();
+      post_prediction_coefs[j].zeros(di[j].basis_dim, prediction_n[desi], nd);
+    }
   }
 
   //-------------------------------------------------------------------------//
@@ -604,6 +626,10 @@ List countbcf(arma::vec y_,
         }
         for(size_t j=0; j< trees[s].size(); ++j) {
           post_coefs[s].slice(save_ctr) += prior_info[s].eta*coef_basis(trees[s][j], x_info[s], di[s]);
+          if (prediction_di[s].n > 0) {
+            post_prediction_coefs[s].slice(save_ctr) += prior_info[s].eta *
+              coef_basis(trees[s][j], x_info[s], prediction_di[s]);
+          }
           if (return_trees) {
             final_tree_trace[s].t[save_ctr][j] = trees[s][j];
             final_tree_trace[s].t[save_ctr][j].compress();
@@ -622,10 +648,16 @@ List countbcf(arma::vec y_,
   delete[] allfit;
   delete[] ftemp;
 
+  List prediction_coefs(num_forests);
+  for (size_t s=0; s<num_forests; ++s) {
+    if (prediction_di[s].n > 0) prediction_coefs[s] = post_prediction_coefs[s];
+  }
+
   return(List::create(_["yhat_post"] = yhat_post,
                       _["forest_fits"] = forest_fits_post,
                       _["function_group"] = function_group,
                       _["coefs"] = post_coefs,
+                      _["prediction_coefs"] = prediction_coefs,
                       _["etas"] = etas_post,
                       _["sigma"] = sigma_post,
                       _["kappa"] = kappa_post,

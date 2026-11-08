@@ -37,7 +37,10 @@ countbcf(
   randeff_scales = 1,
   randeff_df = 3,
   return_trees = FALSE,
-  debug = FALSE
+  debug = FALSE,
+  x_control_predict = NULL,
+  x_moderate_predict = x_control_predict,
+  pihat_predict = NULL
 )
 }
 \arguments{
@@ -131,8 +134,21 @@ because the tree trace is memory-heavy.}
 
 \item{debug}{If TRUE, returns \code{const_args} and the raw C++ fit object
 for debugging.}
+
+\item{x_control_predict, x_moderate_predict}{Optional numeric matrices of
+new covariates for count-component predictions during sampling. Columns must
+match the corresponding training matrices, and both must have the same positive
+number of rows. No full tree history is needed. These rows do not affect fitting.
+Zero-inflation forests are not predicted by these arguments.}
+
+\item{pihat_predict}{Propensity estimates for prediction rows, required when
+the fitted model includes propensity in either count-component forest.}
+
 }
 \value{
+When prediction covariates are supplied, \code{mu_f_predict} and
+\code{tau_f_predict} contain draws by prediction row of the two count-component
+forest coefficients, without an offset or treatment multiplier.
 An object of class \code{"countbcf_fit"}: a list with posterior
 draws of the log mean and the per-forest fits. Notable elements:
 \describe{

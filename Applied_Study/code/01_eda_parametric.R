@@ -272,7 +272,7 @@ fit_preston <- function(kind) {
          parameter = c("beta_male (at e=30, a=70)", "beta_female (at e=30, a=70)",
                        "alpha_agex (per year)", "alpha_age (log-age power)",
                        "% decline in excess per decade of age at exposure",
-                       "female:male ratio", "converged", "logLik", "AIC"),
+                       "female:male ratio", "optim convergence code (0 = success)", "logLik", "AIC"),
          estimate = c(o$par[k + 1], o$par[k + 2], o$par[k + 3], o$par[k + 4],
                       100 * (1 - exp(10 * o$par[k + 3])),
                       o$par[k + 2] / o$par[k + 1], o$convergence,

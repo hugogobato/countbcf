@@ -1,0 +1,5 @@
+city,ring,adj_rate_1e4
+Hiroshima,<3km,60.89124670513598
+Hiroshima,>=3km,64.16331804781528
+Nagasaki,<3km,56.50400925955402
+Nagasaki,>=3km,58.21287557182805

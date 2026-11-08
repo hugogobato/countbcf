@@ -118,6 +118,14 @@
 #'   because the tree trace is memory-heavy.
 #' @param debug If TRUE, returns \code{const_args} and the raw C++ fit object
 #'   for debugging.
+#' @param x_control_predict,x_moderate_predict Optional covariate matrices at
+#'   which to evaluate the count-component prognostic and moderating forests
+#'   during posterior sampling. Both matrices must have the same positive
+#'   number of rows and match the columns of their training matrices. These
+#'   predictions require no stored tree trace and do not affect model fitting.
+#'   The zero-inflation forests, if present, are not predicted by these arguments.
+#' @param pihat_predict Propensity estimates for prediction rows, required when
+#'   the fitted model includes the propensity among either forest's covariates.
 #'
 #' @return An object of class \code{"countbcf_fit"}: a list with posterior
 #' draws of the log mean and the per-forest fits. Notable elements:
@@ -216,7 +224,10 @@ countbcf <- function(
   randeff_scales = 1,
   randeff_df = 3,
   return_trees = FALSE,
-  debug = FALSE
+  debug = FALSE,
+  x_control_predict = NULL,
+  x_moderate_predict = x_control_predict,
+  pihat_predict = NULL
 ) {
 
   if (!(count_model %in% c("poisson", "nb", "zipoisson", "zinb"))) {
@@ -269,6 +280,30 @@ countbcf <- function(
   if (include_pihat != "none" && length(unique(pihat)) == 1) {
     warning("All values of pihat are equal. pihat will not be included among covariates")
     include_pihat <- "none"
+  }
+
+  predict_count <- !is.null(x_control_predict) || !is.null(x_moderate_predict)
+  if (predict_count) {
+    if (is.null(x_control_predict) || is.null(x_moderate_predict))
+      stop("Both count-component prediction matrices must be supplied")
+    X_c_predict <- as.matrix(x_control_predict)
+    X_m_predict <- as.matrix(x_moderate_predict)
+    if (!is.numeric(X_c_predict) || !is.numeric(X_m_predict) ||
+        any(!is.finite(X_c_predict)) || any(!is.finite(X_m_predict)))
+      stop("Prediction covariates must be finite numeric values")
+    if (nrow(X_c_predict) < 1L || nrow(X_c_predict) != nrow(X_m_predict) ||
+        ncol(X_c_predict) != ncol(x_control) ||
+        ncol(X_m_predict) != ncol(x_moderate))
+      stop("Prediction matrices must match training columns and have equal positive row counts")
+    if (include_pihat != "none") {
+      if (!is.numeric(pihat_predict) || length(pihat_predict) != nrow(X_c_predict) ||
+          any(!is.finite(pihat_predict)))
+        stop("Finite pihat_predict values are required for each prediction row")
+      if (include_pihat %in% c("control", "both"))
+        X_c_predict <- cbind(X_c_predict, pihat_predict)
+      if (include_pihat %in% c("moderate", "both"))
+        X_m_predict <- cbind(X_m_predict, pihat_predict)
+    }
   }
 
   ### offset
@@ -380,6 +415,12 @@ countbcf <- function(
   }
 
   designs <- countbcf:::make_bart_designs(X_list, basis_list)
+  if (predict_count) {
+    # These rows are evaluated using the training cutpoints and current trees;
+    # they never enter the likelihood, tree proposals or propensity fitting.
+    designs[[1]]$X_predict <- t(X_c_predict)
+    designs[[2]]$X_predict <- t(X_m_predict)
+  }
 
   make_spec <- function(design_idx, ntree, alpha, beta, vanilla, function_group) {
     design <- designs[[design_idx]]
@@ -506,6 +547,12 @@ countbcf <- function(
   out$tau_f_log <- forest_fits[[2]]   # already = z_trt_i * tau_f(x_i) per obs
   out$mu_f_post  <- .extract_coef(fit_raw$coefs[[1]])
   out$tau_f_post <- .extract_coef(fit_raw$coefs[[2]])
+  if (predict_count) {
+    np <- nrow(X_c_predict)
+    prediction_matrix <- function(cc) t(matrix(as.numeric(cc), nrow = np))
+    out$mu_f_predict <- prediction_matrix(fit_raw$prediction_coefs[[1]])
+    out$tau_f_predict <- prediction_matrix(fit_raw$prediction_coefs[[2]])
+  }
 
   if (is_zi) {
     out$mu_f0_log  <- forest_fits[[3]]

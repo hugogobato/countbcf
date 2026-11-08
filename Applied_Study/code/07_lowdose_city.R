@@ -1,34 +1,12 @@
 #!/usr/bin/env Rscript
-# =====================================================================
-# 07  Is the Nagasaki-vs-Hiroshima ERR difference at 5-<100 mGy real?
-#
-# §6.4 of RESULTS.md found the only subgroup that separates from the ATE
-# in the low-dose contrast: Nagasaki ERR +0.21 against Hiroshima -0.03.
-# City is a modifier Preston's ERR model cannot express, so if it is real
-# it is genuinely new -- but city is also the one covariate with a real
-# arm imbalance (58% Hiroshima in the reference arm, 78% in the low band).
-#
-# The same battery that §8-§10 applied to the high-dose contrast is
-# applied here: the moderating-forest prior scale, the propensity model,
-# trimming, the NIC group, and dropping each city's own dose banding.
-#
-# Every row is scored on BOTH footings, but the STANDARDISED ERR (ratio of
-# person-year weighted counterfactual rates) is the one the manuscript
-# quotes: it is the quantity comparable with a Poisson rate ratio and with
-# Preston's case-weighted summaries.  The person-year weighted mean of the
-# per-cell ERR (average of ratios) runs about 2.4x larger here and is kept
-# only for cross-referencing against T15/T17.
-#
-# Two labelling points, following I. Shuryak's August 2026 review:
-#   * ntree_moderate and the (base, power) depth prior are MODERATING-forest
-#     knobs; a0 is the leaf concentration SHARED by both forests
-#     (R/countbcf.R:90), so an a0 sweep moves the prognostic surface too and
-#     is labelled accordingly;
-#   * the propensity score for this contrast spans roughly [0.50, 0.73], so
-#     a fixed [0.10, 0.90] trim removes nothing and is a no-op rather than a
-#     passed test.  The trimming row therefore trims to the central 90% of
-#     the observed score distribution, which does bite.
-# =====================================================================
+# Sensitivity of the 5-<100 mGy Nagasaki-minus-Hiroshima ERR contrast.
+# Compare moderating-forest tree counts/depth, the shared leaf concentration,
+# propensity models, trimming, and not-in-city handling. Report both the
+# ratio of person-year-weighted counterfactual rates minus one and the
+# weighted average of cell ERRs, with explicit labels. Only the particular
+# refitted Preston specification places city in the baseline alone.
+# The leaf concentration is shared by both count-component forests.
+# Fixed [0.10,0.90] trimming removes no cells here; quantile trimming does.
 
 source(file.path(Sys.getenv("CBCF_ROOT", "."), "Applied_Study/code/common.R"))
 suppressMessages(library(countbcf))

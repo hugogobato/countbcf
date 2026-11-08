@@ -49,29 +49,39 @@ gg(p1, "F01_ate_convergence.png", 9, 5)
 # F2  categorical dose response (parametric) with the CountBCF band ERRs
 # ---------------------------------------------------------------------
 band_err <- ate %>% filter(endpoint == "solid") %>%
-  transmute(mean_dose_Gy = dose_contrast_Gy, ERR = att_err,
-            lo = att_err_lo, hi = att_err_hi, what = "CountBCF band contrast")
+  transmute(treated, ERR = att_serr,
+            lo = att_serr_lo, hi = att_serr_hi,
+            what = "CountBCF exposed-group band ERR") %>%
+  left_join(cells %>% filter(endpoint == "solid", z == 1) %>%
+              group_by(treated) %>%
+              summarise(mean_dose_Gy = weighted.mean(dose, pyr), .groups = "drop"),
+            by = "treated")
+# Preserve the plotted values so this comparison can be checked without
+# reverse-engineering a raster image. Both series use mean absolute dose.
+write_csv(band_err, file.path(TAB, "T42_dose_response_figure_points.csv"))
 p2 <- ggplot(dcr, aes(mean_dose_Gy, RR - 1)) +
   geom_hline(yintercept = 0, linetype = 2, colour = "grey55") +
   geom_pointrange(aes(ymin = RR_lo - 1, ymax = RR_hi - 1), colour = "grey35",
                   size = .25, alpha = .8) +
-  geom_smooth(method = "lm", formula = y ~ x - 1, se = TRUE, colour = "#2C6E9B", fill = "#2C6E9B22") +
+  geom_smooth(method = "lm", formula = y ~ x - 1, se = FALSE, colour = "#2C6E9B") +
   geom_pointrange(data = band_err, aes(mean_dose_Gy, ERR, ymin = lo, ymax = hi),
                   colour = "#B5442A", size = .7) +
-  labs(x = "Person-year weighted colon dose (Gy)", y = "Excess relative risk",
+  labs(x = "Person-year weighted colon dose (Gy)", y = "Excess relative rate (ERR)",
        title = "Dose response for all solid cancers",
-       subtitle = paste("Grey: 18 dose-category Poisson estimates with a linear fit through the origin.",
-                        "Red: the three CountBCF band contrasts.", sep = "\n"))
+       subtitle = paste("Grey: dose-category Poisson estimates; blue: descriptive linear trend.",
+                        "Red: CountBCF exposed-group ratios of counterfactual rates minus one (95% CrI).", sep = "\n"))
 gg(p2, "F02_dose_response.png", 7.5, 5)
 
 # ---------------------------------------------------------------------
-# F3  ERR by age at exposure and sex (the canonical gradient)
+# F3  ERR by age at exposure and sex (descriptive posterior-mean smooths)
+# Do not compute loess standard-error ribbons: these are fitted cell means,
+# not independent observed effects, and loess SE calculation is memory-heavy.
 # ---------------------------------------------------------------------
 p3 <- ggplot(cells %>% filter(z == 1, endpoint == "solid"),
              aes(agex, err, colour = sex_f)) +
   geom_hline(yintercept = 0, linetype = 2, colour = "grey55") +
   geom_point(alpha = .10, size = .5) +
-  geom_smooth(method = "loess", span = .8, se = TRUE, formula = y ~ x) +
+  geom_smooth(method = "loess", span = .8, se = FALSE, formula = y ~ x) +
   facet_wrap(~band_lab) +
   scale_colour_manual(values = SEXCOL) +
   labs(x = "Age at exposure (years)", y = "Excess relative risk", colour = NULL,
@@ -87,7 +97,7 @@ p4 <- ggplot(cells %>% filter(z == 1, endpoint == "solid"),
              aes(age, ear, colour = sex_f)) +
   geom_hline(yintercept = 0, linetype = 2, colour = "grey55") +
   geom_point(alpha = .10, size = .5) +
-  geom_smooth(method = "loess", span = .8, se = TRUE, formula = y ~ x) +
+  geom_smooth(method = "loess", span = .8, se = FALSE, formula = y ~ x) +
   facet_wrap(~band_lab, scales = "free_y") +
   scale_colour_manual(values = SEXCOL) +
   labs(x = "Attained age (years)", y = "Excess cases / 10,000 PY", colour = NULL,
@@ -113,11 +123,11 @@ p5 <- ggplot(f5, aes(subgroup, d_serr, colour = separates_serr)) +
   coord_flip() +
   facet_grid(by ~ band_lab, scales = "free_y", space = "free_y") +
   scale_colour_manual(values = c(`TRUE` = "#B5442A", `FALSE` = "grey45"),
-                      labels = c(`TRUE` = "separates from ATE", `FALSE` = "not distinguishable"),
+                      labels = c(`TRUE` = "interval excludes zero", `FALSE` = "interval contains zero"),
                       name = NULL) +
-  labs(x = NULL, y = "Subgroup standardised ERR minus overall standardised ERR (95% CrI)",
-       title = "Which subgroups are genuinely different from the average effect?",
-       subtitle = "All solid cancers, standardised footing. A subgroup counts only if the CrI on the DIFFERENCE excludes zero") +
+  labs(x = NULL, y = "Subgroup band ERR minus cohort-averaged band ERR (95% CrI)",
+       title = "Subgroup departures from the cohort-averaged effect",
+       subtitle = "All solid cancers; person-year-weighted ratios of rates. Intervals describe subgroup-minus-cohort differences.") +
   theme(legend.position = "bottom")
 gg(p5, "F05_subgroup_separation.png", 10, 7)
 
@@ -127,19 +137,26 @@ gg(p5, "F05_subgroup_separation.png", 10, 7)
 f6 <- newness %>% filter(grepl("^solid", label), cases >= 20,
                          by %in% c("sex_f", "agex_b", "age_b", "city_f")) %>%
   mutate(treated = sub(".*:", "", label),
-         band_lab = factor(BANDLAB[treated], levels = BANDLAB))
-p6 <- ggplot(f6, aes(preston_err, cbcf_err, colour = departs)) +
+         band_lab = factor(BANDLAB[treated], levels = BANDLAB),
+         plot_label = case_when(by == "agex_b" ~ paste("Exposed", subgroup),
+                                by == "age_b" ~ paste("Attained", subgroup),
+                                TRUE ~ subgroup)) %>%
+  arrange(desc(departs_serr))
+p6 <- ggplot(f6, aes(preston_serr, cbcf_serr, colour = departs_serr)) +
   geom_abline(slope = 1, intercept = 0, linetype = 2, colour = "grey55") +
-  geom_pointrange(aes(ymin = cbcf_err_lo, ymax = cbcf_err_hi), size = .3) +
-  geom_text(aes(label = subgroup), size = 2.4, hjust = -0.12, show.legend = FALSE) +
+  geom_pointrange(aes(ymin = cbcf_serr_lo, ymax = cbcf_serr_hi), size = .3) +
+  geom_text(data = f6 %>% filter(by %in% c("sex_f", "city_f") | departs_serr),
+            aes(label = plot_label), size = 2.7, hjust = -0.08,
+            check_overlap = TRUE, show.legend = FALSE) +
   facet_wrap(~band_lab, scales = "free") +
   scale_colour_manual(values = c(`TRUE` = "#B5442A", `FALSE` = "grey45"),
-                      labels = c(`TRUE` = "departs", `FALSE` = "agrees"), name = NULL) +
+                      labels = c(`TRUE` = "excludes fitted comparator", `FALSE` = "contains fitted comparator"), name = NULL) +
   expand_limits(x = 0, y = 0) +
-  labs(x = "ERR implied by the refitted Preston (2007) model",
-       y = "CountBCF ERR (95% CrI)",
-       title = "What is new relative to the canonical parametric ERR model?",
-       subtitle = "All solid cancers, subgroup means over treated person-year cells") +
+  scale_x_continuous(expand = expansion(mult = c(.05, .45))) +
+  labs(x = "Exposed-group band ERR implied by the refitted Preston (2007) model",
+       y = "CountBCF exposed-group band ERR (95% CrI)",
+       title = "CountBCF and fitted Preston subgroup effects",
+       subtitle = "All solid cancers; both surfaces use the same posterior baseline-rate weights") +
   theme(legend.position = "bottom")
 gg(p6, "F06_vs_preston_model.png", 10, 5)
 
@@ -170,7 +187,7 @@ gg(p7b, "F08_ear_surface.png", 9, 5)
 # ---------------------------------------------------------------------
 # F9  overlap
 # ---------------------------------------------------------------------
-ovl2 <- ovl %>% mutate(arm = factor(z, 0:1, c("reference (0-<5 mGy)", "exposed band")),
+ovl2 <- ovl %>% mutate(arm = factor(z, 0:1, c("reference (0-<5 mGy)", "higher-dose group")),
                        band_lab = factor(BANDLAB[contrast], levels = BANDLAB))
 p9 <- ggplot(ovl2, aes(pihat, fill = arm, colour = arm)) +
   geom_density(alpha = .35, adjust = 1.1) +
@@ -178,19 +195,19 @@ p9 <- ggplot(ovl2, aes(pihat, fill = arm, colour = arm)) +
   scale_fill_manual(values = c("#2C6E9B", "#B5442A")) +
   scale_colour_manual(values = c("#2C6E9B", "#B5442A")) +
   labs(x = "Estimated propensity score", y = "Density", fill = NULL, colour = NULL,
-       title = "Overlap by arm (spline logistic propensity model)",
-       subtitle = "No cell has an estimated propensity near 0 or 1: positivity is not strained") +
+       title = "Demographic propensity by dose group (spline logistic model)",
+       subtitle = "Scores overlap for the measured demographic covariates; distance is omitted") +
   theme(legend.position = "bottom")
 gg(p9, "F09_overlap.png", 10, 4.2)
 
 # ---------------------------------------------------------------------
 # F10  sensitivity of the featured quantities
 # ---------------------------------------------------------------------
-# All three panels on the standardised footing, so the figure and
+# All three panels use the ratio-of-rates summaries, so the figure and
 # Tables 10-11 report the same quantities.
 mk_sens <- function(df, ttl) {
   long <- bind_rows(
-    df %>% transmute(spec, q = "overall standardised ERR", est = att_serr,
+    df %>% transmute(spec, q = "exposed-group band ERR", est = att_serr,
                      lo = att_serr_lo, hi = att_serr_hi),
     df %>% transmute(spec, q = "female minus male ERR", est = d_serr_female_male,
                      lo = d_serr_female_male_lo, hi = d_serr_female_male_hi),

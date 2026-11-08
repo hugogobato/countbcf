@@ -1,0 +1,12 @@
+quantity,value
+n cells,21820
+cases,13269
+person-years,2070279.20452
+% zero cells,0.7433547204399633
+Poisson Pearson X2 / df,1.6855573965862127
+Poisson deviance / df,0.5918820525966885
+NB theta (size),100.36557924862822
+NB implied var/mean at mean fitted rate,1.0060570290708857
+AIC Poisson,26979.83218620841
+AIC NB,26984.584673492052
+LRT NB vs Poisson (p),0.5
